@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/** { border: 1px solid red; }*/
