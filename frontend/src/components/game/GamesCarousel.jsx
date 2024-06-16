@@ -10,7 +10,7 @@ export function GamesCarousel({cards}) {
 
     return (
         <div className="flex flex-col gap-5">
-            <div className="flex justify-around items-center gap-5 overflow-x-hidden">
+            <div className="flex justify-center items-center gap-8 md:gap-12 lg:gap-16 overflow-x-hidden py-5">
                 <GameCard name={cards[prevIndex].name} img={cards[prevIndex].img} small={true}
                           onClick={() => setCardIndex(cardIndex === 0 ? cards.length - 1 : cardIndex - 1)}/>
                 <GameCard name={cards[cardIndex].name} img={cards[cardIndex].img}/>
