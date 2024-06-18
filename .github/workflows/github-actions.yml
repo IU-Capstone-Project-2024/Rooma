@@ -65,7 +65,7 @@ jobs:
 
     steps:
       - name: Start the application
-        uses: appleboy/ssh-action@v2
+        uses: appleboy/ssh-action@v4
         with:
           host: ${{ secrets.ROOMA_SERVER_SSH_HOST }}
           username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
