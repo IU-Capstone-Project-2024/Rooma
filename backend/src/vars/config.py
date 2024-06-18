@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from src.logs.log import log
 
 log.info("Started reading .ENV file")
-load_dotenv("../../config/.env")
+load_dotenv("../config/.env")
 try:
     DB_NAME = os.environ["DATABASE_NAME"]
     DB_HOST = os.environ["DATABASE_HOST"]
