@@ -16,5 +16,5 @@ CMD ["uvicorn", "main:app",  "--host", "0.0.0.0", "--port", "8000"]
 
 FROM python-base AS rooma-bot
 
-COPY /backend/src/bot.py /src/bot.py
+COPY /backend/src/bot.py /bot.py
 CMD ["python", "bot.py"]
