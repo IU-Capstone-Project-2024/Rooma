@@ -34,6 +34,7 @@ jobs:
   deploy_frontend:
     name: Deploy React App
     needs: build_frontend
+    environment: Deployment
     if: github.repository == 'azamatbayramov/Rooma'
     runs-on: ubuntu-latest
 
@@ -57,6 +58,7 @@ jobs:
   deploy_application:
     name: Deploy Application
     needs: deploy_frontend
+    environment: Deployment
     if: github.repository == 'azamatbayramov/Rooma'
     runs-on: ubuntu-latest
 
