@@ -38,7 +38,7 @@ const cardsData = {
 };
 
 
-export default function Index() {
+export default function Main() {
     return (
         <section>
             <GamesCarousel cards={cards} />
