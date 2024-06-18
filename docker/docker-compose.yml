@@ -1,0 +1,93 @@
+volumes:
+  db_data:
+  prom_data:
+  grafana_data:
+
+networks:
+  rooma_network:
+    driver: bridge
+
+services:
+  mongodb:
+    container_name: rooma_mongodb
+    image: mongo:7-jammy
+    volumes:
+      - db_data:/data/db
+    networks:
+      - rooma_network
+    restart: unless-stopped
+    command: --quiet
+
+  api:
+    container_name: rooma_api
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile_api
+    networks:
+      - rooma_network
+    depends_on:
+      - mongodb
+
+  bot:
+    container_name: rooma_bot
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile_bot
+    networks:
+      - rooma_network
+    depends_on:
+      - mongodb
+
+  backups:
+    container_name: rooma_backup
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile_backup
+    volumes:
+      - ./backups:/backups
+    networks:
+      - rooma_network
+    depends_on:
+      - mongodb
+
+  prometheus:
+    container_name: rooma_prometheus
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+    networks:
+      - rooma_network
+    depends_on:
+      - api
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  grafana:
+    container_name: rooma_grafana
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana:/etc/grafana
+    env_file:
+      - .env
+    networks:
+      - rooma_network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  nginx:
+    container_name: rooma_nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./static:/etc/nginx/html
+    networks:
+      - rooma_network
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+      - grafana

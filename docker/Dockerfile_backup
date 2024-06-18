@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk add --no-cache mongodb-tools
 
 # Copy the backup script to the container
-COPY backup.sh /backup.sh
+COPY ../backup_scripts/backup.sh /backup.sh
 
 RUN chmod +x backup.sh
 
