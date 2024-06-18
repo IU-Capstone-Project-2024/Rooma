@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: built_frontend
-          path: build/
+          path: frontend/build/
 
   deploy_frontend:
     name: Deploy React App
