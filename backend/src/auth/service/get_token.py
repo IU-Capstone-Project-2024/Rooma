@@ -1,6 +1,6 @@
 import jwt
 
-from src.auth.config import SECRET
+from src.vars.config import AUTH_SECRET
 
 
 class GetTokenService:
@@ -21,7 +21,7 @@ class GetTokenService:
         """
         token = jwt.encode(
             payload={"telegram_id": self._telegram_id},
-            key=SECRET
+            key=AUTH_SECRET
         )
 
         return token
