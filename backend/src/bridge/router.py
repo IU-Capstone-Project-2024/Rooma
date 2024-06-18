@@ -1,10 +1,8 @@
-from uuid import UUID
-
 from fastapi import APIRouter, HTTPException, status
 
 from src.auth.routes import AuthRouter
 from src.auth.schemas import CheckTokenRequestSchema
-from src.bridge.schemas import CreateGameSchema, CreateGameResponseSchema, GetGameLinkResponseSchema
+from src.bridge.schemas import CreateGameSchema, GetGameLinkResponseSchema
 from src.common.repository.game import GameRepository
 from src.common.repository.user import UserRepository
 from src.common.schemas import ErrorSchema
@@ -18,7 +16,7 @@ user_repo = UserRepository()
 
 
 @router.post("/game", responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}})
-async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema) -> CreateGameResponseSchema:
+async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema) -> GetGameLinkResponseSchema:
     check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
     if not check_token.has_access:
         raise HTTPException(
@@ -28,12 +26,7 @@ async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema)
 
     created = await game_repo.create_one(game_data)
     log.info(f"Create game with id = {created.game_id}")
-    return CreateGameResponseSchema(game_id=created.game_id)
-
-
-@router.get("/link")
-async def get_link(game_id: UUID) -> GetGameLinkResponseSchema:
-    return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{game_id}")
+    return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{created.game_id}")
 
 
 @router.get("/users")
