@@ -72,7 +72,7 @@ jobs:
           port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
           key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
           script: |
-            cd ${{ secrets.ROOMA_SERVER_APP_DIR }}
+            cd ${{ secrets.ROOMA_SERVER_APP_DIR }}/docker
             git pull
             docker compose down
             docker compose up -d
