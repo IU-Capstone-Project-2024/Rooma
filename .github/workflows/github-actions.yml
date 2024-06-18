@@ -67,5 +67,11 @@ jobs:
       - name: Install OpenSSH
         run: sudo apt-get install openssh-client
 
+      - name: Start ssh agent
+        run: eval "$(ssh-agent -s)"
+
+      - name: Add ssh key
+        run: ssh-add <(echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}")
+
       - name: Connect to remote server and execute commands
-        run: eval "$(ssh-agent -s)" && ssh-add <(echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}") && ssh ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}@${{ secrets.ROOMA_SERVER_SSH_HOST }} -A -p ${{ secrets.ROOMA_SERVER_SSH_PORT }} "cd ${{ secrets.ROOMA_SERVER_APP_DIR }} && git pull && docker compose down && docker compose up --build -d"
+        run: ssh ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}@${{ secrets.ROOMA_SERVER_SSH_HOST }} -o "StrictHostKeyChecking no" -A -p ${{ secrets.ROOMA_SERVER_SSH_PORT }} "cd ${{ secrets.ROOMA_SERVER_APP_DIR }} && git pull && docker compose down && docker compose up --build -d"
