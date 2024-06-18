@@ -1,7 +1,9 @@
+from uuid import UUID
+
 from fastapi import APIRouter
 
 from src.bridge.repository import GameRepository
-from src.bridge.schemas import CreateGameSchema, CreateGameResponseSchema, GetGameLinkSchema, GetGameLinkResponseSchema
+from src.bridge.schemas import CreateGameSchema, CreateGameResponseSchema, GetGameLinkResponseSchema
 from src.logs.log import log
 from src.vars.config import TG_BOT_URL
 
@@ -17,5 +19,5 @@ async def create_bridge(game_data: CreateGameSchema) -> CreateGameResponseSchema
 
 
 @router.get("/link")
-async def get_link(data: GetGameLinkSchema) -> GetGameLinkResponseSchema:
-    return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{data.game_id}")
+async def get_link(game_id: UUID) -> GetGameLinkResponseSchema:
+    return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{game_id}")
