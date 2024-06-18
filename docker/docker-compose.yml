@@ -46,7 +46,7 @@ services:
       context: ..
       dockerfile: ./docker/Dockerfile_backup
     volumes:
-      - ./backups:/backups
+      - ../backups:/backups
     networks:
       - rooma_network
     depends_on:
@@ -56,7 +56,7 @@ services:
     container_name: rooma_prometheus
     image: prom/prometheus
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ../prometheus:/etc/prometheus
       - prom_data:/prometheus
     networks:
       - rooma_network
@@ -71,7 +71,7 @@ services:
     image: grafana/grafana
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./grafana:/etc/grafana
+      - ../grafana:/etc/grafana
     env_file:
       - ../config/.env
     networks:
@@ -84,8 +84,8 @@ services:
     container_name: rooma_nginx
     image: nginx:latest
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./static:/etc/nginx/html
+      - ../nginx:/etc/nginx/conf.d
+      - ../static:/etc/nginx/html
     networks:
       - rooma_network
     ports:
