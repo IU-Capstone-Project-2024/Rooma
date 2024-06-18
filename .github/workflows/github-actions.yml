@@ -1,0 +1,69 @@
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the React app
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: built_frontend
+          path: build/
+
+  deploy_frontend:
+    name: Deploy React App
+    if: github.repository == 'azamatbayramov/Rooma'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: built_frontend
+          path: build/
+
+      - name: Copy build artifacts to remote server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.ROOMA_SERVER_SSH_HOST }}
+          username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
+          port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
+          key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
+          source: build/
+          target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/static
+
+  deploy_application:
+    name: Deploy Application
+    if: github.repository == 'azamatbayramov/Rooma'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install OpenSSH
+        run: sudo apt-get install openssh-client
+
+      - name: Add SSH key to the agent
+        run: ssh-add <(echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}")
+
+      - name: Connect to remote server and execute commands
+        run: ssh ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}@${{ secrets.ROOMA_SERVER_SSH_HOST }} -A -p ${{ secrets.ROOMA_SERVER_SSH_PORT }} -i ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }} "cd ${{ secrets.ROOMA_SERVER_APP_DIR }} && git pull && docker compose down && docker compose up --build -d"
