@@ -23,7 +23,7 @@ jobs:
         run: cd frontend && ls -a
 
       - name: Install dependencies
-        run: npm install
+        run: ls -a && npm install
 
       - name: Build the React app
         run: npm run build
