@@ -9,6 +9,7 @@ load_dotenv()
 try:
     DB_NAME = os.environ["DATABASE_NAME"]
     DB_HOST = os.environ["DATABASE_HOST"]
+    TG_BOT_URL = os.environ["TG_BOT_URL"]
 
     log.info("Successfully read .ENV file")
 except Exception as e:
