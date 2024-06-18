@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Go to frontend dir
-        run: cd Rooma/frontend
+        run: cd frontend
 
       - name: Install dependencies
         run: npm install
