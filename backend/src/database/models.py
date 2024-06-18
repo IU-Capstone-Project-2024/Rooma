@@ -7,9 +7,9 @@ from pydantic import Field
 
 class User(Document):
     telegram_id: int
-    username: str
+    username: str | None = None
     first_name: str
-    last_name: str
+    last_name: str | None = None
 
 
 class Game(Document):

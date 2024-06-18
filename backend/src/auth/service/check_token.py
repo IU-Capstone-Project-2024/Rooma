@@ -1,6 +1,6 @@
 import jwt
 
-from src.auth.config import SECRET
+from src.vars.config import AUTH_SECRET
 from src.auth.exceptions import BadDecodedSchemaException, DecodeException
 
 
@@ -28,7 +28,7 @@ class CheckTokenService:
         try:
             decode_result = jwt.decode(
                 jwt=self._token,
-                key=SECRET,
+                key=AUTH_SECRET,
                 algorithms=["HS256"]
             )
         except:
