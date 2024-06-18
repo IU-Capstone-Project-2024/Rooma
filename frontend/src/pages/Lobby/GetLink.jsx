@@ -1,6 +1,6 @@
 import {getTelegramId, getToken} from "@/utils/storage.js";
 import Lobby from "@/pages/Lobby/Lobby.jsx";
-import {root} from "../../main.jsx";
+import {root} from "@/main.jsx";
 
 
 async function getLink(name) {
@@ -24,7 +24,7 @@ async function getLink(name) {
     })
     let jsonResponse = await response.json();
     return jsonResponse["link"];
-};
+}
 
 
 export default async function GetLink(name) {
