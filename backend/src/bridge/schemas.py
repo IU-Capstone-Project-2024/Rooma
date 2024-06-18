@@ -11,3 +11,11 @@ class CreateGameSchema(BaseModel):
 
 class CreateGameResponseSchema(BaseModel):
     game_id: UUID
+
+
+class GetGameLinkSchema(BaseModel):
+    game_id: UUID
+
+
+class GetGameLinkResponseSchema(BaseModel):
+    link: str
