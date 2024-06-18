@@ -10,7 +10,11 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY /backend/src /src
 
 FROM python-base AS rooma-api
-CMD ["uvicorn", "src.main:app",  "--host", "0.0.0.0", "--port", "8000"]
+
+COPY /backend/src/main.py /main.py
+CMD ["uvicorn", "main:app",  "--host", "0.0.0.0", "--port", "8000"]
 
 FROM python-base AS rooma-bot
-CMD ["python", "src/bot.py"]
+
+COPY /backend/src/bot.py /src/bot.py
+CMD ["python", "bot.py"]
