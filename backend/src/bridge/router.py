@@ -1,9 +1,12 @@
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
+from src.auth.routes import AuthRouter
+from src.auth.schemas import CheckTokenRequestSchema
 from src.bridge.repository import GameRepository
 from src.bridge.schemas import CreateGameSchema, CreateGameResponseSchema, GetGameLinkResponseSchema
+from src.common.schemas import ErrorSchema
 from src.logs.log import log
 from src.vars.config import TG_BOT_URL
 
@@ -11,8 +14,15 @@ router = APIRouter(prefix="/bridge", tags=["Bridge"])
 game_repo = GameRepository()
 
 
-@router.post("/")
-async def create_bridge(game_data: CreateGameSchema) -> CreateGameResponseSchema:
+@router.post("/", responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}})
+async def create_bridge(token: str, telegram_id: int, game_data: CreateGameSchema) -> CreateGameResponseSchema:
+    check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
+    if not check_token.has_access:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate Telegram ID and token"
+        )
+
     created = await game_repo.create_one(game_data)
     log.info(f"Create game with id = {created.game_id}")
     return CreateGameResponseSchema(game_id=created.game_id)
