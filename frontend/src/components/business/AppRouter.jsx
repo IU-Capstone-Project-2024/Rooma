@@ -11,7 +11,7 @@ const AppRouter = () => {
         <>
             <Routes>
                 <Route path="/" element={<Layout className="bg-[#3FC7B8]"/>}>
-                    <Route path="/" element={<Main/>} />
+                    <Route path="" element={<Main/>} />
                     <Route path="auth" element={<Auth/>} />
                     <Route path="*" element={<NotFound/>} />
                     {/*<Route path="/about" element={<About/>}/>*/}
