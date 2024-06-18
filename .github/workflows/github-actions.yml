@@ -3,7 +3,7 @@ name: Build and Deploy React App
 on:
   push:
     branches:
-      - configure-ci-cd
+      - dev
 
 jobs:
   build_frontend:
