@@ -1,8 +1,9 @@
 from typing import TypeVar
 
-from app.database.repository.base import AbstractBaseRepository
 from beanie import Document, BeanieObjectId
 from pydantic import BaseModel
+
+from src.database.repository.base import AbstractBaseRepository
 
 T = TypeVar("T", bound=Document)
 
