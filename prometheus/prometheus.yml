@@ -3,7 +3,7 @@ global:
   scrape_timeout: 10s
   evaluation_interval: 15s
 scrape_configs:
-- job_name: backend
+- job_name: api
   honor_timestamps: true
   scrape_interval: 15s
   scrape_timeout: 10s
@@ -11,4 +11,4 @@ scrape_configs:
   scheme: http
   static_configs:
   - targets:
-    - backend:8000
+    - api:8000
