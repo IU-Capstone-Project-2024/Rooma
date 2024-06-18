@@ -63,6 +63,9 @@ jobs:
     steps:
       - name: Install OpenSSH
         run: sudo apt-get install openssh-client
+      
+      - name: Run SSH agent
+        run: eval "$(ssh-agent -s)"
 
       - name: Add SSH key to the agent
         run: ssh-add <(echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}")
