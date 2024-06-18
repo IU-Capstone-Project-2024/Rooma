@@ -54,6 +54,7 @@ jobs:
           key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
           source: build/*
           target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/static
+          strip_components: 1
 
   deploy_application:
     name: Deploy Application
