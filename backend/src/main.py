@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from src.bridge.router import router as bridge_router
 from src.database import init_db
 from src.logs.log import log
 
@@ -19,3 +20,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+# include routers
+app.include_router(bridge_router)
