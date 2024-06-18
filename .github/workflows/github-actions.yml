@@ -52,7 +52,7 @@ jobs:
           username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
           port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
           key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
-          source: build/*
+          source: build/build/
           target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/static
 
   deploy_application:
