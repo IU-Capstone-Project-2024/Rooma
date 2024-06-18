@@ -46,6 +46,8 @@ export default function Auth() {
 
     console.log(2, queryToken, queryTelegramId, token, telegramId);
 
+    window.history.pushState({}, '', window.location.pathname);
+
     return <App/>
 };
 
