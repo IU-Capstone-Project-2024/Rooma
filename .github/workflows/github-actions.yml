@@ -64,11 +64,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install OpenSSH
-        run: sudo apt-get install openssh-client
-
-      - name: Add ssh key
-        run: eval "$(ssh-agent -s)" && echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}" | base64 -d | ssh-add -
-        
-      - name: Connect to remote server and execute commands
-        run: ssh ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}@${{ secrets.ROOMA_SERVER_SSH_HOST }} -o "StrictHostKeyChecking no" -A -p ${{ secrets.ROOMA_SERVER_SSH_PORT }} "cd ${{ secrets.ROOMA_SERVER_APP_DIR }} && git pull && docker compose down && docker compose up --build -d"
+      - name: Start the application
+        uses: appleboy/ssh-action@v2
+        with:
+          host: ${{ secrets.ROOMA_SERVER_SSH_HOST }}
+          username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
+          port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
+          key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.ROOMA_SERVER_APP_DIR }}
+            git pull
+            docker compose down
+            docker compose up -d
