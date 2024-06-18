@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException, status
 
 from src.auth.routes import AuthRouter
@@ -27,6 +29,25 @@ async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema)
     created = await game_repo.create_one(game_data)
     log.info(f"Create game with id = {created.game_id}")
     return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{created.game_id}")
+
+
+@router.put("/join", responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema},
+                                status.HTTP_404_NOT_FOUND: {"model": ErrorSchema}})
+async def join_game(token: str, telegram_id: int, game_id: UUID) -> None:
+    check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
+    if not check_token.has_access:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate Telegram ID and token"
+        )
+
+    user = await user_repo.get_user(telegram_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Could not find user"
+        )
+    await game_repo.add_user_to_lobby(game_id, user)
 
 
 @router.get("/users")
