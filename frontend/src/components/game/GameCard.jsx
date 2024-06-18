@@ -2,6 +2,7 @@ import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
 import Lobby from "@/pages/Lobby/Lobby.jsx";
+import GetLink from "@/pages/Lobby/GetLink.jsx";
 
 export default function GameCard({name, img, small, onClick}) {
     return (
@@ -25,7 +26,7 @@ export default function GameCard({name, img, small, onClick}) {
                             • Change Setting #3<br/>
                             <button
                                 className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
-                                onClick={() => Lobby(name)}>
+                                onClick={() => GetLink(name)}>
                                 Create Game
                             </button>
                         </div>
