@@ -52,7 +52,7 @@ jobs:
           username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
           port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
           key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
-          source: build/
+          source: build/*
           target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/static
 
   deploy_application:
@@ -65,12 +65,9 @@ jobs:
     steps:
       - name: Install OpenSSH
         run: sudo apt-get install openssh-client
-      
-      - name: Run SSH agent
-        run: eval "$(ssh-agent -s)"
 
       - name: Add SSH key to the agent
-        run: ssh-add <(echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}")
+        run: eval "$(ssh-agent -s)" && ssh-add <(echo "${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}")
 
       - name: Connect to remote server and execute commands
         run: ssh ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}@${{ secrets.ROOMA_SERVER_SSH_HOST }} -A -p ${{ secrets.ROOMA_SERVER_SSH_PORT }} -i ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }} "cd ${{ secrets.ROOMA_SERVER_APP_DIR }} && git pull && docker compose down && docker compose up --build -d"
