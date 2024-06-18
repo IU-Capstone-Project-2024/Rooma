@@ -10,3 +10,5 @@ motor==3.4.0
 # Prometheus
 prometheus-fastapi-instrumentator==7.0.0
 
+# Bot
+aiogram==3.7.0
