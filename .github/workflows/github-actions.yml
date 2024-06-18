@@ -1,0 +1,78 @@
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build_frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: cd frontend && npm install
+
+      - name: Build the React app
+        run: cd frontend && npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: built_frontend
+          path: frontend/dist/
+
+  deploy_frontend:
+    name: Deploy React App
+    needs: build_frontend
+    environment: Deployment
+    if: github.repository == 'azamatbayramov/Rooma'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: built_frontend
+          path: build/
+
+      - name: Copy build artifacts to remote server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.ROOMA_SERVER_SSH_HOST }}
+          username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
+          port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
+          key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
+          source: build/*
+          target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/static
+          strip_components: 1
+
+  deploy_application:
+    name: Deploy Application
+    needs: deploy_frontend
+    environment: Deployment
+    if: github.repository == 'azamatbayramov/Rooma'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start the application
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ROOMA_SERVER_SSH_HOST }}
+          username: ${{ secrets.ROOMA_SERVER_SSH_USERNAME }}
+          port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
+          key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.ROOMA_SERVER_APP_DIR }}/docker
+            git pull
+            docker compose down
+            docker compose up -d
