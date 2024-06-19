@@ -17,3 +17,9 @@ class GameRepository(MongoBeanieRepository):
 
         game.lobby.append(user)
         _ = await game.save()
+
+    async def get_all_users_from_lobby(self, game_id: UUID) -> list[User]:
+        game = await self.get_one_by_game_id(game_id)
+        if not game:
+            return []
+        return game.lobby

@@ -51,7 +51,7 @@ async def join_game(token: str, telegram_id: int, game_id: UUID) -> None:
 
 
 @router.get("/users")
-async def get_all_users(token: str, telegram_id: int, skip: int | None = None, limit: int | None = None) -> list[User]:
+async def get_all_users(token: str, telegram_id: int, game_id: UUID) -> list[User]:
     check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
     if not check_token.has_access:
         raise HTTPException(
@@ -59,4 +59,4 @@ async def get_all_users(token: str, telegram_id: int, skip: int | None = None, l
             detail="Could not validate Telegram ID and token"
         )
 
-    return await user_repo.get_all(skip=skip, limit=limit)
+    return await game_repo.get_all_users_from_lobby(game_id)
