@@ -15,7 +15,7 @@ async function getLink(name) {
         data: 'placeholder',
     };
 
-    let response = await fetch('http://rooma-games.duckdns.org/bridge/game?token=' + token + '&telegram_id=' + telegramId, {
+    let response = await fetch('http://rooma-games.duckdns.org/api/bridge/game?token=' + token + '&telegram_id=' + telegramId, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
