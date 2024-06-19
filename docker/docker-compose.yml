@@ -26,6 +26,10 @@ services:
       target: rooma-api
     networks:
       - rooma_network
+    env_file:
+      - ../config/.env
+    environment:
+      - IN_DOCKER=true
     depends_on:
       - mongodb
 
@@ -37,6 +41,10 @@ services:
       target: rooma-bot
     networks:
       - rooma_network
+    env_file:
+      - ../config/.env
+    environment:
+      - IN_DOCKER=true
     depends_on:
       - mongodb
 
