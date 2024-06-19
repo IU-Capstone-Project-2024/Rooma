@@ -5,7 +5,7 @@ export default function WaitPage() {
     return (
         <>
             <div>
-                <b><h1>Waiting for game to start!</h1></b>
+                <b style={{fontSize: "5em"}}>Waiting for game to start!</b>
             </div>
         </>
     )
