@@ -17,6 +17,9 @@ if not IN_DOCKER:
 else:
     log.info("Application is running in Docker, no need to read .env file in config.py")
 
+APP_ROOT_PATH = "/api"
+APP_TITLE = "Rooma"
+APP_DESCRIPTION = "Online service for offline games"
 
 DB_NAME = getenv("DATABASE_NAME")
 DB_HOST = getenv("DATABASE_HOST")
