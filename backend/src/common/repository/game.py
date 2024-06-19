@@ -14,7 +14,8 @@ class GameRepository(MongoBeanieRepository):
         game = await self.get_one_by_game_id(game_id)
         if not game:
             return
-
+        if user in game.lobby:
+            return
         game.lobby.append(user)
         _ = await game.save()
 
