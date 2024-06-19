@@ -5,7 +5,7 @@ function requestJoinGame(token, telegramId, gameId) {
     // TODO: add states etc. to prevent double execution
     // TODO: check if token and telegram id do not exist
 
-    fetch('http://localhost:8000/bridge/join?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
+    fetch('http://rooma-games.duckdns.org/bridge/join?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
         method: 'PUT',
     }).then(data => {
     })

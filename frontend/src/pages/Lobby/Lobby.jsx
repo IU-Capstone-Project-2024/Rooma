@@ -8,7 +8,7 @@ async function requestUsers(gameId) {
     let token = getToken();
     let telegramId = getTelegramId();
 
-    let response = await fetch('http://localhost:8000/bridge/users?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
+    let response = await fetch('http://rooma-games.duckdns.org/bridge/users?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
         method: 'GET'
     })
     let users = await response.json();

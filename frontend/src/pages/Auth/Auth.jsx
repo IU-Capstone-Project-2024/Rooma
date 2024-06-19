@@ -27,7 +27,7 @@ export default function Auth() {
     let telegramId = getTelegramId();
 
     if ((!token || !telegramId) && (!queryToken || !queryTelegramId)) {
-        const telegramBotLink = 'https://t.me/whatis_test_bot?start=create_game';
+        const telegramBotLink = 'https://t.me/rooma_games_bot?start=create_game';
 
         return (
             <a href={telegramBotLink} target="_blank" rel="noopener noreferrer">
