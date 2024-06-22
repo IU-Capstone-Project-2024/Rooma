@@ -1,9 +1,8 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 
-from src.auth.routes import AuthRouter
-from src.auth.schemas import CheckTokenRequestSchema
+from src.auth.dependencies import verify_token
 from src.bridge.schemas import CreateGameSchema, GetGameLinkResponseSchema
 from src.common.repository.game import GameRepository
 from src.common.repository.user import UserRepository
@@ -17,30 +16,29 @@ game_repo = GameRepository()
 user_repo = UserRepository()
 
 
-@router.post("/game", responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}})
+@router.post(
+    "/game",
+    responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
+    dependencies=[Depends(verify_token)]
+)
 async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema) -> GetGameLinkResponseSchema:
-    check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
-    if not check_token.has_access:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate Telegram ID and token"
-        )
+    """
+    Creates a game object in the database and returns a link to Telegram for token validation.
 
+    If token is invalid, then 403 is returned.
+    """
     created = await game_repo.create_one(game_data)
     log.info(f"Create game with id = {created.game_id}")
     return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{created.game_id}")
 
 
-@router.put("/join", responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema},
-                                status.HTTP_404_NOT_FOUND: {"model": ErrorSchema}})
+@router.put(
+    "/join",
+    responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema},
+               status.HTTP_404_NOT_FOUND: {"model": ErrorSchema}},
+    dependencies=[Depends(verify_token)]
+)
 async def join_game(token: str, telegram_id: int, game_id: UUID) -> None:
-    check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
-    if not check_token.has_access:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate Telegram ID and token"
-        )
-
     user = await user_repo.get_user(telegram_id)
     if user is None:
         raise HTTPException(
@@ -50,13 +48,10 @@ async def join_game(token: str, telegram_id: int, game_id: UUID) -> None:
     await game_repo.add_user_to_lobby(game_id, user)
 
 
-@router.get("/users")
+@router.get(
+    "/users",
+    responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
+    dependencies=[Depends(verify_token)]
+)
 async def get_all_users(token: str, telegram_id: int, game_id: UUID) -> list[User]:
-    check_token = await AuthRouter.check_token(CheckTokenRequestSchema(token=token, telegram_id=telegram_id))
-    if not check_token.has_access:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Could not validate Telegram ID and token"
-        )
-
     return await game_repo.get_all_users_from_lobby(game_id)
