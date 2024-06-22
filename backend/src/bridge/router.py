@@ -18,10 +18,11 @@ user_repo = UserRepository()
 
 @router.post(
     "/game",
+    response_model=GetGameLinkResponseSchema,
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
 )
-async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema) -> GetGameLinkResponseSchema:
+async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema):
     """
     Creates a game object in the database and returns a link to Telegram for token validation.
 
@@ -38,7 +39,13 @@ async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema)
                status.HTTP_404_NOT_FOUND: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
 )
-async def join_game(token: str, telegram_id: int, game_id: UUID) -> None:
+async def join_game(token: str, telegram_id: int, game_id: UUID):
+    """
+    Joins a user to the game by its `game_id`. The user is added to lobby field.
+
+    If user is not found, then 404 is returned.\\
+    If token is invalid, then 403 is returned.
+    """
     user = await user_repo.get_user(telegram_id)
     if user is None:
         raise HTTPException(
@@ -50,8 +57,14 @@ async def join_game(token: str, telegram_id: int, game_id: UUID) -> None:
 
 @router.get(
     "/users",
+    response_model=list[User],
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
 )
-async def get_all_users(token: str, telegram_id: int, game_id: UUID) -> list[User]:
+async def get_all_users(token: str, telegram_id: int, game_id: UUID):
+    """
+    Returns all users in the game lobby by its `game_id`.
+
+    If token is invalid, then 403 is returned.
+    """
     return await game_repo.get_all_users_from_lobby(game_id)
