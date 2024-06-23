@@ -17,4 +17,4 @@ class Game(Document):
     name: str
     is_active: bool = False
     lobby: list[User] = Field(default_factory=list)
-    data: Any
+    data: dict[str, Any]
