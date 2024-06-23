@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from beanie.operators import Eq
+
 from src.database.models import Game, User
 from src.database.repository.mongo import MongoBeanieRepository
 
@@ -24,3 +26,6 @@ class GameRepository(MongoBeanieRepository):
         if not game:
             return []
         return game.lobby
+
+    async def get_all_active(self) -> list[Game]:
+        return await self.model.find(Eq(Game.is_active, True)).to_list()
