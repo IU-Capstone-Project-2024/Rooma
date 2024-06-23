@@ -12,7 +12,7 @@ COPY /backend/src /src
 FROM python-base AS rooma-api
 
 COPY /backend/src/main.py /main.py
-CMD ["uvicorn", "main:app",  "--host", "0.0.0.0", "--port", "8000"]
+CMD ["fastapi", "run", "main.py"]
 
 FROM python-base AS rooma-bot
 
