@@ -11,13 +11,13 @@ from src.database.models import User
 from src.logs.log import log
 from src.vars.config import TG_BOT_URL
 
-router = APIRouter(prefix="/bridge", tags=["Bridge"])
+router = APIRouter(prefix="/game", tags=["Game"])
 game_repo = GameRepository()
 user_repo = UserRepository()
 
 
 @router.post(
-    "/game",
+    "/create",
     response_model=GetGameLinkResponseSchema,
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
@@ -33,7 +33,7 @@ async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema)
     return GetGameLinkResponseSchema(link=f"{TG_BOT_URL}{created.game_id}")
 
 
-@router.put(
+@router.post(
     "/join",
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema},
                status.HTTP_404_NOT_FOUND: {"model": ErrorSchema}},
@@ -56,7 +56,7 @@ async def join_game(token: str, telegram_id: int, game_id: UUID):
 
 
 @router.get(
-    "/users",
+    "/lobby",
     response_model=list[User],
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
