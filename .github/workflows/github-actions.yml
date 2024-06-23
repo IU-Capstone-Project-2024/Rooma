@@ -75,4 +75,4 @@ jobs:
             cd ${{ secrets.ROOMA_SERVER_APP_DIR }}/docker
             git pull
             docker compose down
-            docker compose up -d
+            docker compose up -d --build
