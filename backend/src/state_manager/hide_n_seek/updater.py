@@ -2,7 +2,7 @@ import asyncio
 
 from src.common.repository.game import GameRepository
 from src.database import init_db
-from src.state_manager.hide_n_seek.states.handler import StateHandler
+from src.state_manager.hide_n_seek.handler import StateHandler
 
 SLEEP_TIME = 5  # seconds
 game_repo = GameRepository()
@@ -12,7 +12,7 @@ async def update_all():
     games = await game_repo.get_all_active()
 
     for game in games:
-        handler = StateHandler(game=game)
+        handler = StateHandler(game_id=game.game_id)
         await handler.handle_current_state()
 
 
