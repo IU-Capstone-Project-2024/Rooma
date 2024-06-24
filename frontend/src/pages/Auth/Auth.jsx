@@ -50,7 +50,8 @@ export default function Auth() {
                 fetch(BASE_URL + "/api/auth/login", loginOptions)
                     .then(
                         (result) => {
-                            setToken(result["access_token"])
+                            console.log(result);
+                            setToken(result["access_token"]);
                         }
                     )
             }, []
