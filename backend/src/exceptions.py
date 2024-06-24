@@ -13,3 +13,8 @@ class NotFoundException(BaseAppException):
 class ForbiddenException(BaseAppException):
     def __init__(self, message: str):
         super().__init__(403, message)
+
+
+class BadRequestException(BaseAppException):
+    def __init__(self, message: str):
+        super().__init__(400, message)
