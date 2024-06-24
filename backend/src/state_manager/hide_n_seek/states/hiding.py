@@ -12,7 +12,6 @@ class StateHandlerHiding(StateHandler):
         # fetch our game and check if it exists
         game = await self.get_current_game()
         if game is None:
-            log.error(f"Cannot find game with id = {self.game_id}")
             return
 
         # get seeker start time and check that it exists in data

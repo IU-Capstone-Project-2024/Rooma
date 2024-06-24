@@ -4,6 +4,8 @@ from src.common.repository.game import GameRepository
 from src.common.repository.game_state import GameStateRepository
 from src.common.schemas import CreateGameStateSchema
 from src.database import Game
+from src.games.exceptions import GameNotFoundException
+from src.logs.log import log
 from src.state_manager.hide_n_seek.state import State
 
 game_repo = GameRepository()
@@ -17,7 +19,11 @@ class StateHandler:
         self.game_id = game_id
 
     async def get_current_game(self) -> Game | None:
-        return await game_repo.get_one_by_game_id(self.game_id)
+        try:
+            return await game_repo.get_one_by_game_id(self.game_id)
+        except GameNotFoundException:
+            log.error(f"Cannot find game with id = {self.game_id}")
+            return None
 
     async def handle(self):
         pass
