@@ -1,7 +1,8 @@
 import React from 'react';
+import {useEffect} from 'react';
 import {getTelegramId, getToken, setTelegramId, setToken} from '@/utils/storage.js';
 import App from "@/App.jsx";
-import {TG_BOT_URL} from "../../constants/urls.js";
+import {BASE_URL, TG_BOT_URL} from "../../constants/urls.js";
 
 
 const button_style = {
@@ -37,6 +38,23 @@ export default function Auth() {
         );
     } else if (queryToken && queryTelegramId) {
         console.log(1, queryToken, queryTelegramId, token, telegramId);
+
+        const loginOptions = {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({refresh_token: queryToken})
+        }
+
+        useEffect(
+            () => {
+                fetch(BASE_URL + "/api/auth/login", loginOptions)
+                    .then(
+                        (result) => {
+                            setToken(result["access_token"])
+                        }
+                    )
+            }, []
+        );
 
         setToken(queryToken);
         setTelegramId(queryTelegramId);
