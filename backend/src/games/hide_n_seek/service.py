@@ -20,9 +20,9 @@ class GameService:
         if "hiders_found" not in game.data or "hiders" not in game.data:
             raise GameForbiddenException(game_id)
 
-        for _code, _telegram_id in game.data["hiders"].items():
+        for _telegram_id, _code in game.data["hiders"].items():
             if _code == code:
-                game.data["hiders_found"].append(_telegram_id)
+                game.data["hiders_found"].append(int(_telegram_id))
                 _ = await game.save()
                 break
         else:
@@ -35,7 +35,8 @@ class GameService:
         if "hiders" not in game.data:
             raise GameForbiddenException(game_id)
 
-        users = await user_repo.get_users_from_telegram_ids(game.data["hiders"].keys())
+        telegram_ids = list(map(int, game.data["hiders"].keys()))
+        users = await user_repo.get_users_from_telegram_ids(telegram_ids)
         hiders = [Player(**user.model_dump()) for user in users]
 
         return HidersResponse(hiders=hiders)
