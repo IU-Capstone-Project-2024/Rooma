@@ -33,7 +33,9 @@ class GameService:
         return SuccessResponse(success=True)
 
     async def leave_game(self, game_id: UUID, user: User) -> SuccessResponse:
-        pass
+        await game_repo.delete_user_from_lobby(game_id, user.telegram_id)
+
+        return SuccessResponse(success=True)
 
     async def get_lobby(self, game_id: UUID, user: User) -> LobbyResponse:
         telegram_ids = await game_repo.get_all_telegram_ids_from_lobby(game_id)

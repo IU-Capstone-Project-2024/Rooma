@@ -4,7 +4,7 @@ from beanie.operators import Eq
 
 from src.database.models import Game
 from src.database.repository.mongo import MongoBeanieRepository
-from src.games.exceptions import GameNotFoundException, CannotAddToLobbyException
+from src.games.exceptions import GameNotFoundException, CannotAddToLobbyException, UserNotFoundException
 
 
 class GameRepository(MongoBeanieRepository):
@@ -24,7 +24,16 @@ class GameRepository(MongoBeanieRepository):
         game.lobby.append(telegram_id)
         _ = await game.save()
 
-        return True
+    async def delete_user_from_lobby(self, game_id: UUID, telegram_id: int):
+        game = await self.get_one_by_game_id(game_id)
+        if not game:
+            raise GameNotFoundException(game_id)
+
+        if telegram_id not in game.lobby:
+            raise UserNotFoundException(telegram_id)
+
+        game.lobby.remove(telegram_id)
+        _ = await game.save()
 
     async def get_all_telegram_ids_from_lobby(self, game_id: UUID) -> list[int]:
         game = await self.get_one_by_game_id(game_id)
