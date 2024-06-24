@@ -1,11 +1,8 @@
 from datetime import datetime
 
-from src.common.repository.game import GameRepository
 from src.logs.log import log
 from src.state_manager.hide_n_seek.handler import StateHandler
 from src.state_manager.hide_n_seek.state import State
-
-game_repo = GameRepository()
 
 
 class StateHandlerSearching(StateHandler):
