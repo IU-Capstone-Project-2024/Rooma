@@ -20,6 +20,11 @@ class Game(Document):
     data: dict[str, Any]
 
 
+class RefreshToken(Document):
+    value: str
+    active: bool
+
+      
 class GameState(Document):
     game_id: UUID
     state: str

@@ -22,7 +22,7 @@ user_repo = UserRepository()
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
 )
-async def create_game(token: str, telegram_id: int, game_data: CreateGameSchema):
+async def create_game(token: str, game_data: CreateGameSchema):
     """
     Creates a game object in the database and returns a link to Telegram for token validation.
 
@@ -69,7 +69,7 @@ async def join_game(token: str, telegram_id: int, game_id: UUID):
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
 )
-async def get_all_users(token: str, telegram_id: int, game_id: UUID):
+async def get_all_users(token: str, game_id: UUID):
     """
     Returns all users in the game lobby by its `game_id`.
 
