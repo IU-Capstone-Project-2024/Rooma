@@ -10,6 +10,8 @@ CODE_LENGTH = 6
 
 class StateHandlerDistribute(StateHandler):
     async def handle(self):
+        log.info(f"State 'distribute' of game with id = {self.game_id}")
+
         # fetch our game and check if it exists
         game = await self.get_current_game()
         if game is None:
