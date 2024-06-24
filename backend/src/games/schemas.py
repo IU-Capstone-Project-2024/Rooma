@@ -14,6 +14,7 @@ class Player(BaseModel):
 class Game(BaseModel):
     game_id: UUID
     owner_telegram_id: int
+    is_active: bool
     name: str
     lobby: list[int] = []
     data: dict[str, Any]
