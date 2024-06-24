@@ -15,17 +15,17 @@ class Game(BaseModel):
     game_id: UUID
     owner_telegram_id: int
     name: str
-    lobby: list[Player]
-    data: Any
+    lobby: list[int]
+    data: dict[str, Any]
 
 
 class CreateGameDTO(BaseModel):
     name: str
-    data: Any
+    data: dict[str, Any]
 
 
 class LobbyResponse(BaseModel):
-    lobby: list[Player]
+    lobby: list[int]
 
 
 class RulesResponse(BaseModel):
