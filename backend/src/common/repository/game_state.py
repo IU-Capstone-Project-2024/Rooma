@@ -12,6 +12,10 @@ class GameStateRepository(MongoBeanieRepository):
     async def get_by_game_id(self, game_id: UUID) -> GameState | None:
         return await self.model.find_one(Eq(self.model.game_id, game_id))
 
+    async def get_state_by_game_id(self, game_id: UUID) -> str:
+        game_state = await self.get_by_game_id(game_id)
+        return game_state.state
+
     async def set_state_by_game_id(self, game_id: UUID, state: str):
         game_state = await self.get_by_game_id(game_id)
         await game_state.update(Set({self.model.state: state}))
