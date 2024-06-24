@@ -1,7 +1,7 @@
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
 
 class Player(BaseModel):
@@ -15,13 +15,16 @@ class Game(BaseModel):
     game_id: UUID
     owner_telegram_id: int
     name: str
-    lobby: list[int]
+    lobby: list[int] = []
     data: dict[str, Any]
 
 
 class CreateGameDTO(BaseModel):
     name: str
     data: dict[str, Any]
+
+    class Config:
+        extra = Extra.allow
 
 
 class LobbyResponse(BaseModel):
