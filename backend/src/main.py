@@ -5,9 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from src.auth.routes import auth_router
-from src.games.routes import router as games_router
 from src.database import init_db
 from src.exceptions import BaseAppException
+from src.games.hide_n_seek.routes import router as hide_n_seek_router
+from src.games.routes import router as games_router
 from src.logs.log import log
 from src.vars.config import APP_ROOT_PATH, APP_DESCRIPTION, APP_TITLE
 
@@ -40,6 +41,7 @@ instrumentator = Instrumentator().instrument(app)
 # include routers
 app.include_router(games_router)
 app.include_router(auth_router)
+app.include_router(hide_n_seek_router)
 
 # CORS
 origins = [
