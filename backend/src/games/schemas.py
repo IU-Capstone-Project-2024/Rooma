@@ -28,7 +28,7 @@ class CreateGameDTO(BaseModel):
 
 
 class LobbyResponse(BaseModel):
-    lobby: list[int]
+    lobby: list[Player]
 
 
 class RulesResponse(BaseModel):

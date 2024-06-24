@@ -29,7 +29,8 @@ class GameRepository(MongoBeanieRepository):
     async def get_all_telegram_ids_from_lobby(self, game_id: UUID) -> list[int]:
         game = await self.get_one_by_game_id(game_id)
         if not game:
-            return []
+            raise GameNotFoundException(game_id)
+
         return game.lobby
 
     async def get_all_active(self) -> list[Game]:

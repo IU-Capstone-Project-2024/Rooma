@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from src.common.repository.game import GameRepository
+from src.common.repository.user import UserRepository
 from src.database import User
 from src.games.exceptions import GameNotFoundException
 from src.games.schemas import (
@@ -8,12 +9,13 @@ from src.games.schemas import (
     Game,
     LobbyResponse,
     RulesResponse,
-    PostFeedbackDTO,
+    PostFeedbackDTO, Player,
 )
 from src.logs.log import log
 from src.schemas import SuccessResponse
 
 game_repo = GameRepository()
+user_repo = UserRepository()
 
 
 class GameService:
@@ -34,11 +36,10 @@ class GameService:
         pass
 
     async def get_lobby(self, game_id: UUID, user: User) -> LobbyResponse:
-        game = await game_repo.get_one_by_game_id(game_id)
-        if game is None:
-            raise GameNotFoundException(game_id)
+        telegram_ids = await game_repo.get_all_telegram_ids_from_lobby(game_id)
+        users = await user_repo.get_users_from_telegram_ids(telegram_ids)
 
-        return LobbyResponse(lobby=game.lobby)
+        return LobbyResponse(lobby=[Player(**user.model_dump()) for user in users])
 
     async def start_game(self, game_id: UUID, user: User) -> SuccessResponse:
         pass
