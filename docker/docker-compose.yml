@@ -48,6 +48,21 @@ services:
     depends_on:
       - mongodb
 
+  states:
+    container_name: rooma_states
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: rooma-states
+    networks:
+      - rooma_network
+    env_file:
+      - ../config/.env
+    environment:
+      - IN_DOCKER=true
+    depends_on:
+      - mongodb
+
   backups:
     container_name: rooma_backup
     build:
