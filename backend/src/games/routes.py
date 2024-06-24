@@ -3,8 +3,6 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from src.auth.dependencies import get_user
-from src.common.repository.game import GameRepository
-from src.common.repository.user import UserRepository
 from src.database.models import User
 from src.games.schemas import (
     Game,
@@ -20,9 +18,6 @@ router = APIRouter(
     prefix="/games",
     tags=["Games"]
 )
-
-game_repo = GameRepository()
-user_repo = UserRepository()
 
 service = GameService()
 
