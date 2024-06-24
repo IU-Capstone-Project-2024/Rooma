@@ -1,6 +1,7 @@
 import {getTelegramId, getToken} from "@/utils/storage.js";
 import Lobby from "@/pages/Lobby/Lobby.jsx";
 import {root} from "@/main.jsx";
+import {BASE_URL} from "../../constants/urls.js";
 
 
 async function getLink(name) {
@@ -15,7 +16,7 @@ async function getLink(name) {
         data: 'placeholder',
     };
 
-    let response = await fetch('http://rooma-games.duckdns.org/api/bridge/game?token=' + token + '&telegram_id=' + telegramId, {
+    let response = await fetch(BASE_URL + '/api/bridge/game?token=' + token + '&telegram_id=' + telegramId, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
