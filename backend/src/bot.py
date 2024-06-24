@@ -38,7 +38,7 @@ async def start(message: Message):
         return
 
     data = user_input[1]
-    token = (await AuthRouter.get_token(GetTokenRequestSchema(telegram_id=message.from_user.id))).token
+    token = (await AuthRouter.get_refresh_token(GetTokenRequestSchema(telegram_id=message.from_user.id))).token
 
     if data == "create_game":
         await message.answer(f"{FRONT_CREATE_GAME_LINK}?token={token}&telegram_id={message.from_user.id}")

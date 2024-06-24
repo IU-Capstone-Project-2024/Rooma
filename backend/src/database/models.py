@@ -17,3 +17,8 @@ class Game(Document):
     name: str
     lobby: list[User] = Field(default_factory=list)
     data: Any
+
+
+class RefreshToken(Document):
+    value: str
+    active: bool
