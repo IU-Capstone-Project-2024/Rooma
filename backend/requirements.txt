@@ -1,6 +1,7 @@
 # API
 fastapi==0.111.0
 pydantic==2.7.1
+shortuuid
 
 # MongoDB
 beanie==1.26.0

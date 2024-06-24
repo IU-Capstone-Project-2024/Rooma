@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class CreateGameSchema(BaseModel):
     name: str
-    data: Any
+    data: dict[str, Any]
 
 
 class GetGameLinkResponseSchema(BaseModel):
