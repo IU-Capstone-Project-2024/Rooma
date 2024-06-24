@@ -16,5 +16,5 @@ class Game(Document):
     game_id: UUID = Field(default_factory=uuid4)
     name: str
     is_active: bool = False
-    lobby: list[User] = Field(default_factory=list)
+    lobby: list[int] = Field(default_factory=list)
     data: dict[str, Any]
