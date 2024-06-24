@@ -1,5 +1,6 @@
 import QRCode from 'qrcode.react';
 import {getTelegramId, getToken} from "@/utils/storage.js";
+import {BASE_URL} from "../../constants/urls.js";
 
 async function requestUsers(gameId) {
     // TODO: add states etc. to prevent double execution
@@ -8,7 +9,7 @@ async function requestUsers(gameId) {
     let token = getToken();
     let telegramId = getTelegramId();
 
-    let response = await fetch('http://rooma-games.duckdns.org/api/bridge/users?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
+    let response = await fetch(BASE_URL + '/api/bridge/users?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
         method: 'GET'
     })
     let users = await response.json();
