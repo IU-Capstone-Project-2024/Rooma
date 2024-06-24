@@ -28,12 +28,12 @@ class StateHandler:
 
     async def get_current_state_handler(self):
         state = await game_state_repo.get_state_by_game_id(self.game_id)
-        handler = self.get_handler_by_state(State[state])
+        handler = self.get_handler_by_state(State(state))
         return handler
 
     def get_handler_by_state(self, state: State):
-        from states.distribute import StateHandlerDistribute
-        from states.start import StateHandlerStart
+        from src.state_manager.hide_n_seek.states.distribute import StateHandlerDistribute
+        from src.state_manager.hide_n_seek.states.start import StateHandlerStart
 
         state_to_handler = {
             State.DISTRIBUTE: StateHandlerDistribute,
