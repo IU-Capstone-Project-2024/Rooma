@@ -10,3 +10,4 @@ class State(StrEnum):
     
     HIDERS_WIN = auto()
     SEEKERS_WIN = auto()
+    NO_WINNERS = auto()

@@ -55,6 +55,7 @@ class StateHandler:
         from src.state_manager.hide_n_seek.states.searching import StateHandlerSearching
         from src.state_manager.hide_n_seek.states.hiders_win import StateHandlerHidersWin
         from src.state_manager.hide_n_seek.states.seekers_win import StateHandlerSeekersWin
+        from src.state_manager.hide_n_seek.states.no_winners import StateHandlerNoWinners
 
         state_to_handler = {
             State.DISTRIBUTE: StateHandlerDistribute,
@@ -63,6 +64,7 @@ class StateHandler:
             State.SEARCHING: StateHandlerSearching,
             State.HIDERS_WIN: StateHandlerHidersWin,
             State.SEEKERS_WIN: StateHandlerSeekersWin,
+            State.NO_WINNERS: StateHandlerNoWinners
         }
 
         return state_to_handler[state](self.game_id)
