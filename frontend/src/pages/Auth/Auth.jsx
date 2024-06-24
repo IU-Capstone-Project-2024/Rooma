@@ -48,6 +48,7 @@ export default function Auth() {
         useEffect(
             () => {
                 fetch(BASE_URL + "/api/auth/login", loginOptions)
+                    .then(res => res.json())
                     .then(
                         (result) => {
                             console.log(result);
