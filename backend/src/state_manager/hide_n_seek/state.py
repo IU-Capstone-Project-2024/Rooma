@@ -7,3 +7,6 @@ class State(StrEnum):
     HIDING = auto()
     SEARCHING = auto()
     HIDER_FOUND = auto()
+    
+    HIDERS_WIN = auto()
+    SEEKERS_WIN = auto()

@@ -52,11 +52,17 @@ class StateHandler:
         from src.state_manager.hide_n_seek.states.distribute import StateHandlerDistribute
         from src.state_manager.hide_n_seek.states.start import StateHandlerStart
         from src.state_manager.hide_n_seek.states.hiding import StateHandlerHiding
+        from src.state_manager.hide_n_seek.states.searching import StateHandlerSearching
+        from src.state_manager.hide_n_seek.states.hiders_win import StateHandlerHidersWin
+        from src.state_manager.hide_n_seek.states.seekers_win import StateHandlerSeekersWin
 
         state_to_handler = {
             State.DISTRIBUTE: StateHandlerDistribute,
             State.START: StateHandlerStart,
-            State.HIDING: StateHandlerHiding
+            State.HIDING: StateHandlerHiding,
+            State.SEARCHING: StateHandlerSearching,
+            State.HIDERS_WIN: StateHandlerHidersWin,
+            State.SEEKERS_WIN: StateHandlerSeekersWin,
         }
 
         return state_to_handler[state](self.game_id)
