@@ -18,3 +18,8 @@ class Game(Document):
     is_active: bool = False
     lobby: list[int] = Field(default_factory=list)
     data: dict[str, Any]
+
+
+class GameState(Document):
+    game_id: UUID
+    state: str
