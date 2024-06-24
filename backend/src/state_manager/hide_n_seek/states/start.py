@@ -27,6 +27,11 @@ class StateHandlerStart(StateHandler):
             log.error(f"Time to hide is not present in game with id = {self.game_id}")
             return
 
+        # game ends before seekers start
+        if time_to_hide >= duration:
+            log.error(f"Hiding takes more time than duration in game with id = {self.game_id}")
+            return
+
         # calculate finish times
         current_time = datetime.utcnow()
         seeker_start_time = current_time + timedelta(minutes=time_to_hide)
