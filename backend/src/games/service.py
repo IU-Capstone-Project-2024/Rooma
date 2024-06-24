@@ -1,9 +1,9 @@
 from uuid import UUID
 
 from src.common.repository.game import GameRepository
+from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
 from src.database import User
-from src.games.exceptions import GameNotFoundException
 from src.games.schemas import (
     CreateGameDTO,
     Game,
@@ -15,6 +15,7 @@ from src.logs.log import log
 from src.schemas import SuccessResponse
 
 game_repo = GameRepository()
+game_state_repo = GameStateRepository()
 user_repo = UserRepository()
 
 
@@ -47,15 +48,15 @@ class GameService:
         pass
 
     async def finish_game(self, game_id: UUID, user: User) -> SuccessResponse:
-        pass
+        await game_repo.set_active(game_id=game_id, is_active=False)
+
+        return SuccessResponse(success=True)
 
     async def get_rules(self, game_id: UUID, user: User) -> RulesResponse:
         pass
 
     async def get_game(self, game_id: UUID, user: User) -> Game:
         game = await game_repo.get_one_by_game_id(game_id)
-        if game is None:
-            raise GameNotFoundException(game_id)
 
         return Game(**game.model_dump())
 
