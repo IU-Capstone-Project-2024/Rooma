@@ -18,7 +18,7 @@ from src.schemas import SuccessResponse
 
 router = APIRouter(
     prefix="/games",
-    tags=["Game"],
+    tags=["Games"],
     dependencies=[Depends(verify_token)],
 )
 
