@@ -45,10 +45,12 @@ class GameService:
         return LobbyResponse(lobby=[Player(**user.model_dump()) for user in users])
 
     async def start_game(self, game_id: UUID, user: User) -> SuccessResponse:
-        pass
+        await game_repo.set_active(game_id, is_active=True)
+
+        return SuccessResponse(success=True)
 
     async def finish_game(self, game_id: UUID, user: User) -> SuccessResponse:
-        await game_repo.set_active(game_id=game_id, is_active=False)
+        await game_repo.set_active(game_id, is_active=False)
 
         return SuccessResponse(success=True)
 
