@@ -26,7 +26,9 @@ class GameService:
         return Game(**created.model_dump())
 
     async def join_game(self, game_id: UUID, user: User) -> SuccessResponse:
-        pass
+        await game_repo.add_user_to_lobby(game_id, user.telegram_id)
+
+        return SuccessResponse(success=True)
 
     async def leave_game(self, game_id: UUID, user: User) -> SuccessResponse:
         pass
