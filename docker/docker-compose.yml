@@ -93,7 +93,7 @@ services:
     image: nginx:latest
     volumes:
       - ../nginx:/etc/nginx/conf.d
-      - ../static:/etc/nginx/html
+      - ../frontend/dist:/etc/nginx/html
     networks:
       - rooma_network
     ports:

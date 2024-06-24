@@ -53,7 +53,7 @@ jobs:
           port: ${{ secrets.ROOMA_SERVER_SSH_PORT }}
           key: ${{ secrets.ROOMA_SERVER_SSH_PRIVATE_KEY }}
           source: build/*
-          target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/static
+          target: ${{ secrets.ROOMA_SERVER_APP_DIR }}/frontend/dist
           strip_components: 1
 
   deploy_application:
@@ -75,4 +75,4 @@ jobs:
             cd ${{ secrets.ROOMA_SERVER_APP_DIR }}/docker
             git pull
             docker compose down
-            docker compose up -d
+            docker compose up -d --build

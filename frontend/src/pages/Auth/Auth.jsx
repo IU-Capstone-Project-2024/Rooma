@@ -1,6 +1,7 @@
 import React from 'react';
 import {getTelegramId, getToken, setTelegramId, setToken} from '@/utils/storage.js';
 import App from "@/App.jsx";
+import {TG_BOT_URL} from "../../constants/urls.js";
 
 
 const button_style = {
@@ -27,7 +28,7 @@ export default function Auth() {
     let telegramId = getTelegramId();
 
     if ((!token || !telegramId) && (!queryToken || !queryTelegramId)) {
-        const telegramBotLink = 'https://t.me/rooma_games_bot?start=create_game';
+        const telegramBotLink = TG_BOT_URL + '?start=create_game';
 
         return (
             <a href={telegramBotLink} target="_blank" rel="noopener noreferrer">

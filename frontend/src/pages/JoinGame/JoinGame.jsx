@@ -1,11 +1,12 @@
 import WaitPage from "@/pages/JoinGame/WaitPage.jsx";
 import {root} from "@/main.jsx";
+import {BASE_URL} from "../../constants/urls.js";
 
 function requestJoinGame(token, telegramId, gameId) {
     // TODO: add states etc. to prevent double execution
     // TODO: check if token and telegram id do not exist
 
-    fetch('http://rooma-games.duckdns.org/api/bridge/join?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
+    fetch(BASE_URL + '/api/bridge/join?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
         method: 'PUT',
     }).then(data => {
     })

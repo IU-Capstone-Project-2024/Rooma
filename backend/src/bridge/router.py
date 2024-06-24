@@ -36,7 +36,8 @@ async def create_game(token: str, game_data: CreateGameSchema):
 @router.post(
     "/join",
     responses={status.HTTP_403_FORBIDDEN: {"model": ErrorSchema},
-               status.HTTP_404_NOT_FOUND: {"model": ErrorSchema}},
+               status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
+               status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema}},
     dependencies=[Depends(verify_token)]
 )
 async def join_game(token: str, telegram_id: int, game_id: UUID):
@@ -44,7 +45,8 @@ async def join_game(token: str, telegram_id: int, game_id: UUID):
     Joins a user to the game by its `game_id`. The user is added to lobby field.
 
     If user is not found, then 404 is returned.\\
-    If token is invalid, then 403 is returned.
+    If token is invalid, then 403 is returned.\\
+    If could not add the user, then 400 is returned.
     """
     user = await user_repo.get_user(telegram_id)
     if user is None:
@@ -52,7 +54,13 @@ async def join_game(token: str, telegram_id: int, game_id: UUID):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Could not find user"
         )
-    await game_repo.add_user_to_lobby(game_id, user)
+
+    result = await game_repo.add_user_to_lobby(game_id, user.telegram_id)
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Could not add user to lobby"
+        )
 
 
 @router.get(
@@ -67,4 +75,7 @@ async def get_all_users(token: str, game_id: UUID):
 
     If token is invalid, then 403 is returned.
     """
-    return await game_repo.get_all_users_from_lobby(game_id)
+    telegram_ids = await game_repo.get_all_telegram_ids_from_lobby(game_id)
+    users = await user_repo.get_users_from_telegram_ids(telegram_ids)
+
+    return users
