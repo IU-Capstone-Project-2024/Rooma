@@ -3,7 +3,7 @@ import os
 
 
 class CustomLogger(logging.Logger):
-    def error(self, msg, *args, **kwargs):
+    def exception(self, msg, *args, **kwargs):
         """
         Log 'msg % args' with severity 'ERROR', including traceback information.
         """
