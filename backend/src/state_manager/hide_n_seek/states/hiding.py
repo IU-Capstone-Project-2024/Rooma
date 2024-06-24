@@ -26,5 +26,8 @@ class StateHandlerHiding(StateHandler):
         if current_time < seeker_start_time:
             return
 
+        game.data["hiders_found"] = []
+        _ = await game.save()
+
         # go to a new state
         await self.set_new_state(State.SEARCHING)
