@@ -32,7 +32,6 @@ class StateHandlerSearching(StateHandler):
         current_time = datetime.utcnow()
         if current_time >= game_end_time:
             await self.set_new_state(State.HIDERS_WIN)
-            await game_repo.set_active(self.game_id, is_active=False)
             return
 
         found_set = set(game.data.get("hiders_found", []))
@@ -41,5 +40,4 @@ class StateHandlerSearching(StateHandler):
         # no hiders
         if len(hiders_set - found_set) == 0:
             await self.set_new_state(State.SEEKERS_WIN)
-            await game_repo.set_active(self.game_id, is_active=False)
             return
