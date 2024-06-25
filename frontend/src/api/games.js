@@ -8,7 +8,7 @@ const {user} = useAuth();
 const token = user.token;
 
 export const createGame = async (gameId, ownerTelegramId, isActive, name, lobby, data) => {
-    const url = `${GAMES_URL}create?token=${token}`;
+    const url = `${GAMES_URL}/create?token=${token}`;
 
     const gameInfo = {
         game_id: gameId,
@@ -28,3 +28,16 @@ export const createGame = async (gameId, ownerTelegramId, isActive, name, lobby,
         throw error; // Пробрасываем ошибку дальше, если нужно обработать в другом месте
     }
 };
+
+export const joinGame = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/join?token=${token}`;
+
+    try {
+        const response = await axios.post(url);
+        console.log('Game joined:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error joining game:', error);
+        throw error;
+    }
+}
