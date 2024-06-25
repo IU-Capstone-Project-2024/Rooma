@@ -5,7 +5,7 @@ from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
 from src.database import User
 from src.games.exceptions import GameForbiddenException, UserNotFoundException, GameNotFoundException
-from src.games.hide_n_seek.schemas import HidersResponse, EndTimesResponse, StateResponse
+from src.games.hide_n_seek.schemas import HidersResponse, EndTimesResponse, StateResponse, DurationsResponse
 from src.games.schemas import Player
 from src.schemas import SuccessResponse
 
@@ -55,6 +55,14 @@ class GameService:
         return EndTimesResponse(
             seeker_start_time=game.data["seeker_start_time"],
             game_end_time=game.data["game_end_time"]
+        )
+
+    async def get_durations(self, game_id: UUID, user: User) -> DurationsResponse:
+        game = await game_repo.get_one_by_game_id(game_id)
+
+        return DurationsResponse(
+            duration=game.data["duration"],
+            time_to_hide=game.data["time_to_hide"]
         )
 
     async def get_state(self, game_id: UUID, user: User) -> StateResponse:

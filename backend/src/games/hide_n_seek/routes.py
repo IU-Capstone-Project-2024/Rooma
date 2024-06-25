@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from src.auth.dependencies import get_user
 from src.database.models import User
-from src.games.hide_n_seek.schemas import HidersResponse, EndTimesResponse, StateResponse
+from src.games.hide_n_seek.schemas import HidersResponse, EndTimesResponse, StateResponse, DurationsResponse
 from src.games.hide_n_seek.service import GameService
 from src.schemas import SuccessResponse
 
@@ -38,6 +38,14 @@ async def get_hiders(game_id: UUID, user: User = Depends(get_user)):
 )
 async def get_end_times(game_id: UUID, user: User = Depends(get_user)):
     return await service.get_end_time(game_id, user)
+
+
+@router.get(
+    "/{game_id}/durations",
+    response_model=DurationsResponse
+)
+async def get_durations(game_id: UUID, user: User = Depends(get_user)):
+    return await service.get_durations(game_id, user)
 
 
 @router.get(

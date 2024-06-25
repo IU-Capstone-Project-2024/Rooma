@@ -14,5 +14,10 @@ class EndTimesResponse(BaseModel):
     game_end_time: datetime
 
 
+class DurationsResponse(BaseModel):
+    duration: int
+    time_to_hide: int
+
+
 class StateResponse(BaseModel):
     state: str
