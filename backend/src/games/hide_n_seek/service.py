@@ -21,6 +21,8 @@ class GameService:
             raise GameForbiddenException(game_id)
         if "hiders_found" not in game.data or "hiders" not in game.data:
             raise GameForbiddenException(game_id)
+        if str(user.telegram_id) in game.data["hiders"]:
+            raise GameForbiddenException(game_id)
 
         for _telegram_id, _code in game.data["hiders"].items():
             if _code == code:
