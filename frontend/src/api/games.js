@@ -7,16 +7,16 @@ const GAMES_URL = BASE_URL + '/api/games/';
 const {user} = useAuth();
 const token = user.token;
 
-export const createGame = async (gameId, ownerTelegramId, isActive, name, lobby, data) => {
+export const createGame = async ( name, duration, timeToHide, seekerPercentage) => {
     const url = `${GAMES_URL}/create?token=${token}`;
 
     const gameInfo = {
-        game_id: gameId,
-        owner_telegram_id: ownerTelegramId,
-        is_active: isActive,
         name: name,
-        lobby: lobby,
-        data: data,
+        data: {
+            duration: duration,
+            timeToHide: timeToHide,
+            seekerPercentage: seekerPercentage
+        }
     };
 
     try {
