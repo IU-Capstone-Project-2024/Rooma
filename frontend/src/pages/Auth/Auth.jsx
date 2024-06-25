@@ -1,74 +1,33 @@
-import React from 'react';
-import {useEffect} from 'react';
-import {getTelegramId, getToken, setTelegramId, setToken} from '@/utils/storage.js';
-import App from "@/App.jsx";
-import {BASE_URL, TG_BOT_URL} from "../../constants/urls.js";
+import {Navigate} from 'react-router-dom';
+import {useAuth} from '@/components/business/useAuth';
+import {TG_BOT_URL} from '@/constants/urls.js';
+import logo from '@/assets/logo.svg';
+import telegramLogo from '@/assets/telegramLogo.svg';
 
+const Auth = () => {
+    const {isAuth} = useAuth();
 
-const button_style = {
-    padding: '10px 20px',
-    fontSize: '16px',
-    backgroundColor: '#0088cc', // Telegram's primary color
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer'
-};
-
-
-export default function Auth() {
-    // TODO: add states etc. to prevent double execution
-
-    const url = window.location.search;
-    const params = new URLSearchParams(url);
-
-    const queryToken = params.get('token');
-    const queryTelegramId = params.get('telegram_id');
-
-    let token = getToken();
-    let telegramId = getTelegramId();
-
-    if ((!token || !telegramId) && (!queryToken || !queryTelegramId)) {
-        const telegramBotLink = TG_BOT_URL + '?start=create_game';
-
-        return (
-            <a href={telegramBotLink} target="_blank" rel="noopener noreferrer">
-                <button style={button_style}>Authorize in Telegram Bot</button>
-            </a>
-        );
-    } else if (queryToken && queryTelegramId) {
-        console.log(1, queryToken, queryTelegramId, token, telegramId);
-
-        const loginOptions = {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({refresh_token: queryToken})
-        }
-
-        useEffect(
-            () => {
-                fetch(BASE_URL + "/api/auth/login", loginOptions)
-                    .then(res => res.json())
-                    .then(
-                        (result) => {
-                            console.log(result);
-                            setToken(result["access_token"]);
-                        }
-                    )
-            }, []
-        );
-
-        setToken(queryToken);
-        setTelegramId(queryTelegramId);
+    if (isAuth()) {
+        return <Navigate to="/"/>;
     }
 
-    token = getToken();
-    telegramId = getTelegramId();
+    const telegramBotLink = `${TG_BOT_URL}?start=create_game`;
 
-    console.log(2, queryToken, queryTelegramId, token, telegramId);
-
-    // window.history.pushState({}, '', window.location.pathname);
-
-    return <App/>
+    return (
+        <div className="flex flex-col items-center justify-center h-screen bg-[#3FC7B8]">
+            <div className="flex items-center mb-8">
+                <img src={logo} alt="Rooma" className="h-16"/>
+                <h1 className="text-6xl font-bold text-white ml-4">Rooma</h1>
+            </div>
+            <a href={telegramBotLink} target="_blank" rel="noopener noreferrer">
+                <button
+                    className="flex items-center px-10 py-6 text-xl bg-white text-black font-semibold rounded-lg shadow-md hover:bg-gray-200 focus:outline-none">
+                    <img src={telegramLogo} alt="Telegram Logo" className="h-8 w-8 mr-4"/>
+                    Authorize in Telegram Bot
+                </button>
+            </a>
+        </div>
+    );
 };
 
+export default Auth;
