@@ -11,8 +11,11 @@ class GetTokenResponseSchema(BaseModel):
 
 class CheckTokenRequestSchema(BaseModel):
     token: str
-    telegram_id: int
 
 
-class CheckTokenResponseSchema(BaseModel):
-    has_access: bool
+class LoginRequestSchema(BaseModel):
+    refresh_token: str
+
+
+class LoginResponseSchema(BaseModel):
+    access_token: str

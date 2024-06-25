@@ -14,6 +14,18 @@ class User(Document):
 
 class Game(Document):
     game_id: UUID = Field(default_factory=uuid4)
+    owner_telegram_id: int
     name: str
-    lobby: list[User] = Field(default_factory=list)
-    data: Any
+    is_active: bool = False
+    lobby: list[int] = Field(default_factory=list)
+    data: dict[str, Any]
+
+
+class RefreshToken(Document):
+    value: str
+    active: bool
+
+      
+class GameState(Document):
+    game_id: UUID
+    state: str
