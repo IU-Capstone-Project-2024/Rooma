@@ -13,3 +13,8 @@ export const setTelegramId = (telegramId) => {
 export const getTelegramId = () => {
     return localStorage.getItem('telegramId');
 };
+
+export const clearStorage = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('telegramId');
+};
