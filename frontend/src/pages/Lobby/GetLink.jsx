@@ -28,7 +28,7 @@ async function getLink(name) {
 }
 
 
-export default async function GetLink(name) {
+export default async function GetLink(name, request) {
     let link = await getLink(name);
 
     root.render(<Lobby link={link}/>);
