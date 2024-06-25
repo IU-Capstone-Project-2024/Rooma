@@ -17,14 +17,18 @@ user_repo = UserRepository()
 class GameService:
     async def find_hider(self, code: str, game_id: UUID, user: User) -> SuccessResponse:
         game = await game_repo.get_one_by_game_id(game_id)
+        if not game.is_active:
+            raise GameForbiddenException(game_id)
         if "hiders_found" not in game.data or "hiders" not in game.data:
             raise GameForbiddenException(game_id)
 
         for _telegram_id, _code in game.data["hiders"].items():
             if _code == code:
-                game.data["hiders_found"].append(int(_telegram_id))
-                _ = await game.save()
-                break
+                telegram_id = int(_telegram_id)
+                if telegram_id not in game.data["hiders_found"]:
+                    game.data["hiders_found"].append(telegram_id)
+                    _ = await game.save()
+                    break
         else:
             raise UserNotFoundException(code)
 

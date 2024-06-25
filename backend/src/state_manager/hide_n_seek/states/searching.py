@@ -33,6 +33,7 @@ class StateHandlerSearching(StateHandler):
 
         found_set = set(game.data.get("hiders_found", []))
         hiders_set = set(game.data.get("hiders", dict()).keys())
+        log.warn(f"{found_set}, {hiders_set}")
 
         # no hiders
         if len(hiders_set - found_set) == 0:
