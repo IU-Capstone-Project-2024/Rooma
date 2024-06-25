@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { BASE_URL } from "@/constants/urls.js";
+import {useAuth} from "@/components/business/useAuth.js";
 
 const GAMES_URL = BASE_URL + '/api/games/';
 
-export const createGame = async (token, gameId, ownerTelegramId, isActive, name, lobby, data) => {
+const {user} = useAuth();
+const token = user.token;
+
+export const createGame = async (gameId, ownerTelegramId, isActive, name, lobby, data) => {
     const url = `${GAMES_URL}create?token=${token}`;
 
     const gameInfo = {
