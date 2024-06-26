@@ -46,7 +46,7 @@ const RequestUsers = (gameId) => {
 
     ProcessUsers(); // immediate
 
-    setTimeout(ProcessUsers, 5000);
+    setTimeout(ProcessUsers(), 5000);
 }
 
 export default function Lobby() {
