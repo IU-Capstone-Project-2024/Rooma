@@ -3,10 +3,8 @@ import {BASE_URL} from "@/constants/urls.js";
 
 const GAMES_URL = BASE_URL + '/api/games/hide-n-seek/';
 
-const token = localStorage.getItem("token");
-
 export const getDuration = async (gameId) => {
-    const url = `${GAMES_URL}/${gameId}/durations?token=${token}`;
+    const url = `${GAMES_URL}/${gameId}/durations?token=${localStorage.getItem("token")}`;
 
     try {
         const response = await axios.get(url);
