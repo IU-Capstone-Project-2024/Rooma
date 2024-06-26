@@ -3,18 +3,24 @@ import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
 import {createGame} from "@/api/gamesCommon.js";
+import {useNavigate} from "react-router-dom";
 
 
 export default function GameCard({ name, img, small, onClick }) {
     const [game_minutes, setGameMinutes] = useState(0);
     const [waiting_minutes, setWaitingMinutes] = useState(0);
 
+    const navigate = useNavigate();
+
     const handleCreateGame = () => {
         const selectedGameTime =  `${String(game_minutes).padStart(2, '0')}`;
         const selectedWaitingTime =  `${String(waiting_minutes).padStart(2, '0')}`;
 
+
         createGame("hide and seek", Number(selectedGameTime), Number(selectedWaitingTime), 20)
-            .then();
+            .then((res) => {
+                navigate("/lobby?game_id=" + res["game_id"]);
+            });
     };
 
     return (

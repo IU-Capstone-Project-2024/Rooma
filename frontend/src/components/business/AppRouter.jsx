@@ -8,6 +8,7 @@ import Auth from "@/pages/Auth/Auth.jsx";
 
 import RequireAuth from "@/components/business/RequireAuth.jsx";
 import {AuthProvider} from "@/components/business/AuthProvider.jsx";
+import Lobby from "@/pages/Lobby/Lobby.jsx";
 
 
 const AppRouter = () => {
@@ -19,8 +20,8 @@ const AppRouter = () => {
                     <Route path="/" element={<Layout className="bg-[#3FC7B8]"/>}>
                         <Route path="" element={<RequireAuth><Main/></RequireAuth>}/>
                         <Route path="join_game" element={<RequireAuth><JoinGame/></RequireAuth>}/>
+                        <Route path="lobby" element={<RequireAuth><Lobby/></RequireAuth>}/>
                         <Route path="*" element={<NotFound/>}/>
-
                     </Route>
                 </Routes>
             </AuthProvider>
