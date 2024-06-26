@@ -2,39 +2,19 @@ import { useState } from "react";
 import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import GetLink from "@/pages/Lobby/GetLink.jsx";
+import {createGame} from "@/api/gamesCommon.js";
 
-const convertTimeToSeconds = (timeString) => {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
-    return (hours * 3600) + (minutes * 60) + seconds;
-};
 
 export default function GameCard({ name, img, small, onClick }) {
-    const [game_hours, setGameHours] = useState(0);
     const [game_minutes, setGameMinutes] = useState(0);
-    const [game_seconds, setGameSeconds] = useState(0);
-
-    const [waiting_hours, setWaitingHours] = useState(0);
     const [waiting_minutes, setWaitingMinutes] = useState(0);
-    const [waiting_seconds, setWaitingSeconds] = useState(0);
 
     const handleCreateGame = () => {
-        const selectedGameTime =  `${String(game_hours).padStart(2, '0')}:${String(game_minutes).padStart(2, '0')}:${String(game_seconds).padStart(2, '0')}`;
-        const selectedWaitingTime =  `${String(waiting_hours).padStart(2, '0')}:${String(waiting_minutes).padStart(2, '0')}:${String(waiting_seconds).padStart(2, '0')}`;
+        const selectedGameTime =  `${String(game_minutes).padStart(2, '0')}`;
+        const selectedWaitingTime =  `${String(waiting_minutes).padStart(2, '0')}`;
 
-        const gameTimeInSeconds = convertTimeToSeconds(selectedGameTime);
-        const waitingTimeInSeconds = convertTimeToSeconds(selectedWaitingTime);
-
-        const request = {
-            name: "hide and seek",
-            data: {
-                duration: gameTimeInSeconds,
-                time_to_hide: waitingTimeInSeconds,
-                seeker_percentage: 20
-            }
-        }
-
-        GetLink(name, request);
+        createGame("hide and seek", Number(selectedGameTime), Number(selectedWaitingTime), 20)
+            .then();
     };
 
     return (
@@ -69,16 +49,8 @@ export default function GameCard({ name, img, small, onClick }) {
                         </div>
 
                         <div className="flex items-center justify-between">
-                            <p>Select game time:</p>
+                            <p>Select game time (in minutes):</p>
                             <div className="flex">
-                                <input
-                                    type="number"
-                                    value={game_hours}
-                                    onChange={(e) => setGameHours(Math.max(0, Math.min(23, e.target.value)))}
-                                    className="w-12 text-center"
-                                    placeholder="hh"
-                                />
-                                <span>:</span>
                                 <input
                                     type="number"
                                     value={game_minutes}
@@ -86,42 +58,18 @@ export default function GameCard({ name, img, small, onClick }) {
                                     className="w-12 text-center"
                                     placeholder="mm"
                                 />
-                                <span>:</span>
-                                <input
-                                    type="number"
-                                    value={game_seconds}
-                                    onChange={(e) => setGameSeconds(Math.max(0, Math.min(59, e.target.value)))}
-                                    className="w-12 text-center"
-                                    placeholder="ss"
-                                />
                             </div>
                         </div>
 
                         <div className="flex items-center justify-between">
-                            <p>Select time for waiting:</p>
+                            <p>Select time for waiting (in minutes):</p>
                             <div className="flex">
-                                <input
-                                    type="number"
-                                    value={waiting_hours}
-                                    onChange={(e) => setWaitingHours(Math.max(0, Math.min(23, e.target.value)))}
-                                    className="w-12 text-center"
-                                    placeholder="hh"
-                                />
-                                <span>:</span>
                                 <input
                                     type="number"
                                     value={waiting_minutes}
                                     onChange={(e) => setWaitingMinutes(Math.max(0, Math.min(59, e.target.value)))}
                                     className="w-12 text-center"
                                     placeholder="mm"
-                                />
-                                <span>:</span>
-                                <input
-                                    type="number"
-                                    value={waiting_seconds}
-                                    onChange={(e) => setWaitingSeconds(Math.max(0, Math.min(59, e.target.value)))}
-                                    className="w-12 text-center"
-                                    placeholder="ss"
                                 />
                             </div>
                         </div>
