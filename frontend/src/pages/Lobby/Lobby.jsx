@@ -14,7 +14,7 @@ async function requestUsers(gameId) {
 
     let response = await fetch(BASE_URL + '/api/bridge/users?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
         method: 'GET'
-    })
+    });
     let users = await response.json();
     let rows = "";
     for (let i = 0; i < users.length; i++) {
@@ -42,7 +42,6 @@ async function requestUsers(gameId) {
     });
 }
 
-
 export default function Lobby() {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -52,41 +51,50 @@ export default function Lobby() {
     useEffect(() => {
         if (!game_id) {
             navigate("/");
+        } else {
+            requestUsers(game_id);
         }
-    }, []);
+    }, [game_id]);
 
     const link = BASE_URL + "/join_game?game_id=" + game_id;
 
     return (
         <section className="bg-[#ED784A] space-y-10">
-            <div className="mx-auto max-w-fit my-8 flex flex-col">
+            <div className="mx-auto max-w-fit my-8 flex flex-row justify-around">
                 <div className="qr-section">
                     <QRCode className="qr-code" size={360} includeMargin={true} value={link}/>
                     <button
-                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", "px-8 py-2")}>
+                        className={classNames("m-2 bg-[#FFCD7B] self-start rounded-xl text-white", "px-8 py-2")}>
                         Copy link
                     </button>
                 </div>
-                <div className="player-list-section">
-                    <div className="player-list">
-                        <div className="player">1 Alex Noar</div>
-                    </div>
+
+                <div className="flex flex-col">
+                    <table className="table-auto border-collapse border border-gray-800 w-full">
+                        <thead>
+                        <tr>
+                            <th className="border border-gray-600 px-4 py-2 bg-gray-200">Telegram ID</th>
+                            <th className="border border-gray-600 px-4 py-2 bg-gray-200">First Name</th>
+                        </tr>
+                        </thead>
+                        <tbody className="users">
+                        <tr>
+                            <td className="border border-gray-600 px-4 py-2">12345678</td>
+                            <td className="border border-gray-600 px-4 py-2">John Doe</td>
+                        </tr>
+                        <tr>
+                            <td className="border border-gray-600 px-4 py-2">87654321</td>
+                            <td className="border border-gray-600 px-4 py-2">Jane Smith</td>
+                        </tr>
+                        {/* Sample data for illustration */}
+                        </tbody>
+                    </table>
+
                     <button
-                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", "px-8 py-2")}>
+                        className={classNames("m-2 bg-[#FFCD7B] self-start rounded-xl text-white", "px-8 py-2")}>
                         Play
                     </button>
                 </div>
-
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Telegram ID</th>
-                        <th>First Name</th>
-                    </tr>
-                    </thead>
-                    <tbody className="users">
-                    </tbody>
-                </table>
             </div>
         </section>
     );
