@@ -1,45 +1,52 @@
 import QRCode from 'qrcode.react';
-import {getTelegramId, getToken} from "@/utils/storage.js";
 import {BASE_URL} from "@/constants/urls.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import classNames from "classnames";
+import {getLobby} from "@/api/gamesCommon.js";
 
-async function requestUsers(gameId) {
-    // TODO: add states etc. to prevent double execution
-    // TODO: check if token and telegram id do not exist
 
-    let token = getToken();
-    let telegramId = getTelegramId();
-
-    let response = await fetch(BASE_URL + '/api/bridge/users?token=' + token + '&telegram_id=' + telegramId + '&game_id=' + gameId, {
-        method: 'GET'
-    });
-    let users = await response.json();
+function createUsersHTML(users) {
     let rows = "";
     for (let i = 0; i < users.length; i++) {
         const tr = document.createElement('tr'); // Create <tr> element
 
         // Create first <td> column with item ID
         const td1 = document.createElement('td');
+        td1.className = "border border-gray-600 px-4 py-2 bg-[#DDDEDD]";
         td1.textContent = users[i]["telegram_id"];
-        tr.appendChild(td1); // Append td1 to tr
+        tr.appendChild(td1);
 
         // Create second <td> column with item name
         const td2 = document.createElement('td');
+        td2.className = "border border-gray-600 px-4 py-2 bg-[#DDDEDD]";
         td2.textContent = users[i]["first_name"];
-        tr.appendChild(td2); // Append td2 to tr
+        tr.appendChild(td2);
 
         rows += tr.outerHTML + "\n";
     }
-    document.getElementsByClassName("users").item(0).innerHTML = rows;
 
-    // return jsonResponse["link"];
-    await new Promise(resolve => {
-        setTimeout(resolve, 1000, gameId)
-    }).then(() => {
-        return requestUsers(gameId)
-    });
+    return rows;
+}
+
+
+const RequestUsers = (gameId) => {
+    const [users, setUsers] = useState([]);
+
+    const ProcessUsers = () => {
+        getLobby(gameId)
+            .then((res) => {
+                setUsers(res["lobby"]);
+            });
+        let users_el = document.getElementsByClassName("users").item(0);
+        if (users_el) {
+            users_el.innerHTML = createUsersHTML(users);
+        }
+    }
+
+    ProcessUsers(); // immediate
+
+    setTimeout(ProcessUsers, 5000);
 }
 
 export default function Lobby() {
@@ -51,12 +58,19 @@ export default function Lobby() {
     useEffect(() => {
         if (!game_id) {
             navigate("/");
-        } else {
-            requestUsers(game_id);
         }
-    }, [game_id]);
+    }, [game_id, navigate]);
+
+    RequestUsers(game_id);
 
     const link = BASE_URL + "/join_game?game_id=" + game_id;
+
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(link);
+        } catch (err) { /* empty */
+        }
+    };
 
     return (
         <section className="bg-[#ED784A] space-y-10">
@@ -64,7 +78,8 @@ export default function Lobby() {
                 <div className="qr-section">
                     <QRCode className="qr-code" size={360} includeMargin={true} value={link}/>
                     <button
-                        className={classNames("m-2 bg-[#FFCD7B] self-start rounded-xl text-white", "px-8 py-2")}>
+                        className={classNames("m-2 bg-[#FFCD7B] self-start rounded-xl text-white", "px-8 py-2")}
+                        onClick={copyToClipboard}>
                         Copy link
                     </button>
                 </div>
@@ -78,15 +93,6 @@ export default function Lobby() {
                         </tr>
                         </thead>
                         <tbody className="users">
-                        <tr>
-                            <td className="border border-gray-600 px-4 py-2">12345678</td>
-                            <td className="border border-gray-600 px-4 py-2">John Doe</td>
-                        </tr>
-                        <tr>
-                            <td className="border border-gray-600 px-4 py-2">87654321</td>
-                            <td className="border border-gray-600 px-4 py-2">Jane Smith</td>
-                        </tr>
-                        {/* Sample data for illustration */}
                         </tbody>
                     </table>
 
