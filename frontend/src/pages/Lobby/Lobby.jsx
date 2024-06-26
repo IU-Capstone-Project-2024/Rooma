@@ -33,7 +33,7 @@ function createUsersHTML(users) {
 const RequestUsers = (gameId) => {
     const [users, setUsers] = useState([]);
 
-    const ProcessUsers = () => {
+    setTimeout(() => {
         getLobby(gameId)
             .then((res) => {
                 setUsers(res["lobby"]);
@@ -42,11 +42,7 @@ const RequestUsers = (gameId) => {
         if (users_el) {
             users_el.innerHTML = createUsersHTML(users);
         }
-    }
-
-    ProcessUsers(); // immediate
-
-    setTimeout(ProcessUsers(), 5000);
+    }, 5000);
 }
 
 export default function Lobby() {
