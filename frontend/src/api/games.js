@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from "@/constants/urls.js";
 
-const GAMES_URL = BASE_URL + '/api/games/';
+const GAMES_URL = BASE_URL + '/api/games';
 
 const token = localStorage.getItem("token");
 

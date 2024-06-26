@@ -7,6 +7,10 @@ const RequireAuth = ({children}) => {
     const {isAuth, signIn} = useAuth();
     const location = useLocation();
 
+    if (isAuth()) {
+        return children;
+    }
+
     const params = new URLSearchParams(location.search);
     const queryToken = params.get('token');
     const queryTelegramId = params.get('telegram_id');
