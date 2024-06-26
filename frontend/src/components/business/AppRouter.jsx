@@ -20,7 +20,7 @@ const AppRouter = () => {
                         <Route path="" element={<RequireAuth><Main/></RequireAuth>}/>
                         <Route path="join_game" element={<RequireAuth><JoinGame/></RequireAuth>}/>
                         <Route path="*" element={<NotFound/>}/>
-                        {/*<Route path="/about" element={<About/>}/>*/}
+
                     </Route>
                 </Routes>
             </AuthProvider>

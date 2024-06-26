@@ -1,6 +1,6 @@
 import QRCode from 'qrcode.react';
 import {getTelegramId, getToken} from "@/utils/storage.js";
-import {BASE_URL} from "../../constants/urls.js";
+import {BASE_URL} from "@/constants/urls.js";
 
 async function requestUsers(gameId) {
     // TODO: add states etc. to prevent double execution
@@ -44,15 +44,11 @@ export default function Lobby(props) {
     requestUsers(props.link.toString().split("start=").at(1)).then(r => {
     });
     return (
-        <>
-            <div style={{margin: 'auto auto auto auto', maxWidth: 'fit-content'}}>
+        <section className="bg-[#FF7F29] space-y-10">
+            <div className="mx-auto max-w-fit my-8">
                 <a href={props.link} style={{fontSize: '5em'}}>PRESS ME</a>
-                <br/>
-                <br/>
-                <br/>
                 <QRCode size={360} value={props.link}/>
-                <br/>
-                <br/>
+
                 <table>
                     <thead>
                     <tr>
@@ -64,6 +60,6 @@ export default function Lobby(props) {
                     </tbody>
                 </table>
             </div>
-        </>
+        </section>
     );
 };
