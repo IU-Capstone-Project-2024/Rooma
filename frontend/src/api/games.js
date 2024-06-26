@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { BASE_URL } from "@/constants/urls.js";
-import {useAuth} from "@/components/business/useAuth.js";
 
 const GAMES_URL = BASE_URL + '/api/games/';
 
-const {user} = useAuth();
-const token = user.token;
+const token = localStorage.getItem("token");
 
 export const createGame = async ( name, duration, timeToHide, seekerPercentage) => {
     const url = `${GAMES_URL}/create?token=${token}`;
