@@ -3,10 +3,8 @@ import { BASE_URL } from "@/constants/urls.js";
 
 const GAMES_URL = BASE_URL + '/api/games';
 
-const token = localStorage.getItem("token");
-
 export const createGame = async ( name, duration, timeToHide, seekerPercentage) => {
-    const url = `${GAMES_URL}/create?token=${token}`;
+    const url = `${GAMES_URL}/create?token=${localStorage.getItem("token")}`;
 
     const gameInfo = {
         name: name,
@@ -28,7 +26,7 @@ export const createGame = async ( name, duration, timeToHide, seekerPercentage) 
 };
 
 export const joinGame = async (gameId) => {
-    const url = `${GAMES_URL}/${gameId}/join?token=${token}`;
+    const url = `${GAMES_URL}/${gameId}/join?token=${localStorage.getItem("token")}`;
 
     try {
         const response = await axios.post(url);
@@ -41,7 +39,7 @@ export const joinGame = async (gameId) => {
 }
 
 export const leaveGame = async (gameId) => {
-    const url = `${GAMES_URL}/${gameId}/leave?token=${token}`;
+    const url = `${GAMES_URL}/${gameId}/leave?token=${localStorage.getItem("token")}`;
 
     try {
         const response = await axios.post(url);
@@ -54,7 +52,7 @@ export const leaveGame = async (gameId) => {
 }
 
 export const getLobby = async (gameId) => {
-    const url = `${GAMES_URL}/${gameId}/lobby?token=${token}`;
+    const url = `${GAMES_URL}/${gameId}/lobby?token=${localStorage.getItem("token")}`;
 
     try {
         const response = await axios.get(url);
