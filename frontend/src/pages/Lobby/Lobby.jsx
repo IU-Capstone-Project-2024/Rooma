@@ -3,6 +3,7 @@ import {getTelegramId, getToken} from "@/utils/storage.js";
 import {BASE_URL} from "@/constants/urls.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
+import classNames from "classnames";
 
 async function requestUsers(gameId) {
     // TODO: add states etc. to prevent double execution
@@ -54,12 +55,27 @@ export default function Lobby() {
         }
     }, []);
 
+    const link = BASE_URL + "/join_game?game_id=" + game_id;
 
     return (
-        <section className="bg-[#FF7F29] space-y-10">
-            <div className="mx-auto max-w-fit my-8">
-                <a href={props.link} style={{fontSize: '5em'}}>PRESS ME</a>
-                <QRCode size={360} value={props.link}/>
+        <section className="bg-[#ED784A] space-y-10">
+            <div className="mx-auto max-w-fit my-8 flex flex-col">
+                <div className="qr-section">
+                    <QRCode className="qr-code" size={360} includeMargin={true} value={link}/>
+                    <button
+                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", "px-8 py-2")}>
+                        Copy link
+                    </button>
+                </div>
+                <div className="player-list-section">
+                    <div className="player-list">
+                        <div className="player">1 Alex Noar</div>
+                    </div>
+                    <button
+                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", "px-8 py-2")}>
+                        Play
+                    </button>
+                </div>
 
                 <table>
                     <thead>
