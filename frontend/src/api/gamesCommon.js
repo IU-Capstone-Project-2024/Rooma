@@ -10,8 +10,8 @@ export const createGame = async ( name, duration, timeToHide, seekerPercentage) 
         name: name,
         data: {
             duration: duration,
-            timeToHide: timeToHide,
-            seekerPercentage: seekerPercentage
+            time_to_hide: timeToHide,
+            seeker_percentage: seekerPercentage
         }
     };
 
