@@ -56,9 +56,7 @@ export const getLobby = async (gameId) => {
 
     try {
         const response = await axios.get(url);
-        return {
-            lobby: response.data
-        };
+        return response.data;
     } catch (error) {
         console.error('Error getting lobby:', error);
         throw error;
