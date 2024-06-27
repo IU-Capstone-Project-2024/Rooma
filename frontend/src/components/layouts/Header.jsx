@@ -1,13 +1,30 @@
 import logo from "../../assets/logo.svg";
 import {useAuth} from '@/components/business/useAuth';
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
+import Modal from "@/components/general/Modal.jsx";
 
 export default function Header() {
     const {signOut} = useAuth();
     const navigate = useNavigate();
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const handleNavigateToMain = () => {
         navigate('/');
+    };
+
+    const handleLogout = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleConfirmLogout = () => {
+        setIsModalOpen(false);
+        signOut();
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -21,10 +38,16 @@ export default function Header() {
 
             <button
                 className="bg-[#9CD3CD72] h-14 px-5 text-white text-lg rounded-full"
-                onClick={signOut}
+                onClick={handleLogout}
             >
                 Log out
             </button>
+
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                action={handleConfirmLogout}
+            />
         </header>
     );
 }
