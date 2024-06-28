@@ -41,9 +41,8 @@ export const AuthProvider = ({children}) => {
             }, []
         );
 
-        setToken(queryToken);
         setTelegramId(queryTelegramId);
-        setUser({token: queryToken, telegramId: queryTelegramId});
+        setUser({token: getToken(), telegramId: getTelegramId()});
         navigate('/');
     };
 

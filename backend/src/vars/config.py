@@ -35,7 +35,6 @@ APP_DESCRIPTION = "Online service for offline games"
 
 DB_NAME = getenv("DATABASE_NAME")
 DB_HOST = getenv("DATABASE_HOST")
-TG_BOT_URL = getenv("TG_BOT_URL")
 TOKEN = getenv("BOT_TOKEN")
 
 REFRESH_AUTH_SECRET = getenv("REFRESH_AUTH_SECRET")
