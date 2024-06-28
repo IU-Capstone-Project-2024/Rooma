@@ -20,7 +20,7 @@ const RequireAuth = ({children}) => {
     }
 
     if (!isAuth()) {
-        return <Navigate to="/auth"/>;
+        return <Navigate to="/auth" state={{from: location}}/>;
     }
 
     return children;

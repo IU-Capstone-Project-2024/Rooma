@@ -1,14 +1,17 @@
-import {Navigate} from 'react-router-dom';
+import {Navigate, useLocation} from 'react-router-dom';
 import {useAuth} from '@/components/business/useAuth';
 import {TG_BOT_URL} from '@/constants/urls.js';
 import logo from '@/assets/logo.svg';
 import telegramLogo from '@/assets/telegramLogo.svg';
 
 const Auth = () => {
+    const location = useLocation();
+    const fromPage = location.state?.from || '/';
+
     const {isAuth} = useAuth();
 
     if (isAuth()) {
-        return <Navigate to="/"/>;
+        return <Navigate to={fromPage} replace={true}/>
     }
 
     const telegramBotLink = `${TG_BOT_URL}?start=create_game`;
