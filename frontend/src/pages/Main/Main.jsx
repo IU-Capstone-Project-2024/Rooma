@@ -37,7 +37,6 @@ const cardsData = {
     All: cards,
 };
 
-
 export default function Main() {
     return (
         <section>
