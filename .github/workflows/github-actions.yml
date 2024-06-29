@@ -27,12 +27,6 @@ jobs:
       - name: Copy .env file to runner
         run: echo "${{ secrets.ROOMA_FRONTEND_ENV }}" > config/.env
 
-      - name: Check .env file
-        run: cat config/.env >> "$GITHUB_OUTPUT"
-
-      - name: Check
-        run: ls -la
-
       - name: Build the React app
         run: cd frontend && npm run build
 
