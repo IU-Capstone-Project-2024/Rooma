@@ -9,6 +9,7 @@ jobs:
   build_frontend:
     name: Build Frontend
     environment: Deployment
+    if: github.repository == 'azamatbayramov/Rooma'
     runs-on: ubuntu-latest
 
     steps:
