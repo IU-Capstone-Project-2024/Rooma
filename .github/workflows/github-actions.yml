@@ -30,6 +30,9 @@ jobs:
       - name: Check .env file
         run: cat config/.env
 
+      - name: Check
+        run: ls -la
+
       - name: Build the React app
         run: cd frontend && npm run build
 
