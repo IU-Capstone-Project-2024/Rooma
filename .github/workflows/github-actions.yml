@@ -8,6 +8,7 @@ on:
 jobs:
   build_frontend:
     name: Build Frontend
+    environment: Deployment
     runs-on: ubuntu-latest
 
     steps:
