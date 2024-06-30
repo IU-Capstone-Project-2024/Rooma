@@ -20,6 +20,12 @@ class Game(BaseModel):
     data: dict[str, Any]
 
 
+class CurrentGamesResponse(BaseModel):
+    game_id: UUID
+    is_host: bool
+    name: str
+
+
 class CreateGameDTO(BaseModel):
     name: str
     data: dict[str, Any]
