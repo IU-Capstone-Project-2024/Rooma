@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {joinGame} from "@/api/gamesCommon.js";
-import {getDuration} from "@/api/hideAndSeek.js";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { joinGame } from "@/api/gamesCommon.js";
+import { getDuration } from "@/api/hideAndSeek.js";
 
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
@@ -16,54 +16,55 @@ export default function WaitPage() {
         if (!game_id) {
             navigate("/");
         }
-    }, []);
-
-    joinGame(game_id);
+    }, [game_id, navigate]);
 
     useEffect(() => {
-        getDuration(game_id).then((result) => {
-            setDuration(result["duration"]);
-            setWaitTime(result["time_to_hide"]);
-        });
-    }, []);
+        if (game_id) {
+            joinGame(game_id); // Assuming joinGame handles game join logic
+            getDuration(game_id).then((result) => {
+                setDuration(result?.duration);
+                setWaitTime(result?.time_to_hide);
+            });
+        }
+    }, [game_id]);
 
     return (
-        <section className="bg-[#FF7F29] space-y-10">
-            <h1 className="text-xl text-white font-bold mb-2">Hide and seek</h1>
+        <section className="bg-[#FF7F29] my-8 flex flex-col justify-center items-center px-4 sm:px-8">
+            <h1 className="text-3xl text-white font-bold mb-6">Hide and Seek Game</h1>
 
-            <div
-                className="my-8 mx-10 sm:mx-20 md:mx-28 lg:mx-36 text-center text-lg space-y-4 border-4 border-t-amber-400">
+            <div className="bg-white rounded-xl p-6 max-w-3xl w-full mx-auto shadow-md border-4 border-[#FFC87A]">
+                <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <p className="text-lg">Number of Participants:</p>
+                        <div className="bg-[#FFC87A] px-3 py-1 rounded-lg">
+                            <p className="font-medium">Unlimited</p>
+                        </div>
+                    </div>
 
-                <div className="flex items-center justify-between">
-                    <p>Number of participants:</p>
-                    <div className="bg-[#FFC87A] px-2 rounded-lg">
-                        <p>not limited</p>
+                    <div className="flex items-center justify-between mb-4">
+                        <p className="text-lg">Game Duration:</p>
+                        <div className="bg-[#FFC87A] px-3 py-1 rounded-lg">
+                            <p className="font-medium">{duration} minutes</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <p className="text-lg">Wait Time for Seekers:</p>
+                        <div className="bg-[#FFC87A] px-3 py-1 rounded-lg">
+                            <p className="font-medium">{waitTime} minutes</p>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                    <p>Game time:</p>
-                    <div className="bg-[#FFC87A] px-2 rounded-lg">
-                        <p>{duration} minutes</p>
-                    </div>
+                <div className="text-lg text-gray-800">
+                    <p className="mb-2">Game Description:</p>
+                    <p>
+                        Players will be automatically divided into seekers and hiders. The host starts the game,
+                        revealing roles. Hiders receive unique codes; if found, they must reveal their code to the seeker.
+                        The seeker must enter the code on their phone to count the find.
+                    </p>
                 </div>
-
-                <div className="flex items-center justify-between">
-                    <p>Waiting time for seekers:</p>
-                    <div className="bg-[#FFC87A] px-2 rounded-lg">
-                        <p>{waitTime} minutes</p>
-                    </div>
-                </div>
-
-                <p className="text-left">Game Description: </p>
-                <p className="mb-4 text-left">
-                    Players will be automatically divided into those who are looking and those who are hiding.
-                    After the host starts the game, their role appears on the players screens. Those who are
-                    hiding will have their own unique code, which needs to be said if the player is found.
-                    The searching player, having found the player, must find out the code and enter it on the
-                    phone so that the found person is counted.
-                </p>
             </div>
         </section>
-    )
-};
+    );
+}
