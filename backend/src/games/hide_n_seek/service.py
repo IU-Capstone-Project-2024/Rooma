@@ -43,8 +43,11 @@ class GameService:
         for _telegram_id, _code in data.hiders.items():
             if _code == code:
                 if _telegram_id not in data.hiders:
-                    game.data["hiders_found"].append(telegram_id)
+                    data.hiders_found.append(_telegram_id)
+
+                    game.data = data.model_dump()
                     _ = await game.save()
+
                     break
         else:
             raise UserNotFoundException(code)
@@ -53,10 +56,9 @@ class GameService:
 
     async def get_hiders(self, game_id: UUID, user: User) -> HidersResponse:
         game = await game_repo.get_one_by_game_id(game_id)
-        if "hiders" not in game.data:
-            raise GameForbiddenException(game_id)
+        data = HideNSeekData(**game.data)
 
-        telegram_ids = list(map(int, game.data["hiders"].keys()))
+        telegram_ids = list(map(int, data.hiders.keys()))
         users = await user_repo.get_users_from_telegram_ids(telegram_ids)
         hiders = [Player(**user.model_dump()) for user in users]
 
@@ -64,20 +66,20 @@ class GameService:
 
     async def get_end_time(self, game_id: UUID, user: User) -> EndTimesResponse:
         game = await game_repo.get_one_by_game_id(game_id)
-        if "seeker_start_time" not in game.data or "game_end_time" not in game.data:
-            raise GameForbiddenException(game_id)
+        data = HideNSeekData(**game.data)
 
         return EndTimesResponse(
-            seeker_start_time=game.data["seeker_start_time"],
-            game_end_time=game.data["game_end_time"]
+            seeker_start_time=data.seeker_start_time,
+            game_end_time=data.game_end_time
         )
 
     async def get_durations(self, game_id: UUID, user: User) -> DurationsResponse:
         game = await game_repo.get_one_by_game_id(game_id)
+        data = HideNSeekData(**game.data)
 
         return DurationsResponse(
-            duration=game.data["duration"],
-            time_to_hide=game.data["time_to_hide"]
+            duration=data.duration,
+            time_to_hide=data.time_to_hide
         )
 
     async def get_state(self, game_id: UUID, user: User) -> StateResponse:
