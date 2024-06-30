@@ -9,7 +9,8 @@ from src.games.schemas import (
     CreateGameDTO,
     LobbyResponse,
     RulesResponse,
-    PostFeedbackDTO, CurrentGamesResponse,
+    PostFeedbackDTO,
+    CurrentGamesResponse,
 )
 from src.games.service import GameService
 from src.schemas import SuccessResponse

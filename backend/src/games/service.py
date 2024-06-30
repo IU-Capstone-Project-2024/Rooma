@@ -9,7 +9,9 @@ from src.games.schemas import (
     Game,
     LobbyResponse,
     RulesResponse,
-    PostFeedbackDTO, Player, CurrentGamesResponse,
+    PostFeedbackDTO,
+    Player,
+    CurrentGamesResponse,
 )
 from src.logs.log import log
 from src.schemas import SuccessResponse
