@@ -16,7 +16,7 @@ class UserNotFoundException(NotFoundException):
 class GameForbiddenException(ForbiddenException):
     def __init__(self, game_id):
         self.id = game_id
-        super().__init__(f"You do not have access to budget with id {game_id}")
+        super().__init__(f"You do not have access to modify game with id {game_id}")
 
 
 class CannotAddToLobbyException(BadRequestException):
