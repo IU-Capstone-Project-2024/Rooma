@@ -42,7 +42,7 @@ class GameService:
 
         for _telegram_id, _code in data.hiders.items():
             if _code == code:
-                if _telegram_id not in data.hiders:
+                if _telegram_id not in data.hiders_found:
                     data.hiders_found.append(_telegram_id)
 
                     game.data = data.model_dump()
