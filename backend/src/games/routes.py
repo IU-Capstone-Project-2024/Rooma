@@ -31,7 +31,7 @@ async def create_game(data: CreateGameDTO, user: User = Depends(get_user)):
 
 
 @router.get(
-    "/current-games",
+    "/list-current",
     response_model=list[CurrentGamesResponse],
 )
 async def current_games(user: User = Depends(get_user)):
