@@ -6,10 +6,10 @@ from src.auth.dependencies import get_user
 from src.database.models import User
 from src.games.schemas import (
     Game,
-    CreateGameDTO,
     LobbyResponse,
     RulesResponse,
     PostFeedbackDTO,
+    CurrentGamesResponse,
 )
 from src.games.service import GameService
 from src.schemas import SuccessResponse
@@ -22,12 +22,12 @@ router = APIRouter(
 service = GameService()
 
 
-@router.post(
-    "/create",
-    response_model=Game,
+@router.get(
+    "/list-current",
+    response_model=list[CurrentGamesResponse],
 )
-async def create_game(data: CreateGameDTO, user: User = Depends(get_user)):
-    return await service.create_game(data, user)
+async def current_games(user: User = Depends(get_user)):
+    return await service.current_games(user)
 
 
 @router.post(

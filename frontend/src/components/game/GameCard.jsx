@@ -2,7 +2,7 @@ import { useState } from "react";
 import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import {createGame} from "@/api/gamesCommon.js";
+import {createGame} from "@/api/hideAndSeek.js";
 import {useNavigate} from "react-router-dom";
 
 
@@ -50,7 +50,7 @@ export default function GameCard({ name, img, small, onClick }) {
                         <div className="flex items-center justify-between">
                             <p>Number of participants:</p>
                             <div className="bg-[#FFC87A] px-2 rounded-lg">
-                                <p>no limited</p>
+                                <p>not limited</p>
                             </div>
                         </div>
 

@@ -5,13 +5,13 @@ from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
 from src.database import User
 from src.games.schemas import (
-    CreateGameDTO,
     Game,
     LobbyResponse,
     RulesResponse,
-    PostFeedbackDTO, Player,
+    PostFeedbackDTO,
+    Player,
+    CurrentGamesResponse,
 )
-from src.logs.log import log
 from src.schemas import SuccessResponse
 
 game_repo = GameRepository()
@@ -20,13 +20,22 @@ user_repo = UserRepository()
 
 
 class GameService:
-    async def create_game(self, data: CreateGameDTO, user: User) -> Game:
-        data.owner_telegram_id = user.telegram_id
+    async def current_games(self, user: User) -> list[CurrentGamesResponse]:
+        response: list[CurrentGamesResponse] = []
 
-        created = await game_repo.create_one(data)
-        log.info(f"Create game with id = {created.game_id}")
+        user_host = await game_repo.get_all_games_by_owner_id(user.telegram_id)
+        response += [
+            CurrentGamesResponse(game_id=game.game_id, is_host=True, name=game.name)
+            for game in user_host
+        ]
 
-        return Game(**created.model_dump())
+        user_participant = await game_repo.get_all_games_with_participant(user.telegram_id)
+        response += [
+            CurrentGamesResponse(game_id=game.game_id, is_host=False, name=game.name)
+            for game in user_participant
+        ]
+
+        return response
 
     async def join_game(self, game_id: UUID, user: User) -> SuccessResponse:
         await game_repo.add_user_to_lobby(game_id, user.telegram_id)

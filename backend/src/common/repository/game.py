@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from beanie.operators import Eq
+from beanie.operators import And, Eq
 
 from src.database.models import Game
 from src.database.repository.mongo import MongoBeanieRepository
@@ -48,3 +48,37 @@ class GameRepository(MongoBeanieRepository):
 
     async def get_all_active(self) -> list[Game]:
         return await self.model.find(Eq(Game.is_active, True)).to_list()
+
+    async def get_all_games_by_owner_id(self, telegram_id: int) -> list[Game]:
+        """
+        Searches all games, where `telegram_id` matches the `owner_telegram_id` field.
+
+        Args:
+            telegram_id: Owner Telegram ID to search with.
+
+        Returns:
+            List of all games with this owner Telegram ID.
+        """
+        return await self.model.find(
+            And(
+                Eq(Game.is_active, True),
+                Eq(Game.owner_telegram_id, telegram_id)
+            )
+        ).to_list()
+
+    async def get_all_games_with_participant(self, telegram_id: int) -> list[Game]:
+        """
+        Searches all games, where `telegram_id` is in the `lobby` array.
+
+        Args:
+            telegram_id: Participant Telegram ID to search with.
+
+        Returns:
+            List of all games with this Telegram ID as the participant.
+        """
+        return await self.model.find(
+            And(
+                Eq(Game.is_active, True),
+                Eq(Game.lobby, telegram_id)
+            )
+        ).to_list()

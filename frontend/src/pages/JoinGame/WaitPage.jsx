@@ -37,7 +37,7 @@ export default function WaitPage() {
                 <div className="flex items-center justify-between">
                     <p>Number of participants:</p>
                     <div className="bg-[#FFC87A] px-2 rounded-lg">
-                        <p>no limited</p>
+                        <p>not limited</p>
                     </div>
                 </div>
 
