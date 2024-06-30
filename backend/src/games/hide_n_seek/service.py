@@ -5,15 +5,8 @@ from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
 from src.database import User
 from src.games.exceptions import GameForbiddenException, UserNotFoundException, GameNotFoundException
-from src.games.hide_n_seek.schemas import (
-    HidersResponse,
-    EndTimesResponse,
-    StateResponse,
-    DurationsResponse,
-    CreateHideNSeekRequest, HideNSeekData
-)
-from src.games.schemas import Player, Game
-from src.logs.log import log
+from src.games.hide_n_seek.schemas import HidersResponse, EndTimesResponse, StateResponse, DurationsResponse
+from src.games.schemas import Player
 from src.schemas import SuccessResponse
 
 game_repo = GameRepository()
@@ -22,27 +15,19 @@ user_repo = UserRepository()
 
 
 class GameService:
-    async def create_game(self, data: CreateHideNSeekRequest, user: User) -> Game:
-        data.owner_telegram_id = user.telegram_id
-
-        created = await game_repo.create_one(data)
-        log.info(f"Create game with id = {created.game_id}")
-
-        return Game(**created.model_dump())
-
     async def find_hider(self, code: str, game_id: UUID, user: User) -> SuccessResponse:
         game = await game_repo.get_one_by_game_id(game_id)
         if not game.is_active:
             raise GameForbiddenException(game_id)
-
-        data = HideNSeekData(**game.data)
-
-        if user.telegram_id in data.hiders.keys():
+        if "hiders_found" not in game.data or "hiders" not in game.data:
+            raise GameForbiddenException(game_id)
+        if str(user.telegram_id) in game.data["hiders"]:
             raise GameForbiddenException(game_id)
 
-        for _telegram_id, _code in data.hiders.items():
+        for _telegram_id, _code in game.data["hiders"].items():
             if _code == code:
-                if _telegram_id not in data.hiders:
+                telegram_id = int(_telegram_id)
+                if telegram_id not in game.data["hiders_found"]:
                     game.data["hiders_found"].append(telegram_id)
                     _ = await game.save()
                     break
