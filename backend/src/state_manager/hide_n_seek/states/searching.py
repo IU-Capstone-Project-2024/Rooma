@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from src.games.hide_n_seek.schemas import HideNSeekData
 from src.logs.log import log
 from src.state_manager.hide_n_seek.handler import StateHandler
 from src.state_manager.hide_n_seek.state import State
@@ -14,28 +15,21 @@ class StateHandlerSearching(StateHandler):
         if game is None:
             return
 
-        # get game end time and check that it exists in data
-        game_end_time = game.data.get("game_end_time")
-        if game_end_time is None:
-            log.error(f"Game end time is not present in game with id = {self.game_id}")
-            return
-
         # game is ended by foreign
         if game.is_active is False:
             await self.set_new_state(State.NO_WINNERS)
             return
 
+        data = HideNSeekData(**game.data)
+
         # check if game ends by timeout
         current_time = datetime.utcnow()
-        if current_time >= game_end_time:
+        if current_time >= data.game_end_time:
             await self.set_new_state(State.HIDERS_WIN)
             return
 
-        found_set = set(game.data.get("hiders_found", []))
-        hiders_set = set(list(map(
-            int,
-            game.data.get("hiders", dict()).keys()
-        )))
+        found_set = set(data.hiders_found)
+        hiders_set = set(list(map(int, data.hiders.keys())))
 
         # no hiders
         if len(hiders_set - found_set) == 0:

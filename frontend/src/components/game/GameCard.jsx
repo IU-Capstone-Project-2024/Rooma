@@ -2,7 +2,7 @@ import { useState } from "react";
 import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import {createGame} from "@/api/gamesCommon.js";
+import {createGame} from "@/api/hideAndSeek.js";
 import {useNavigate} from "react-router-dom";
 
 

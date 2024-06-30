@@ -3,8 +3,14 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from src.auth.dependencies import get_user
-from src.database.models import User
-from src.games.hide_n_seek.schemas import HidersResponse, EndTimesResponse, StateResponse, DurationsResponse
+from src.database.models import User, Game
+from src.games.hide_n_seek.schemas import (
+    HidersResponse,
+    EndTimesResponse,
+    StateResponse,
+    DurationsResponse,
+    CreateHideNSeekRequest
+)
 from src.games.hide_n_seek.service import GameService
 from src.schemas import SuccessResponse
 
@@ -14,6 +20,14 @@ router = APIRouter(
 )
 
 service = GameService()
+
+
+@router.post(
+    "/create",
+    response_model=Game,
+)
+async def create_game(data: CreateHideNSeekRequest, user: User = Depends(get_user)):
+    return await service.create_game(data, user)
 
 
 @router.post(

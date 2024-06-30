@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from src.games.hide_n_seek.schemas import HideNSeekData
 from src.logs.log import log
 from src.state_manager.hide_n_seek.handler import StateHandler
 from src.state_manager.hide_n_seek.state import State
@@ -14,18 +15,16 @@ class StateHandlerHiding(StateHandler):
         if game is None:
             return
 
-        # get seeker start time and check that it exists in data
-        seeker_start_time = game.data.get("seeker_start_time")
-        if seeker_start_time is None:
-            log.error(f"Seeker start time is not present in game with id = {self.game_id}")
-            return
+        data = HideNSeekData(**game.data)
 
         # check if seekers can start
         current_time = datetime.utcnow()
-        if current_time < seeker_start_time:
+        if current_time < data.seeker_start_time:
             return
 
-        game.data["hiders_found"] = []
+        data.hiders_found = []
+
+        game.data = data.model_dump()
         _ = await game.save()
 
         # go to a new state

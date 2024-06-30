@@ -5,13 +5,13 @@ from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
 from src.database import User
 from src.games.schemas import (
-    CreateGameDTO,
     Game,
     LobbyResponse,
     RulesResponse,
-    PostFeedbackDTO, Player, CurrentGamesResponse,
+    PostFeedbackDTO,
+    Player,
+    CurrentGamesResponse,
 )
-from src.logs.log import log
 from src.schemas import SuccessResponse
 
 game_repo = GameRepository()
@@ -20,14 +20,6 @@ user_repo = UserRepository()
 
 
 class GameService:
-    async def create_game(self, data: CreateGameDTO, user: User) -> Game:
-        data.owner_telegram_id = user.telegram_id
-
-        created = await game_repo.create_one(data)
-        log.info(f"Create game with id = {created.game_id}")
-
-        return Game(**created.model_dump())
-
     async def current_games(self, user: User) -> list[CurrentGamesResponse]:
         response: list[CurrentGamesResponse] = []
 
