@@ -15,6 +15,7 @@ from src.games.hide_n_seek.schemas import (
 from src.games.schemas import Player, Game
 from src.logs.log import log
 from src.schemas import SuccessResponse
+from src.state_manager.hide_n_seek.state import State
 
 game_repo = GameRepository()
 game_state_repo = GameStateRepository()
@@ -33,6 +34,10 @@ class GameService:
     async def find_hider(self, code: str, game_id: UUID, user: User) -> SuccessResponse:
         game = await game_repo.get_one_by_game_id(game_id)
         if not game.is_active:
+            raise GameForbiddenException(game_id)
+
+        game_state = await game_state_repo.get_state_by_game_id(game_id=game.game_id)
+        if game_state != State.SEARCHING:
             raise GameForbiddenException(game_id)
 
         data = HideNSeekData(**game.data)
