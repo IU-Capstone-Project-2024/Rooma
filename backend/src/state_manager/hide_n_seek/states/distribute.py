@@ -1,5 +1,6 @@
 from random import sample
 
+from src.games.hide_n_seek.schemas import HideNSeekData
 from src.helpers.code_generator import generate_unique_codes
 from src.logs.log import log
 from src.state_manager.hide_n_seek.handler import StateHandler
@@ -17,23 +18,17 @@ class StateHandlerDistribute(StateHandler):
         if game is None:
             return
 
-        # get seeker percentage and check that it exists in data
-        seeker_percentage = game.data.get("seeker_percentage")
-        if seeker_percentage is None:
-            log.error(f"Seeker percentage is not present in game with id = {self.game_id}")
-            return
-
         # cannot distribute 0 or 1 people into two teams
         if len(game.lobby) < 2:
             log.error(f"Not enough people to distribute in game with id = {self.game_id}")
             return
 
+        data = HideNSeekData(**game.data)
+
         # calculate seeker size and check if there are no seekers or hiders
-        seeker_size = int(seeker_percentage / 100) * len(game.lobby)
-        if seeker_size == 0:  # no seekers
-            seeker_size = 1
-        elif seeker_size == len(game.lobby):  # no hiders
-            seeker_size = len(game.lobby) - 1
+        seeker_size = int(data.seeker_percentage / 100) * len(game.lobby)
+        seeker_size = max(seeker_size, 1)  # no seekers
+        seeker_size = min(seeker_size, len(game.lobby) - 1)  # no hiders
 
         # distribute
         seekers = set(sample(game.lobby, seeker_size))
@@ -43,7 +38,8 @@ class StateHandlerDistribute(StateHandler):
         codes = generate_unique_codes(amount=len(hiders), length=CODE_LENGTH)
 
         # update data about teams
-        game.data["hiders"] = {telegram_id: code for telegram_id, code in zip(hiders, codes)}
+        data.hiders = {telegram_id: code for telegram_id, code in zip(hiders, codes)}
+        game.data = data.model_dump()
         _ = await game.save()
 
         # go to new state
