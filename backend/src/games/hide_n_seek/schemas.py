@@ -21,6 +21,9 @@ class CreateHideNSeekRequest(BaseModel):
     name: str
     data: HideNSeekData
 
+    # set by backend
+    owner_telegram_id: int | None = None
+
 
 class HidersResponse(BaseModel):
     hiders: list[Player]
