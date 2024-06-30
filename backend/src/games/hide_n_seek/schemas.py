@@ -39,8 +39,8 @@ class HidersResponse(BaseModel):
 
 
 class EndTimesResponse(BaseModel):
-    seeker_start_time: datetime
-    game_end_time: datetime
+    seeker_start_time: datetime | None
+    game_end_time: datetime | None
 
 
 class DurationsResponse(BaseModel):
