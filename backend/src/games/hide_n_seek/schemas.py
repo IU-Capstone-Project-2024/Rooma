@@ -1,15 +1,24 @@
 from datetime import datetime
+from typing import Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from src.games.schemas import Player
 
 
-class HideNSeekData(BaseModel):
+class HideNSeekCreateData(BaseModel):
     seeker_percentage: int = Field(..., ge=0, le=100)
     duration: int = Field(..., ge=0)  # minutes
     time_to_hide: int = Field(..., ge=0)  # minutes
 
+    @model_validator(mode='after')
+    def check_passwords_match(self) -> Self:
+        if self.time_to_hide >= self.duration:
+            raise ValueError("Time to hide cannot be larger than duration of the game")
+        return self
+
+
+class HideNSeekData(HideNSeekCreateData):
     # set by backend
     hiders: dict[int, str] = {}  # dict[telegram_id, code]
     hiders_found: list[int] = []  # list[telegram_id]
@@ -19,7 +28,7 @@ class HideNSeekData(BaseModel):
 
 class CreateHideNSeekRequest(BaseModel):
     name: str
-    data: HideNSeekData
+    data: HideNSeekCreateData
 
     # set by backend
     owner_telegram_id: int | None = None
