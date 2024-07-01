@@ -36,3 +36,15 @@ export const getDuration = async (gameId) => {
         throw error;
     }
 }
+
+export const getState = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/state?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting state:', error);
+        throw error;
+    }
+}
