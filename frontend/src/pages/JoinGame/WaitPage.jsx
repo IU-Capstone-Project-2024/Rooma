@@ -14,7 +14,7 @@ export default function WaitPage() {
 
     useEffect(() => {
         if (!game_id) {
-            navigate("/");
+            navigate("/", {replace: true});
         }
     }, [game_id, navigate]);
 
