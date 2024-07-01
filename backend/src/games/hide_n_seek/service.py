@@ -1,3 +1,4 @@
+from datetime import datetime, UTC
 from uuid import UUID
 
 from src.common.repository.game import GameRepository
@@ -10,7 +11,7 @@ from src.games.hide_n_seek.schemas import (
     EndTimesResponse,
     StateResponse,
     DurationsResponse,
-    CreateHideNSeekRequest, HideNSeekData
+    CreateHideNSeekRequest, HideNSeekData, HiderFoundData
 )
 from src.games.schemas import Player, Game
 from src.logs.log import log
@@ -32,30 +33,41 @@ class GameService:
         return Game(**created.model_dump())
 
     async def find_hider(self, code: str, game_id: UUID, user: User) -> SuccessResponse:
+        # ensure that game is running
         game = await game_repo.get_one_by_game_id(game_id)
         if not game.is_active:
             raise GameForbiddenException(game_id)
 
+        # ensure that seekers are searching
         game_state = await game_state_repo.get_state_by_game_id(game_id=game.game_id)
         if game_state != State.SEARCHING:
             raise GameForbiddenException(game_id)
 
         data = HideNSeekData(**game.data)
 
+        # ensure that requested user is seeker
         if user.telegram_id in data.hiders.keys():
             raise GameForbiddenException(game_id)
 
-        for _telegram_id, _code in data.hiders.items():
-            if _code == code:
-                if _telegram_id not in data.hiders_found:
-                    data.hiders_found.append(_telegram_id)
-
-                    game.data = data.model_dump()
-                    _ = await game.save()
-
-                    break
-        else:
+        # ensure that hider with the given code exists
+        hider_tid = next((k for k, v in data.hiders.items() if v == code), None)
+        if hider_tid is None:
             raise UserNotFoundException(code)
+
+        # ensure that we did not find the hider before
+        if all(hider_data.hider_tid != hider_tid for hider_data in data.hiders_found):
+            data.hiders_found.append(
+                HiderFoundData(
+                    hider_tid=hider_tid,
+                    seeker_tid=user.telegram_id,
+                    found_time=datetime.now(UTC)
+                )
+            )
+
+            game.data = data.model_dump()
+            _ = await game.save()
+        else:
+            raise GameForbiddenException(code)
 
         return SuccessResponse(success=True)
 

@@ -18,10 +18,16 @@ class HideNSeekCreateData(BaseModel):
         return self
 
 
+class HiderFoundData(BaseModel):
+    hider_tid: int
+    seeker_tid: int
+    found_time: datetime
+
+
 class HideNSeekData(HideNSeekCreateData):
     # set by backend
     hiders: dict[int, str] = {}  # dict[telegram_id, code]
-    hiders_found: list[int] = []  # list[telegram_id]
+    hiders_found: list[HiderFoundData] = []
     seeker_start_time: datetime | None = None
     game_end_time: datetime | None = None
 
