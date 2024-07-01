@@ -56,3 +56,14 @@ class DurationsResponse(BaseModel):
 
 class StateResponse(BaseModel):
     state: str
+
+
+class HidersResultsResponse(BaseModel):
+    telegram_id: int
+    name: str
+    found_time: int
+
+
+class SeekersResultsResponse(BaseModel):
+    name: str
+    found: int
