@@ -11,7 +11,11 @@ from src.games.hide_n_seek.schemas import (
     EndTimesResponse,
     StateResponse,
     DurationsResponse,
-    CreateHideNSeekRequest, HideNSeekData, HiderFoundData
+    CreateHideNSeekRequest,
+    HideNSeekData,
+    HiderFoundData,
+    HidersResultsResponse,
+    SeekersResultsResponse
 )
 from src.games.schemas import Player, Game
 from src.logs.log import log
@@ -105,3 +109,45 @@ class GameService:
             raise GameNotFoundException(game_id)
 
         return StateResponse(state=state)
+
+    async def get_hider_results(self, game_id: UUID, user: User) -> list[HidersResultsResponse]:
+        game = await game_repo.get_one_by_game_id(game_id)
+        data = HideNSeekData(**game.data)
+
+        response: list[HidersResultsResponse] = []
+        for hider_data in data.hiders_found:
+            user = await user_repo.get_user(hider_data.hider_tid)
+            response.append(
+                HidersResultsResponse(
+                    telegram_id=hider_data.hider_tid,
+                    name=user.first_name,
+                    found_time=(hider_data.found_time - data.seeker_start_time).total_seconds() // 60
+                )
+            )
+
+        response.sort(key=lambda x: x.found_time, reverse=True)
+
+        return response
+
+    async def get_seeker_results(self, game_id: UUID, user: User) -> list[SeekersResultsResponse]:
+        game = await game_repo.get_one_by_game_id(game_id)
+        data = HideNSeekData(**game.data)
+
+        seeker_found_dict: dict[int, int] = {}
+        for hider_data in data.hiders_found:
+            seeker_found_dict[hider_data.seeker_tid] = seeker_found_dict.get(hider_data.seeker_tid, 0) + 1
+
+        response: list[SeekersResultsResponse] = []
+        for seeker_tid, found in seeker_found_dict.items():
+            user = await user_repo.get_user(seeker_tid)
+            response.append(
+                SeekersResultsResponse(
+                    telegram_id=seeker_tid,
+                    name=user.first_name,
+                    found=found
+                )
+            )
+
+        response.sort(key=lambda x: x.found, reverse=True)
+
+        return response
