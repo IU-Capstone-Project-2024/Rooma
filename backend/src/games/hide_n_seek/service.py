@@ -139,9 +139,9 @@ class GameService:
         game = await game_repo.get_one_by_game_id(game_id)
         data = HideNSeekData(**game.data)
 
-        seeker_found_dict: dict[int, int] = {}
+        seeker_found_dict: dict[int, int] = {seeker_tid: 0 for seeker_tid in set(game.lobby) - set(data.hiders.keys())}
         for hider_data in data.hiders_found:
-            seeker_found_dict[hider_data.seeker_tid] = seeker_found_dict.get(hider_data.seeker_tid, 0) + 1
+            seeker_found_dict[hider_data.seeker_tid] += 1
 
         response: list[SeekersResultsResponse] = []
         for seeker_tid, found in seeker_found_dict.items():

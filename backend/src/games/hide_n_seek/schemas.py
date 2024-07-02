@@ -67,4 +67,4 @@ class HidersResultsResponse(BaseModel):
 class SeekersResultsResponse(BaseModel):
     telegram_id: int
     name: str
-    found: int | None
+    found: int
