@@ -3,7 +3,7 @@ import {BASE_URL} from "@/constants/urls.js";
 
 const GAMES_URL = BASE_URL + '/api/games/hide-n-seek';
 
-export const createGame = async ( name, duration, timeToHide, seekerPercentage) => {
+export const createGame = async (name, duration, timeToHide, seekerPercentage) => {
     const url = `${GAMES_URL}/create?token=${localStorage.getItem("token")}`;
 
     const gameInfo = {
@@ -39,6 +39,30 @@ export const getDuration = async (gameId) => {
 
 export const getState = async (gameId) => {
     const url = `${GAMES_URL}/${gameId}/state?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting state:', error);
+        throw error;
+    }
+}
+
+export const getHiderResults = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/results/hiders?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting state:', error);
+        throw error;
+    }
+}
+
+export const getSeekerResults = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/results/seekers?token=${localStorage.getItem("token")}`;
 
     try {
         const response = await axios.get(url);

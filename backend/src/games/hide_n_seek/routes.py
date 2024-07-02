@@ -9,7 +9,9 @@ from src.games.hide_n_seek.schemas import (
     EndTimesResponse,
     StateResponse,
     DurationsResponse,
-    CreateHideNSeekRequest
+    CreateHideNSeekRequest,
+    HidersResultsResponse,
+    SeekersResultsResponse
 )
 from src.games.hide_n_seek.service import GameService
 from src.schemas import SuccessResponse
@@ -68,3 +70,19 @@ async def get_durations(game_id: UUID, user: User = Depends(get_user)):
 )
 async def get_state(game_id: UUID, user: User = Depends(get_user)):
     return await service.get_state(game_id, user)
+
+
+@router.get(
+    "/{game_id}/results/hiders",
+    response_model=list[HidersResultsResponse]
+)
+async def get_hider_results(game_id: UUID, user: User = Depends(get_user)):
+    return await service.get_hider_results(game_id, user)
+
+
+@router.get(
+    "/{game_id}/results/seekers",
+    response_model=list[SeekersResultsResponse]
+)
+async def get_seeker_results(game_id: UUID, user: User = Depends(get_user)):
+    return await service.get_seeker_results(game_id, user)
