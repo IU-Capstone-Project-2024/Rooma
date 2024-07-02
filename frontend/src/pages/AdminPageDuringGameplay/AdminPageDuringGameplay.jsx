@@ -2,9 +2,21 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import clock from "@/assets/hideAndSeek/clock.svg";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
-import {getDuration, getHiderResults, getSeekerResults} from "@/api/hideAndSeek.js";
+import {getDuration, getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
+import {useColor} from "@/components/layouts/ColorContext.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
+import {finishGame} from "@/api/gamesCommon.js";
+
 
 export default function AdminPageDuringGameplay() {
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#FF7F29');
+        setFooterColor('#FF7F29');
+        setBackgroundColor('#FF7F29');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
     const [searchParams] = useSearchParams();
     const [hiderResults, setHiderResults] = useState([]);
     const [seekerResults, setSeekerResults] = useState([]);
@@ -39,50 +51,50 @@ export default function AdminPageDuringGameplay() {
         fetchDuration();
     }, [gameId]);
 
-    const finishGame = () => {
+    const moveAfterFinish = () => {
         navigate("/feedback_review");
     };
 
-    useEffect(() => {
-        const refreshData = async () => {
-            const seekerRes = await getSeekerResults(gameId);
-            setSeekerResults(seekerRes);
+    const prematureFinishGame = () => {
+        finishGame(gameId);
+        moveAfterFinish();
+    };
 
-            const hiderRes = await getHiderResults(gameId);
-            setHiderResults(hiderRes);
-        };
+    // refresh data about players
+    useInterval(async () => {
+        const [seekerRes, hiderRes, stateRes] = await Promise.all([
+            getSeekerResults(gameId),
+            getHiderResults(gameId),
+            getState(gameId)
+        ]);
 
-        const timer = setInterval(() => {
-            refreshData();
-        }, 5000);
+        setSeekerResults(seekerRes);
+        setHiderResults(hiderRes);
 
-        return () => clearInterval(timer);
-    }, [gameId]);
+        if (stateRes["state"] === "seekers_win" || stateRes["state"] === "hiders_win") {
+            moveAfterFinish();
+        }
+    }, 5000);
 
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setSeconds(prevSeconds => {
-                if (prevSeconds === 0) {
-                    if (minutes === 0) {
-                        if (hours === 0) {
-                            clearInterval(timer);
-                            finishGame();
-                            return 0;
-                        }
-                        setHours(prevHours => prevHours - 1);
-                        setMinutes(59);
-                        return 59;
+    // refresh timer
+    useInterval(() => {
+        setSeconds(prevSeconds => {
+            if (prevSeconds === 0) {
+                if (minutes === 0) {
+                    if (hours === 0) {
+                        moveAfterFinish();
+                        return 0;
                     }
-                    setMinutes(prevMinutes => prevMinutes - 1);
+                    setHours(prevHours => prevHours - 1);
+                    setMinutes(59);
                     return 59;
                 }
-                return prevSeconds - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [minutes, hours, finishGame]);
+                setMinutes(prevMinutes => prevMinutes - 1);
+                return 59;
+            }
+            return prevSeconds - 1;
+        });
+    }, 1000);
 
     return (
         <section className="relative flex flex-col items-center justify-center bg-[#FF7F29]">
@@ -143,7 +155,7 @@ export default function AdminPageDuringGameplay() {
                             </span>
                         </div>
                     </div>
-                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded" onClick={finishGame}>
+                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded" onClick={prematureFinishGame}>
                         Finish game
                     </button>
                 </div>
