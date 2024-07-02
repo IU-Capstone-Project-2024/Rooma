@@ -3,6 +3,8 @@ import killer from "../../assets/gameCardAvatars/killer.png";
 import space from "../../assets/gameCardAvatars/space.png";
 import {GamesCarousel} from "../../components/game/GamesCarousel.jsx";
 import {GamesMenu} from "../../components/game/GamesMenu.jsx";
+import { useColor } from '@/components/layouts/ColorContext.jsx';
+import { useEffect } from 'react';
 
 const cards = [
     {
@@ -38,6 +40,14 @@ const cardsData = {
 };
 
 export default function Main() {
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#3FC7B8');
+        setFooterColor('#3FC7B8');
+        setBackgroundColor('#3FC7B8');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
     return (
         <section>
             <GamesCarousel cards={cards} />

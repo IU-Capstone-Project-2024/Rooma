@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import classNames from "classnames";
 import {getLobby} from "@/api/gamesCommon.js";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
+import {useColor} from "@/components/layouts/ColorContext.jsx";
 
 const ROW_COUNT = 8;
 
@@ -76,8 +77,16 @@ export default function Lobby() {
         }
     };
 
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#FF7F29');
+        setFooterColor('#FF7F29');
+        setBackgroundColor('#FF7F29');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
     return (
-        <section className="relative bg-[#FF7F29] space-y-10 flex flex-col items-center justify-around">
+        <section className="relative space-y-10 flex flex-col items-center justify-around">
             <img src={steps_1} alt="steps" className="absolute top-24 right-0 h-96 z-0"/>
             <img src={steps_1} alt="steps" className="absolute bottom-0 left-0 h-96 z-0 rotate-90"/>
 

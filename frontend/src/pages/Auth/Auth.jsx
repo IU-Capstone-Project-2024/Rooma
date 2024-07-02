@@ -3,6 +3,8 @@ import {useAuth} from '@/components/business/useAuth';
 import {TG_BOT_URL} from '@/constants/urls.js';
 import logo from '@/assets/logo.svg';
 import telegramLogo from '@/assets/telegramLogo.svg';
+import {useColor} from "@/components/layouts/ColorContext.jsx";
+import {useEffect} from "react";
 
 const Auth = () => {
     const location = useLocation();
@@ -15,6 +17,14 @@ const Auth = () => {
     }
 
     const telegramBotLink = `${TG_BOT_URL}?start=create_game`;
+
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#3FC7B8');
+        setFooterColor('#3FC7B8');
+        setBackgroundColor('#3FC7B8');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#3FC7B8]">
