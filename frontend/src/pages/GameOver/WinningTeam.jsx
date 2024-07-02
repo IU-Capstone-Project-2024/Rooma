@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Trophy from '../../components/game/Trophy.jsx';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getState } from "@/api/hideAndSeek.js";
+import {useColor} from "@/components/layouts/ColorContext.jsx";
 
 export default function WinningTeam() {
     //TODO: Get data from back-end (now only the winning team from GetStatus)
@@ -18,9 +19,17 @@ export default function WinningTeam() {
         { name: 'Azamat', found: 'None' },
     ];
 
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#FF7F29');
+        setFooterColor('#FF7F29');
+        setBackgroundColor('#FF7F29');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
 
     return (
-        <div className="bg-[#FF7F29] text-center space-y-10 p-5 flex flex-col sm:px-8">
+        <div className="text-center space-y-10 p-5 flex flex-col sm:px-8">
 
             <h1 className="text-4xl text-white font-bold">Hide and Seek</h1>
             <div className="flex justify-center my-3 relative">

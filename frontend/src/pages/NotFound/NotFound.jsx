@@ -1,7 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import {useColor} from "@/components/layouts/ColorContext.jsx";
 
 const NotFound = () => {
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#3FC7B8');
+        setFooterColor('#3FC7B8');
+        setBackgroundColor('#3FC7B8');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#3FC7B8]">
             <h1 className="text-9xl font-bold text-white mb-4">404</h1>
