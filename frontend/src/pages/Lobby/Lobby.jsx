@@ -6,6 +6,7 @@ import classNames from "classnames";
 import {getLobby} from "@/api/gamesCommon.js";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 const ROW_COUNT = 8;
 
@@ -16,7 +17,7 @@ function createUsersHTML(users) {
 
         const td0 = document.createElement('td');
         td0.className = "border border-gray-600 px-4 py-2 bg-white";
-        td0.textContent = i + 1;
+        td0.textContent = (i + 1).toString();
         tr.appendChild(td0);
 
         const td1 = document.createElement('td');
@@ -35,28 +36,9 @@ function createUsersHTML(users) {
     return rows;
 }
 
-const RequestUsers = (gameId) => {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            getLobby(gameId)
-                .then((res) => {
-                    setUsers(res["lobby"]);
-                });
-
-            let users_el = document.getElementsByClassName("users").item(0);
-            if (users_el) {
-                users_el.innerHTML = createUsersHTML(users);
-            }
-        }, 5000);
-
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, [gameId, users]);
-}
-
 export default function Lobby() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [users, setUsers] = useState([]);
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const game_id = searchParams.get("game_id");
 
@@ -66,7 +48,17 @@ export default function Lobby() {
         }
     }, [game_id, navigate]);
 
-    RequestUsers(game_id);
+    useInterval(() => {
+        getLobby(game_id)
+            .then((res) => {
+                setUsers(res["lobby"]);
+            });
+
+        let users_el = document.getElementsByClassName("users").item(0);
+        if (users_el) {
+            users_el.innerHTML = createUsersHTML(users);
+        }
+    }, 5000);
 
     const link = BASE_URL + "/join_game?game_id=" + game_id;
 
@@ -77,7 +69,7 @@ export default function Lobby() {
         }
     };
 
-    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
@@ -123,4 +115,4 @@ export default function Lobby() {
             </div>
         </section>
     );
-};
+}
