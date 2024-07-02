@@ -3,8 +3,18 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import clock from "@/assets/hideAndSeek/clock.svg";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {getDuration, getHiderResults, getSeekerResults} from "@/api/hideAndSeek.js";
+import {useColor} from "@/components/layouts/ColorContext.jsx";
+
 
 export default function AdminPageDuringGameplay() {
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#FF7F29');
+        setFooterColor('#FF7F29');
+        setBackgroundColor('#FF7F29');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
     const [searchParams] = useSearchParams();
     const [hiderResults, setHiderResults] = useState([]);
     const [seekerResults, setSeekerResults] = useState([]);
@@ -43,6 +53,7 @@ export default function AdminPageDuringGameplay() {
         navigate("/feedback_review");
     };
 
+    // refresh data about players
     useEffect(() => {
         const refreshData = async () => {
             const seekerRes = await getSeekerResults(gameId);
@@ -59,7 +70,7 @@ export default function AdminPageDuringGameplay() {
         return () => clearInterval(timer);
     }, [gameId]);
 
-
+    // refresh timer
     useEffect(() => {
         const timer = setInterval(() => {
             setSeconds(prevSeconds => {
