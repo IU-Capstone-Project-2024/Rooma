@@ -41,4 +41,14 @@ export const getLobby = async (gameId) => {
     }
 }
 
+export const getRules = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/rules?token=${localStorage.getItem("token")}`;
 
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting rules:', error);
+        throw error;
+    }
+}

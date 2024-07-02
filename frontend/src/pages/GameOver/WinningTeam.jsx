@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import Trophy from '../../components/game/Trophy.jsx';
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getState } from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 
