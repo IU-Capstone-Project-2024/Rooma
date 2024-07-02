@@ -69,7 +69,7 @@ export default function WinningTeam() {
                         <th className="border border-white bg-yellow-400 p-2">Telegram ID</th>
                         <th className="border border-white bg-yellow-400 p-2">Name</th>
                         <th className="border border-white bg-yellow-400 p-2">
-                            {winningTeam === 'seekers_win' ? 'Players Found' : 'Time Hidden'}
+                            {winningTeam === 'seekers_win' ? 'Players Found' : 'Time Hidden (in minutes)'}
                         </th>
                     </tr>
                     </thead>
