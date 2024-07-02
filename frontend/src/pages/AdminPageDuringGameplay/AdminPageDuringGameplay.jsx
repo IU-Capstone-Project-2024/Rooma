@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import clock from "@/assets/hideAndSeek/clock.svg";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
-import {getDuration} from "@/api/hideAndSeek.js";
+import {getDuration, getHiderResults, getSeekerResults} from "@/api/hideAndSeek.js";
 
 export default function AdminPageDuringGameplay() {
     const [searchParams] = useSearchParams();
@@ -19,35 +19,7 @@ export default function AdminPageDuringGameplay() {
     useEffect(() => {
         if (!gameId) {
             navigate("/", {replace: true});
-            return;
         }
-
-        // Заполняем фиктивные данные для команд
-        const dummyHiderResults = [
-            {telegram_id: "123456", name: "Player 1", found_time: "5"},
-            {telegram_id: "789012", name: "Player 2", found_time: "10"},
-            {telegram_id: "345678", name: "Player 3", found_time: "15"},
-            {telegram_id: "456789", name: "Player 4", found_time: "20"},
-            {telegram_id: "567890", name: "Player 5", found_time: "25"},
-            {telegram_id: "678901", name: "Player 6", found_time: "30"},
-            {telegram_id: "789012", name: "Player 7", found_time: "35"},
-            {telegram_id: "890123", name: "Player 8", found_time: "40"},
-            {telegram_id: "901234", name: "Player 9", found_time: "45"}
-        ];
-        const dummySeekerResults = [
-            {telegram_id: "234567", name: "Player A", found: 3},
-            {telegram_id: "890123", name: "Player B", found: 5},
-            {telegram_id: "456789", name: "Player C", found: 7},
-            {telegram_id: "567890", name: "Player D", found: 9},
-            {telegram_id: "678901", name: "Player E", found: 11},
-            {telegram_id: "789012", name: "Player F", found: 13},
-            {telegram_id: "890123", name: "Player G", found: 15},
-            {telegram_id: "901234", name: "Player H", found: 17},
-            {telegram_id: "012345", name: "Player I", found: 19}
-        ];
-        setHiderResults(dummyHiderResults);
-        setSeekerResults(dummySeekerResults);
-
     }, [gameId, navigate]);
 
     // get duration and update the timer
@@ -68,8 +40,25 @@ export default function AdminPageDuringGameplay() {
     }, [gameId]);
 
     const finishGame = () => {
-        navigate("http://localhost/");
+        navigate("/feedback_review");
     };
+
+    useEffect(() => {
+        const refreshData = async () => {
+            const seekerRes = await getSeekerResults(gameId);
+            setSeekerResults(seekerRes);
+
+            const hiderRes = await getHiderResults(gameId);
+            setHiderResults(hiderRes);
+        };
+
+        const timer = setInterval(() => {
+            refreshData();
+        }, 5000);
+
+        return () => clearInterval(timer);
+    }, [gameId]);
+
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -94,11 +83,6 @@ export default function AdminPageDuringGameplay() {
 
         return () => clearInterval(timer);
     }, [minutes, hours, finishGame]);
-
-    const refreshData = () => {
-        // В данном случае данные фиксированные, поэтому ничего обновлять не будем
-        console.log("Data refreshed");
-    };
 
     return (
         <section className="relative flex flex-col items-center justify-center bg-[#FF7F29]">
@@ -147,12 +131,6 @@ export default function AdminPageDuringGameplay() {
                                 ))}
                                 </tbody>
                             </table>
-                        </div>
-                        <div className="flex justify-center mt-4">
-                            <button className="px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
-                                    onClick={refreshData}>
-                                Refresh
-                            </button>
                         </div>
                     </div>
                 </div>
