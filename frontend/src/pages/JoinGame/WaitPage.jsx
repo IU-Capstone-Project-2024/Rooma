@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { joinGame } from "@/api/gamesCommon.js";
 import { getDuration } from "@/api/hideAndSeek.js";
@@ -7,7 +7,7 @@ import {useColor} from "@/components/layouts/ColorContext.jsx";
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
     const [waitTime, setWaitTime] = useState(null);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ export default function WaitPage() {
 
     useEffect(() => {
         if (!game_id) {
-            navigate("/");
+            navigate("/", {replace: true});
         }
     }, [game_id, navigate]);
 

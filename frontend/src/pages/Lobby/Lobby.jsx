@@ -1,9 +1,9 @@
 import QRCode from 'qrcode.react';
-import { BASE_URL } from "@/constants/urls.js";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {BASE_URL} from "@/constants/urls.js";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 import classNames from "classnames";
-import { getLobby } from "@/api/gamesCommon.js";
+import {getLobby} from "@/api/gamesCommon.js";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 
@@ -62,7 +62,7 @@ export default function Lobby() {
 
     useEffect(() => {
         if (!game_id) {
-            navigate("/");
+            navigate("/", {replace: true});
         }
     }, [game_id, navigate]);
 
@@ -73,7 +73,8 @@ export default function Lobby() {
     const copyToClipboard = async () => {
         try {
             await navigator.clipboard.writeText(link);
-        } catch (err) { /* empty */ }
+        } catch (err) { /* empty */
+        }
     };
 
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
@@ -93,7 +94,7 @@ export default function Lobby() {
 
             <div className="max-w-fit my-4 flex flex-col md:flex-row z-10">
                 <div className="flex flex-col items-center mx-4 md:mx-16">
-                    <QRCode className="qr-code mb-4 md:mb-8" size={280} includeMargin={true} value={link} />
+                    <QRCode className="qr-code mb-4 md:mb-8" size={280} includeMargin={true} value={link}/>
                     <button
                         className={classNames("bg-[#FFCD7B] rounded-xl text-white px-8 py-2")}
                         onClick={copyToClipboard}>

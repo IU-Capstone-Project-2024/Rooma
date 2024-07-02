@@ -28,7 +28,7 @@ class StateHandlerSearching(StateHandler):
             await self.set_new_state(State.HIDERS_WIN)
             return
 
-        found_set = set(data.hiders_found)
+        found_set = set(hider_data.hider_tid for hider_data in data.hiders_found)
         hiders_set = set(list(map(int, data.hiders.keys())))
 
         # no hiders
