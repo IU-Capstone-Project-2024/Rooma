@@ -1,57 +1,51 @@
 import {useEffect, useState} from 'react';
 import Trophy from '../../components/game/Trophy.jsx';
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {getState} from "@/api/hideAndSeek.js";
+import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 
 export default function WinningTeam() {
     const [searchParams] = useSearchParams();
     const [winningTeam, setWinningTeam] = useState("");
-    const [hasNavigated, setHasNavigated] = useState(false);
+    const [hiderResults, setHiderResults] = useState([]);
+    const [seekerResults, setSeekerResults] = useState([]);
+
     const navigate = useNavigate();
-    const game_id = searchParams.get("game_id");
+    const gameId = searchParams.get("game_id");
+
 
     useEffect(() => {
-        if (!game_id) {
-            if (!hasNavigated) {
-                setHasNavigated(true);
+        const fetchData = async () => {
+            if (!gameId) {
                 navigate("/", {replace: true});
+                return;
             }
-            return;
-        }
 
-        const fetchGameState = async () => {
             try {
-                const res = await getState(game_id);
-                setWinningTeam(res["state"]);
+                const res = await getState(gameId);
+                const currentWinningTeam = res["state"];
+                setWinningTeam(currentWinningTeam);
 
-                if (res["state"] !== "seekers_win" && res["state"] !== "hiders_win") {
-                    if (!hasNavigated) {
-                        setHasNavigated(true);
-                        alert("Game has not ended!");
-                        navigate("/", {replace: true});
-                    }
+                if (currentWinningTeam !== "seekers_win" && currentWinningTeam !== "hiders_win") {
+                    alert("Game has not ended!");
+                    navigate("/", {replace: true});
+                    return;
+                }
+
+                if (currentWinningTeam === "seekers_win") {
+                    const seekerRes = await getSeekerResults(gameId);
+                    setSeekerResults(seekerRes);
+                } else {
+                    const hiderRes = await getHiderResults(gameId);
+                    setHiderResults(hiderRes);
                 }
             } catch (err) {
-                if (!hasNavigated) {
-                    setHasNavigated(true);
-                    alert(err);
-                    navigate("/", {replace: true});
-                }
+                alert(err);
+                navigate("/", {replace: true});
             }
         };
 
-        fetchGameState();
-    }, [game_id, navigate, hasNavigated]);
-
-    const statistics = [
-        {name: 'Azamat', found: '5 players'},
-        {name: 'Azamat', found: '4 players'},
-        {name: 'Azamat', found: '3 players'},
-        {name: 'Azamat', found: '2 players'},
-        {name: 'Azamat', found: '1 player'},
-        {name: 'Azamat', found: 'None'},
-    ];
-
+        fetchData();
+    }, [gameId, navigate]);
 
     return (
         <div className="bg-[#FF7F29] text-center space-y-10 p-5 flex flex-col sm:px-8">
@@ -72,6 +66,7 @@ export default function WinningTeam() {
                 <table className="table-auto border-collapse  w-full">
                     <thead>
                     <tr>
+                        <th className="border border-white bg-yellow-400 p-2">Telegram ID</th>
                         <th className="border border-white bg-yellow-400 p-2">Name</th>
                         <th className="border border-white bg-yellow-400 p-2">
                             {winningTeam === 'seekers_win' ? 'Players Found' : 'Time Hidden'}
@@ -79,11 +74,12 @@ export default function WinningTeam() {
                     </tr>
                     </thead>
                     <tbody>
-                    {statistics.map((stat, index) => (
+                    {(winningTeam === 'seekers_win' ? seekerResults : hiderResults).map((stat, index) => (
                         <tr key={index}>
-                            <td className="border border-white bg-yellow-200 p-2">{stat.name}</td>
+                            <td className="border border-white bg-yellow-200 p-2">{stat["telegram_id"]}</td>
+                            <td className="border border-white bg-yellow-200 p-2">{stat["name"]}</td>
                             <td className="border border-white bg-yellow-200 p-2">
-                                {winningTeam === 'seekers_win' ? stat.found : stat.hiddenTime}
+                                {winningTeam === 'seekers_win' ? stat["found"] : stat["found_time"]}
                             </td>
                         </tr>
                     ))}
