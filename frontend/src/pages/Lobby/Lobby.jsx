@@ -36,6 +36,14 @@ function createUsersHTML(users) {
     return rows;
 }
 
+async function copyTextToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (err) {
+        alert(err);
+    }
+}
+
 export default function Lobby() {
     const [users, setUsers] = useState([]);
     const [searchParams] = useSearchParams();
@@ -62,13 +70,6 @@ export default function Lobby() {
 
     const link = BASE_URL + "/join_game?game_id=" + game_id;
 
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(link);
-        } catch (err) { /* empty */
-        }
-    };
-
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
     useEffect(() => {
@@ -89,7 +90,7 @@ export default function Lobby() {
                     <QRCode className="qr-code mb-4 md:mb-8" size={280} includeMargin={true} value={link}/>
                     <button
                         className={classNames("bg-[#FFCD7B] rounded-xl text-white px-8 py-2")}
-                        onClick={copyToClipboard}>
+                        onClick={() => copyTextToClipboard(link)}>
                         Copy link
                     </button>
                 </div>
