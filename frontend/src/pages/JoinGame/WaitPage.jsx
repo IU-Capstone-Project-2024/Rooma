@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { joinGame } from "@/api/gamesCommon.js";
 import { getDuration } from "@/api/hideAndSeek.js";
@@ -6,7 +6,7 @@ import { getDuration } from "@/api/hideAndSeek.js";
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
     const [waitTime, setWaitTime] = useState(null);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const navigate = useNavigate();
 
