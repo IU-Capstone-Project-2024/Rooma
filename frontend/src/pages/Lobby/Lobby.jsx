@@ -37,10 +37,15 @@ function createUsersHTML(users) {
 }
 
 async function copyTextToClipboard(text) {
-    try {
+    if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
-    } catch (err) {
-        alert(err);
+    } else {
+        const input = document.createElement('textarea');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
     }
 }
 
