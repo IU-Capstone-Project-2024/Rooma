@@ -2,8 +2,9 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import clock from "@/assets/hideAndSeek/clock.svg";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
-import {getDuration, getHiderResults, getSeekerResults} from "@/api/hideAndSeek.js";
+import {getDuration, getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 
 export default function AdminPageDuringGameplay() {
@@ -54,46 +55,40 @@ export default function AdminPageDuringGameplay() {
     };
 
     // refresh data about players
-    useEffect(() => {
-        const refreshData = async () => {
-            const seekerRes = await getSeekerResults(gameId);
-            setSeekerResults(seekerRes);
+    useInterval(async () => {
+        const [seekerRes, hiderRes, stateRes] = await Promise.all([
+            getSeekerResults(gameId),
+            getHiderResults(gameId),
+            getState(gameId)
+        ]);
 
-            const hiderRes = await getHiderResults(gameId);
-            setHiderResults(hiderRes);
-        };
+        setSeekerResults(seekerRes);
+        setHiderResults(hiderRes);
 
-        const timer = setInterval(() => {
-            refreshData();
-        }, 5000);
-
-        return () => clearInterval(timer);
-    }, [gameId]);
+        if (stateRes["state"] === "seekers_win" || stateRes["state"] === "hiders_win") {
+            finishGame();
+        }
+    }, 5000);
 
     // refresh timer
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setSeconds(prevSeconds => {
-                if (prevSeconds === 0) {
-                    if (minutes === 0) {
-                        if (hours === 0) {
-                            clearInterval(timer);
-                            finishGame();
-                            return 0;
-                        }
-                        setHours(prevHours => prevHours - 1);
-                        setMinutes(59);
-                        return 59;
+    useInterval(() => {
+        setSeconds(prevSeconds => {
+            if (prevSeconds === 0) {
+                if (minutes === 0) {
+                    if (hours === 0) {
+                        finishGame();
+                        return 0;
                     }
-                    setMinutes(prevMinutes => prevMinutes - 1);
+                    setHours(prevHours => prevHours - 1);
+                    setMinutes(59);
                     return 59;
                 }
-                return prevSeconds - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [minutes, hours, finishGame]);
+                setMinutes(prevMinutes => prevMinutes - 1);
+                return 59;
+            }
+            return prevSeconds - 1;
+        });
+    }, 1000);
 
     return (
         <section className="relative flex flex-col items-center justify-center bg-[#FF7F29]">
