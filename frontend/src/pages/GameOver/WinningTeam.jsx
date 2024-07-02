@@ -76,9 +76,9 @@ export default function WinningTeam() {
                 <table className="table-auto border-collapse  w-full">
                     <thead>
                     <tr>
-                        <th className="border border-white bg-yellow-400 p-2">Telegram ID</th>
-                        <th className="border border-white bg-yellow-400 p-2">Name</th>
-                        <th className="border border-white bg-yellow-400 p-2">
+                        <th className="bg-gray-100 p-2">Telegram ID</th>
+                        <th className="bg-gray-100 p-2">Name</th>
+                        <th className="bg-gray-100 p-2">
                             {winningTeam === 'seekers_win' ? 'Players Found' : 'Found in Minutes'}
                         </th>
                     </tr>
@@ -86,9 +86,9 @@ export default function WinningTeam() {
                     <tbody>
                     {(winningTeam === 'seekers_win' ? seekerResults : hiderResults).map((stat, index) => (
                         <tr key={index}>
-                            <td className="border border-white bg-yellow-200 p-2">{stat["telegram_id"]}</td>
-                            <td className="border border-white bg-yellow-200 p-2">{stat["name"]}</td>
-                            <td className="border border-white bg-yellow-200 p-2">
+                            <td className="bg-white p-2">{stat["telegram_id"]}</td>
+                            <td className="bg-white p-2">{stat["name"]}</td>
+                            <td className="bg-white p-2">
                                 {
                                     winningTeam === 'seekers_win'
                                         ? stat["found"]

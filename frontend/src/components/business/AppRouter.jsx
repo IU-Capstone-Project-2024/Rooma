@@ -11,6 +11,7 @@ import Lobby from '@/pages/Lobby/Lobby.jsx';
 import WaitPage from '@/pages/JoinGame/WaitPage.jsx';
 import WinningTeam from '@/pages/GameOver/WinningTeam.jsx';
 import { ColorProvider, useColor } from '@/components/layouts/ColorContext.jsx';
+import AdminPageDuringGameplay from "@/pages/AdminPageDuringGameplay/AdminPageDuringGameplay.jsx";
 
 const AppRouter = () => {
     return (
@@ -22,6 +23,7 @@ const AppRouter = () => {
                         <Route path="" element={<RequireAuth><Main /></RequireAuth>} />
                         <Route path="join_game" element={<RequireAuth><WaitPage /></RequireAuth>} />
                         <Route path="lobby" element={<RequireAuth><Lobby /></RequireAuth>} />
+                        <Route path="admin_page_during_gameplay" element={<RequireAuth><AdminPageDuringGameplay/></RequireAuth>}/>
                         <Route path="win" element={<RequireAuth><WinningTeam /></RequireAuth>} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
