@@ -6,8 +6,8 @@ from src.logs.log import log
 
 IN_DOCKER = getenv("IN_DOCKER", False)
 
-AUTHORIZE_MESSAGE = "Hello there! Here's your link to authorize in Rooma:\n Do not pass it to anyone!"
-JOIN_GAME_MESSAGE = "Here's your link to join the game 🎮 Have fun!"
+AUTHORIZE_MESSAGE = "Hello there! Here's your link to authorize in Rooma:\nDo not pass it to anyone!"
+JOIN_GAME_MESSAGE = "Here's your link to join the game 🎮 Have fun!\nDo not pass it to anyone!"
 INFO_MESSAGE = """Hey there! 👋 I'm Rooma, your friendly bot for offline team building games.
 Want to host a fun and unforgettable game night with your team? Look no further! Rooma makes it a breeze for organizers and gives players an amazing experience.
 With Rooma, you can:
