@@ -114,18 +114,24 @@ class GameService:
         game = await game_repo.get_one_by_game_id(game_id)
         data = HideNSeekData(**game.data)
 
-        response: list[HidersResultsResponse] = []
-        for hider_data in data.hiders_found:
-            user = await user_repo.get_user(hider_data.hider_tid)
-            response.append(
-                HidersResultsResponse(
-                    telegram_id=hider_data.hider_tid,
-                    name=user.first_name,
-                    found_time=(hider_data.found_time - data.seeker_start_time).total_seconds() // 60
-                )
+        response_dict: dict[int, HidersResultsResponse] = {}
+        for hider_tid in data.hiders.keys():
+            user = await user_repo.get_user(hider_tid)
+            response_dict[hider_tid] = HidersResultsResponse(
+                telegram_id=hider_tid,
+                name=user.first_name,
+                found_time=None
             )
 
-        response.sort(key=lambda x: x.found_time, reverse=True)
+        for hider_data in data.hiders_found:
+            response_dict[hider_data.hider_tid].found_time = (
+                    (hider_data.found_time - data.seeker_start_time).total_seconds() // 60
+            )
+
+        response: list[HidersResultsResponse] = list(response_dict.values())
+
+        # not found first
+        response.sort(key=lambda x: x.found_time if x.found_time is not None else float("inf"), reverse=True)
 
         return response
 

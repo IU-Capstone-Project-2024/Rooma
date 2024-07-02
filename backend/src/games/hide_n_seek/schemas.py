@@ -61,10 +61,10 @@ class StateResponse(BaseModel):
 class HidersResultsResponse(BaseModel):
     telegram_id: int
     name: str
-    found_time: int
+    found_time: int | None
 
 
 class SeekersResultsResponse(BaseModel):
     telegram_id: int
     name: str
-    found: int
+    found: int | None

@@ -69,7 +69,7 @@ export default function WinningTeam() {
                         <th className="border border-white bg-yellow-400 p-2">Telegram ID</th>
                         <th className="border border-white bg-yellow-400 p-2">Name</th>
                         <th className="border border-white bg-yellow-400 p-2">
-                            {winningTeam === 'seekers_win' ? 'Players Found' : 'Time Hidden (in minutes)'}
+                            {winningTeam === 'seekers_win' ? 'Players Found' : 'Found in Minutes'}
                         </th>
                     </tr>
                     </thead>
@@ -79,7 +79,11 @@ export default function WinningTeam() {
                             <td className="border border-white bg-yellow-200 p-2">{stat["telegram_id"]}</td>
                             <td className="border border-white bg-yellow-200 p-2">{stat["name"]}</td>
                             <td className="border border-white bg-yellow-200 p-2">
-                                {winningTeam === 'seekers_win' ? stat["found"] : stat["found_time"]}
+                                {
+                                    winningTeam === 'seekers_win'
+                                        ? stat["found"]
+                                        : (stat["found_time"] == null ? "Not found" : stat["found_time"])
+                                }
                             </td>
                         </tr>
                     ))}
