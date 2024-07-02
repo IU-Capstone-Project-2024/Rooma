@@ -5,6 +5,7 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {getDuration, getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
+import {finishGame} from "@/api/gamesCommon.js";
 
 
 export default function AdminPageDuringGameplay() {
@@ -50,8 +51,13 @@ export default function AdminPageDuringGameplay() {
         fetchDuration();
     }, [gameId]);
 
-    const finishGame = () => {
+    const moveAfterFinish = () => {
         navigate("/feedback_review");
+    };
+
+    const prematureFinishGame = () => {
+        finishGame(gameId);
+        moveAfterFinish();
     };
 
     // refresh data about players
@@ -66,7 +72,7 @@ export default function AdminPageDuringGameplay() {
         setHiderResults(hiderRes);
 
         if (stateRes["state"] === "seekers_win" || stateRes["state"] === "hiders_win") {
-            finishGame();
+            moveAfterFinish();
         }
     }, 5000);
 
@@ -76,7 +82,7 @@ export default function AdminPageDuringGameplay() {
             if (prevSeconds === 0) {
                 if (minutes === 0) {
                     if (hours === 0) {
-                        finishGame();
+                        moveAfterFinish();
                         return 0;
                     }
                     setHours(prevHours => prevHours - 1);
@@ -149,7 +155,7 @@ export default function AdminPageDuringGameplay() {
                             </span>
                         </div>
                     </div>
-                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded" onClick={finishGame}>
+                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded" onClick={prematureFinishGame}>
                         Finish game
                     </button>
                 </div>
