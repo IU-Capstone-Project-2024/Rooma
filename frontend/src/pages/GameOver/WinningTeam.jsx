@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import Trophy from '../../components/game/Trophy.jsx';
-import {useNavigate, useSearchParams} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getState } from "@/api/hideAndSeek.js";
+import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 
 export default function WinningTeam() {
@@ -11,6 +13,14 @@ export default function WinningTeam() {
 
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
+
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#FF7F29');
+        setFooterColor('#FF7F29');
+        setBackgroundColor('#FF7F29');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
 
 
     useEffect(() => {
@@ -48,7 +58,7 @@ export default function WinningTeam() {
     }, [gameId, navigate]);
 
     return (
-        <div className="bg-[#FF7F29] text-center space-y-10 p-5 flex flex-col sm:px-8">
+        <div className="text-center space-y-10 p-5 flex flex-col sm:px-8">
 
             <h1 className="text-4xl text-white font-bold">Hide and Seek</h1>
             <div className="flex justify-center my-3 relative">

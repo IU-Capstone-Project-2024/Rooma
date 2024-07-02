@@ -1,7 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');*/
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Itim';
+  src: url('./assets/fonts/Itim-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Itim', cursive, sans-serif;
+}
 
 /** { border: 1px solid red; }*/

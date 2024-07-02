@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { joinGame } from "@/api/gamesCommon.js";
 import { getDuration } from "@/api/hideAndSeek.js";
+import {useColor} from "@/components/layouts/ColorContext.jsx";
 
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
@@ -28,8 +29,16 @@ export default function WaitPage() {
         }
     }, [game_id]);
 
+    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+
+    useEffect(() => {
+        setHeaderColor('#FF7F29');
+        setFooterColor('#FF7F29');
+        setBackgroundColor('#FF7F29');
+    }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
     return (
-        <section className="bg-[#FF7F29] my-8 flex flex-col justify-center items-center px-4 sm:px-8">
+        <section className="my-8 flex flex-col justify-center items-center px-4 sm:px-8">
             <h1 className="text-3xl text-white font-bold mb-6">Hide and Seek Game</h1>
 
             <div className="bg-white rounded-xl p-6 max-w-3xl w-full mx-auto shadow-md border-4 border-[#FFC87A]">
