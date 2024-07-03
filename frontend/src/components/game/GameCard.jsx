@@ -177,19 +177,21 @@ export default function GameCard({name, img, small, onClick}) {
                             <p className="text-left">Game Description:</p>
                             <p className="mb-4 text-left">{gameDetails.description}</p>
                             {gameDetails.isActive && (
-                                <h3 className="text-lg text-[#ED7A2D] font-bold">Comment for players:</h3>
-                                <textarea
-                                    className="w-full h-24 p-2 border-2 border-[#FFC87A] rounded-xl"
-                                    placeholder="Enter your comment here..."
-                                    value={comment}
-                                    onChange={(e) => setComment(e.target.value)}
-                                />
-                                <button
-                                    className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
-                                    onClick={handleCreateGame}
-                                >
-                                    Create Game
-                                </button>
+                                <div>
+                                    <h3 className="text-lg text-[#ED7A2D] font-bold">Comment for players:</h3>
+                                    <textarea
+                                        className="w-full h-24 p-2 border-2 border-[#FFC87A] rounded-xl"
+                                        placeholder="Enter your comment here..."
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                    />
+                                    <button
+                                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
+                                        onClick={handleCreateGame}
+                                    >
+                                        Create Game
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </>
