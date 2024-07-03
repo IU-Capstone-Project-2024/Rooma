@@ -16,7 +16,8 @@ from src.games.hide_n_seek.schemas import (
     HiderFoundData,
     HidersResultsResponse,
     SeekersResultsResponse,
-    HiderCodeResponse
+    HiderCodeResponse,
+    PlayerRoleResponse
 )
 from src.games.schemas import Player, Game
 from src.logs.log import log
@@ -167,3 +168,12 @@ class GameService:
             raise UserNotFoundException(user_id=user.telegram_id)
 
         return HiderCodeResponse(code=data.hiders[user.telegram_id])
+
+    async def get_role(self, game_id: UUID, telegram_id: int) -> PlayerRoleResponse:
+        game = await game_repo.get_one_by_game_id(game_id)
+        data = HideNSeekData(**game.data)
+
+        if telegram_id in data.hiders:
+            return PlayerRoleResponse(role="hider")
+        else:
+            return PlayerRoleResponse(role="seeker")

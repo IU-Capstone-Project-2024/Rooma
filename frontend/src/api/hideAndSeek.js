@@ -57,7 +57,7 @@ export const getHiderResults = async (gameId) => {
         const response = await axios.get(url);
         return response.data;
     } catch (error) {
-        console.error('Error getting state:', error);
+        console.error('Error getting hider results:', error);
         throw error;
     }
 }
@@ -69,7 +69,7 @@ export const getSeekerResults = async (gameId) => {
         const response = await axios.get(url);
         return response.data;
     } catch (error) {
-        console.error('Error getting state:', error);
+        console.error('Error getting seeker results:', error);
         throw error;
     }
 }
@@ -93,7 +93,19 @@ export const getHiderCode = async (gameId) => {
         const response = await axios.get(url);
         return response.data;
     } catch (error) {
-        console.error('Error getting state:', error);
+        console.error('Error getting hider code:', error);
+        throw error;
+    }
+}
+
+export const getPlayerRole = async (gameId, telegramId) => {
+    const url = `${GAMES_URL}/${gameId}/role?token=${localStorage.getItem("token")}&telegram_id=${telegramId}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting player role:', error);
         throw error;
     }
 }
