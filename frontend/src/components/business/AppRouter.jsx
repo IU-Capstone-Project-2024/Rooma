@@ -10,8 +10,9 @@ import { AuthProvider } from '@/components/business/AuthProvider.jsx';
 import Lobby from '@/pages/Lobby/Lobby.jsx';
 import WaitPage from '@/pages/JoinGame/WaitPage.jsx';
 import WinningTeam from '@/pages/GameOver/WinningTeam.jsx';
-import { ColorProvider, useColor } from '@/components/layouts/ColorContext.jsx';
+import { ColorProvider} from '@/components/layouts/ColorContext.jsx';
 import AdminPageDuringGameplay from "@/pages/AdminPageDuringGameplay/AdminPageDuringGameplay.jsx";
+import SeekerPage from "@/pages/SeekerWaitPage/SeekerPage.jsx";
 import AdminResults from "@/pages/GameOver/AdminResults.jsx";
 
 const AppRouter = () => {
@@ -27,6 +28,7 @@ const AppRouter = () => {
                         <Route path="admin_gameplay" element={<RequireAuth><AdminPageDuringGameplay/></RequireAuth>}/>
                         <Route path="admin_results" element={<RequireAuth><AdminResults/></RequireAuth>}/>
                         <Route path="win" element={<RequireAuth><WinningTeam /></RequireAuth>} />
+                        <Route path="seeker" element={<RequireAuth><SeekerPage /></RequireAuth>} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
