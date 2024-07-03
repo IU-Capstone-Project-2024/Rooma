@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {getRules, joinGame} from "@/api/gamesCommon.js";
+import {getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
 import { getDuration } from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 
@@ -14,6 +14,12 @@ export default function WaitPage() {
     const navigate = useNavigate();
 
     const game_id = searchParams.get("game_id");
+
+    const leaveGameByButton = () => {
+        // Assuming leaveGame handles game leave logic
+        navigate("/", {replace: true});
+        leaveGame(game_id);
+    }
 
     useEffect(() => {
         if (!game_id) {
@@ -83,6 +89,10 @@ export default function WaitPage() {
                             <p className="font-medium">{waitTime} minutes</p>
                         </div>
                     </div>
+
+                    <button
+                        className="mt-6 bg-[#FF7F29] text-white font-bold py-2 px-4 rounded-lg"
+                        onClick={leaveGameByButton}>Leave the Game</button>
                 </div>
             </div>
         </section>
