@@ -63,6 +63,7 @@ export default function GameCard({name, img, small, onClick}) {
                 }
                 contentStyle={{
                     maxWidth: "400px",
+                    minWidth: "60%",
                     padding: "20px",
                     borderRadius: "10px",
                     boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
@@ -89,7 +90,7 @@ export default function GameCard({name, img, small, onClick}) {
                             {GAME_DETAILS.get(name)?.gameTime &&
                                 <div className="flex flex-col md:flex-row justify-between">
                                     <p className="text-left">Select game time (hours/minutes):</p>
-                                    <div className="flex items-center">
+                                    <div className="flex justify-center items-center">
                                         <input
                                             type="number"
                                             value={game_hours}
@@ -112,7 +113,7 @@ export default function GameCard({name, img, small, onClick}) {
                             {GAME_DETAILS.get(name)?.waitingTime &&
                                 <div className="flex flex-col md:flex-row justify-between">
                                     <p className="text-left">Select time for waiting (hours/minutes):</p>
-                                    <div className="flex items-center">
+                                    <div className="flex justify-center items-center">
                                         <input
                                             type="number"
                                             value={waiting_hours}
