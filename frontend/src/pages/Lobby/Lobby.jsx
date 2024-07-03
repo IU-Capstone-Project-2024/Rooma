@@ -3,7 +3,7 @@ import {BASE_URL} from "@/constants/urls.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import classNames from "classnames";
-import {getLobby} from "@/api/gamesCommon.js";
+import {getLobby, startGame} from "@/api/gamesCommon.js";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
@@ -49,6 +49,7 @@ async function copyTextToClipboard(text) {
     }
 }
 
+
 export default function Lobby() {
     const [users, setUsers] = useState([]);
     const [searchParams] = useSearchParams();
@@ -73,7 +74,7 @@ export default function Lobby() {
         }
     }, 5000);
 
-    const link = BASE_URL + "/join_game?game_id=" + game_id;
+    const link = `${BASE_URL}/join_game?game_id=${game_id}`;
 
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
@@ -82,6 +83,11 @@ export default function Lobby() {
         setFooterColor('#FF7F29');
         setBackgroundColor('#FF7F29');
     }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
+    const startGameFunc = async () => {
+        await startGame(game_id);
+        navigate(`/admin_page_during_gameplay?game_id=${game_id}`);
+    }
 
     return (
         <section className="relative space-y-10 flex flex-col items-center justify-around">
@@ -114,7 +120,8 @@ export default function Lobby() {
                     </table>
 
                     <button
-                        className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}>
+                        className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}
+                        onClick={startGameFunc}>
                         Play
                     </button>
                 </div>
