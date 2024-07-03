@@ -61,10 +61,14 @@ export default function WaitPage() {
                         <p>{rules}</p>
                     </div>
 
-                    <div className="text-lg text-gray-800">
-                        <p className="mb-2">Game master comment:</p>
-                        <p>{note}</p>
-                    </div>
+                    {
+                        note && (
+                            <div className="text-lg text-gray-800">
+                                <p className="mb-2">Game master comment:</p>
+                                <p className="bg-[#FFC87A] px-3 py-1 rounded-lg" style={{whiteSpace: "pre-wrap"}}>{note}</p>
+                            </div>
+                        )
+                    }
 
                     <div className="flex items-center justify-between mb-4">
                         <p className="text-lg">Game Duration:</p>
