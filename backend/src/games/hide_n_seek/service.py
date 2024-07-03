@@ -15,7 +15,8 @@ from src.games.hide_n_seek.schemas import (
     HideNSeekData,
     HiderFoundData,
     HidersResultsResponse,
-    SeekersResultsResponse
+    SeekersResultsResponse,
+    HiderCodeResponse
 )
 from src.games.schemas import Player, Game
 from src.logs.log import log
@@ -157,3 +158,12 @@ class GameService:
         response.sort(key=lambda x: x.found, reverse=True)
 
         return response
+
+    async def get_hider_code(self, game_id: UUID, user: User) -> HiderCodeResponse:
+        game = await game_repo.get_one_by_game_id(game_id)
+        data = HideNSeekData(**game.data)
+
+        if user.telegram_id not in data.hiders:
+            raise UserNotFoundException(user_id=user.telegram_id)
+
+        return HiderCodeResponse(code=data.hiders[user.telegram_id])
