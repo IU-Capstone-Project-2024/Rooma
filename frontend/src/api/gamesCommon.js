@@ -52,3 +52,15 @@ export const getRules = async (gameId) => {
         throw error;
     }
 }
+
+export const finishGame = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/finish?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.post(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting rules:', error);
+        throw error;
+    }
+}

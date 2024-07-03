@@ -3,6 +3,7 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.filters.command import CommandStart, Command
 from aiogram.types.message import Message
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from dotenv import load_dotenv
 
@@ -41,19 +42,34 @@ async def start(message: Message):
 
     user_input = message.text.split()
 
-    if len(user_input) < 1:
+    if len(user_input) < 2:
         return
 
     data = user_input[1]
     token = (await AuthRouter.get_refresh_token(GetTokenRequestSchema(telegram_id=message.from_user.id))).token
 
     if data == "create_game":
+        kb = [
+            [InlineKeyboardButton(
+                url=f"{FRONT_CREATE_GAME_LINK}?token={token}&telegram_id={message.from_user.id}",
+                text="Login Link"
+            )]
+        ]
+
         await message.answer(
-            AUTHORIZE_MESSAGE + f"{FRONT_CREATE_GAME_LINK}?token={token}&telegram_id={message.from_user.id}"
+            text=AUTHORIZE_MESSAGE,
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=kb)
         )
     else:
+        kb = [
+            [InlineKeyboardButton(
+                url=f"{FRONT_JOIN_GAME_LINK}?token={token}&telegram_id={message.from_user.id}&game_id={data}",
+                text="Login Link"
+            )]
+        ]
+
         await message.answer(
-            JOIN_GAME_MESSAGE + f"{FRONT_JOIN_GAME_LINK}?token={token}&telegram_id={message.from_user.id}&game_id={data}"
+            JOIN_GAME_MESSAGE, reply_markup=InlineKeyboardMarkup(inline_keyboard=kb)
         )
 
 
