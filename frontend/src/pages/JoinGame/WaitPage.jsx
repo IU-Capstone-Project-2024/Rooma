@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { joinGame } from "@/api/gamesCommon.js";
+import {getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
 import { getDuration } from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
     const [waitTime, setWaitTime] = useState(null);
+    const [rules, setRules] = useState(null);
+    const [note, setNote] = useState(null);
     const [searchParams] = useSearchParams();
 
     const navigate = useNavigate();
 
     const game_id = searchParams.get("game_id");
+
+    const leaveGameByButton = () => {
+        // Assuming leaveGame handles game leave logic
+        navigate("/", {replace: true});
+        leaveGame(game_id);
+    }
 
     useEffect(() => {
         if (!game_id) {
@@ -25,6 +33,10 @@ export default function WaitPage() {
             getDuration(game_id).then((result) => {
                 setDuration(result?.duration);
                 setWaitTime(result?.time_to_hide);
+            });
+            getRules(game_id).then((result) => {
+                setRules(result?.rules);
+                setNote(result?.note);
             });
         }
     }, [game_id]);
@@ -50,6 +62,20 @@ export default function WaitPage() {
                         </div>
                     </div>
 
+                    <div className="text-lg text-gray-800">
+                        <p className="mb-2">Rules of the game:</p>
+                        <p>{rules}</p>
+                    </div>
+
+                    {
+                        note && (
+                            <div className="text-lg text-gray-800">
+                                <p className="mb-2">Game master comment:</p>
+                                <p className="bg-[#FFC87A] px-3 py-1 rounded-lg" style={{whiteSpace: "pre-wrap"}}>{note}</p>
+                            </div>
+                        )
+                    }
+
                     <div className="flex items-center justify-between mb-4">
                         <p className="text-lg">Game Duration:</p>
                         <div className="bg-[#FFC87A] px-3 py-1 rounded-lg">
@@ -63,15 +89,10 @@ export default function WaitPage() {
                             <p className="font-medium">{waitTime} minutes</p>
                         </div>
                     </div>
-                </div>
 
-                <div className="text-lg text-gray-800">
-                    <p className="mb-2">Game Description:</p>
-                    <p>
-                        Players will be automatically divided into seekers and hiders. The host starts the game,
-                        revealing roles. Hiders receive unique codes; if found, they must reveal their code to the seeker.
-                        The seeker must enter the code on their phone to count the find.
-                    </p>
+                    <button
+                        className="mt-6 bg-[#FF7F29] text-white font-bold py-2 px-4 rounded-lg"
+                        onClick={leaveGameByButton}>Leave the Game</button>
                 </div>
             </div>
         </section>

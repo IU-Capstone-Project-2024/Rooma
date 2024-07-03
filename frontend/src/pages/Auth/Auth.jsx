@@ -9,6 +9,7 @@ import {useEffect} from "react";
 const Auth = () => {
     const location = useLocation();
     const fromPage = location.state?.from || '/';
+    const gameId = location.state?.gameId;
 
     const {isAuth} = useAuth();
 
@@ -16,7 +17,7 @@ const Auth = () => {
         return <Navigate to={fromPage} replace={true}/>
     }
 
-    const telegramBotLink = `${TG_BOT_URL}?start=create_game`;
+    const telegramBotLink = `${TG_BOT_URL}?start=${gameId ? gameId : 'create_game'}`;
 
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
 

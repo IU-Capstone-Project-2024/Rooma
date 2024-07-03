@@ -14,13 +14,14 @@ const RequireAuth = ({children}) => {
     const params = new URLSearchParams(location.search);
     const queryToken = params.get('token');
     const queryTelegramId = params.get('telegram_id');
+    const gameId = params.get('game_id');
 
     if (queryToken && queryTelegramId) {
         signIn(queryToken, queryTelegramId);
     }
 
     if (!isAuth()) {
-        return <Navigate to="/auth" state={{from: location}}/>;
+        return <Navigate to="/auth" state={{ from: location, gameId: gameId }} />;
     }
 
     return children;

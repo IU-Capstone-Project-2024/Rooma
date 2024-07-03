@@ -3,9 +3,10 @@ import {BASE_URL} from "@/constants/urls.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import classNames from "classnames";
-import {getLobby} from "@/api/gamesCommon.js";
+import {getLobby, startGame} from "@/api/gamesCommon.js";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 const ROW_COUNT = 8;
 
@@ -16,7 +17,7 @@ function createUsersHTML(users) {
 
         const td0 = document.createElement('td');
         td0.className = "border border-gray-600 px-4 py-2 bg-white";
-        td0.textContent = i + 1;
+        td0.textContent = (i + 1).toString();
         tr.appendChild(td0);
 
         const td1 = document.createElement('td');
@@ -35,28 +36,23 @@ function createUsersHTML(users) {
     return rows;
 }
 
-const RequestUsers = (gameId) => {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            getLobby(gameId)
-                .then((res) => {
-                    setUsers(res["lobby"]);
-                });
-
-            let users_el = document.getElementsByClassName("users").item(0);
-            if (users_el) {
-                users_el.innerHTML = createUsersHTML(users);
-            }
-        }, 5000);
-
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, [gameId, users]);
+async function copyTextToClipboard(text) {
+    if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+    } else {
+        const input = document.createElement('textarea');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+    }
 }
 
+
 export default function Lobby() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [users, setUsers] = useState([]);
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const game_id = searchParams.get("game_id");
 
@@ -66,24 +62,32 @@ export default function Lobby() {
         }
     }, [game_id, navigate]);
 
-    RequestUsers(game_id);
+    useInterval(() => {
+        getLobby(game_id)
+            .then((res) => {
+                setUsers(res["lobby"]);
+            });
 
-    const link = BASE_URL + "/join_game?game_id=" + game_id;
-
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(link);
-        } catch (err) { /* empty */
+        let users_el = document.getElementsByClassName("users").item(0);
+        if (users_el) {
+            users_el.innerHTML = createUsersHTML(users);
         }
-    };
+    }, 5000);
 
-    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+    const link = `${BASE_URL}/join_game?game_id=${game_id}`;
+
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
         setFooterColor('#FF7F29');
         setBackgroundColor('#FF7F29');
     }, [setHeaderColor, setFooterColor, setBackgroundColor]);
+
+    const startGameFunc = async () => {
+        await startGame(game_id);
+        navigate(`/admin_page_during_gameplay?game_id=${game_id}`);
+    }
 
     return (
         <section className="relative space-y-10 flex flex-col items-center justify-around">
@@ -97,7 +101,7 @@ export default function Lobby() {
                     <QRCode className="qr-code mb-4 md:mb-8" size={280} includeMargin={true} value={link}/>
                     <button
                         className={classNames("bg-[#FFCD7B] rounded-xl text-white px-8 py-2")}
-                        onClick={copyToClipboard}>
+                        onClick={() => copyTextToClipboard(link)}>
                         Copy link
                     </button>
                 </div>
@@ -116,11 +120,12 @@ export default function Lobby() {
                     </table>
 
                     <button
-                        className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}>
+                        className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}
+                        onClick={startGameFunc}>
                         Play
                     </button>
                 </div>
             </div>
         </section>
     );
-};
+}
