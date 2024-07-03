@@ -1,15 +1,15 @@
-import {useState} from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import {createGame} from "@/api/hideAndSeek.js";
-import {useNavigate} from "react-router-dom";
+import { createGame } from "@/api/hideAndSeek.js";
+import { useNavigate } from "react-router-dom";
 
 const GAME_DETAILS = new Map([
     ["Hide and Seek", {
         participants: "not limited",
         gameTime: true,
-        waitingTime: false,
+        waitingTime: true,
         isActive: true,
         description: "Players will be automatically divided into those who are looking and those who are hiding. " +
             "After the host starts the game, their role appears on the players screens." +
@@ -53,8 +53,7 @@ const convertTimeToMinutes = (timeString) => {
     return (hours * 60) + minutes;
 };
 
-export default function GameCard({name, img, small, onClick}) {
-    console.log(GAME_DETAILS.get(name), name, GAME_DETAILS)
+export default function GameCard({ name, img, small, onClick }) {
     const [game_hours, setGameHours] = useState(0);
     const [game_minutes, setGameMinutes] = useState(0);
 
@@ -84,7 +83,7 @@ export default function GameCard({name, img, small, onClick}) {
         <div
             className={classNames("cursor-pointer flex flex-col justify-between rounded-2xl bg-[#9CD3CD] aspect-square bg-cover border-4 border-[#9CD3CD] hover:scale-105 transition",
                 small ? "h-48 md:h-56 xl:h-64" : "h-56 md:h-64 xl:h-80")}
-            style={{backgroundImage: `url(${img})`}} onClick={onClick}>
+            style={{ backgroundImage: `url(${img})` }} onClick={onClick}>
             <div
                 className="text-center py-1 text-xl bg-[#] backdrop-brightness-75 text-white rounded-t-2xl select-none">{name}</div>
             <Popup
@@ -103,8 +102,11 @@ export default function GameCard({name, img, small, onClick}) {
                     </button>
                 }
                 contentStyle={{
+                    width: "90%",
                     maxWidth: "400px",
-                    minWidth: "60%",
+                    minHeight: "40%",
+                    maxHeight: "80%",
+                    overflowY: "auto",
                     padding: "20px",
                     borderRadius: "10px",
                     boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
