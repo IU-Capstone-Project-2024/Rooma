@@ -52,7 +52,7 @@ export default function AdminPageDuringGameplay() {
     }, [gameId]);
 
     const moveAfterFinish = () => {
-        navigate("/feedback_review");
+        navigate(`/admin_results?game_id=${gameId}`);
     };
 
     const prematureFinishGame = () => {
@@ -155,7 +155,8 @@ export default function AdminPageDuringGameplay() {
                             </span>
                         </div>
                     </div>
-                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded" onClick={prematureFinishGame}>
+                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
+                            onClick={prematureFinishGame}>
                         Finish game
                     </button>
                 </div>
