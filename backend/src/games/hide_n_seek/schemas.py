@@ -35,6 +35,7 @@ class HideNSeekData(HideNSeekCreateData):
 class CreateHideNSeekRequest(BaseModel):
     name: str
     data: HideNSeekCreateData
+    note: str | None = None
 
     # set by backend
     owner_telegram_id: int | None = None

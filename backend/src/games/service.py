@@ -4,6 +4,7 @@ from src.common.repository.game import GameRepository
 from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
 from src.database import User
+from src.game_types.game_types import get_rules_by_game_type
 from src.games.schemas import (
     Game,
     LobbyResponse,
@@ -64,7 +65,10 @@ class GameService:
         return SuccessResponse(success=True)
 
     async def get_rules(self, game_id: UUID, user: User) -> RulesResponse:
-        pass
+        game = await game_repo.get_one_by_game_id(game_id)
+        note = game.note
+        rules = get_rules_by_game_type(game.game_type)
+        return RulesResponse(note=note, rules=rules)
 
     async def get_game(self, game_id: UUID, user: User) -> Game:
         game = await game_repo.get_one_by_game_id(game_id)
