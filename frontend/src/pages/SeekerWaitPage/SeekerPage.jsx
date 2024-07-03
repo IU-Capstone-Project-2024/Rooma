@@ -2,7 +2,7 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {getDuration, getEndTimes} from "@/api/hideAndSeek.js";
+import {find, getDuration, getEndTimes} from "@/api/hideAndSeek.js";
 import GameTimer from "@/components/game/GameTimer.jsx";
 
 export default function SeekerPage() {
@@ -24,8 +24,14 @@ export default function SeekerPage() {
 
     const [isStarted, setIsStarted] = useState(false);
 
+    const [codeToSubmit, setCodeToSubmit] = useState("");
+
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
+
+    const sendRequestToFind = async () => {
+        await find(gameId, codeToSubmit)
+    }
 
     useEffect(() => {
         if (!gameId) {
@@ -72,8 +78,25 @@ export default function SeekerPage() {
                 <p>Game Duration: {hours} hours {minutes} minutes</p>
             </div>
 
-            {new Date() > seekerStartTime && <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>}
-            {new Date() > seekerStartTime && <GameTimer endTime={gameEndTime} />}
+            {
+                new Date() > seekerStartTime && (
+                    <div>
+                        <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>;
+                        <GameTimer endTime={gameEndTime} />
+
+                        <textarea
+                            className="w-80 h-40 bg-white rounded-lg p-2 text-black"
+                            placeholder="Enter the code here"
+                            onChange={(e) => setCodeToSubmit(e.target.value)}
+                        />
+
+                        <button className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg mt-4" onClick={sendRequestToFind}>
+                            Submit
+                        </button>
+                    </div>
+                )
+            }
+
 
             {new Date() < seekerStartTime && <h2 className="text-2xl text-white font-bold mb-8 z-10">The game will start soon!</h2>}
             {new Date() < seekerStartTime && <GameTimer endTime={seekerStartTime} frozen={true} />}

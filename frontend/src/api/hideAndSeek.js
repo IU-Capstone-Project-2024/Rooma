@@ -109,3 +109,15 @@ export const getPlayerRole = async (gameId, telegramId) => {
         throw error;
     }
 }
+
+export const find = async (gameId, code) => {
+    const url = `${GAMES_URL}/${gameId}/find?token=${localStorage.getItem("token")}&code=${code}`;
+
+    try {
+        const response = await axios.post(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting hider code:', error);
+        throw error;
+    }
+}
