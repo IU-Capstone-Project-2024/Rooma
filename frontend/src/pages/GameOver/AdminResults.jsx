@@ -37,7 +37,11 @@ export default function AdminResults() {
                 const currentWinningTeam = res["state"];
                 setWinningTeam(currentWinningTeam);
 
-                if (currentWinningTeam !== "seekers_win" && currentWinningTeam !== "hiders_win") {
+                if (currentWinningTeam === "seekers_win") {
+                    setActiveButton("seekers");
+                } else if (currentWinningTeam === "hiders_win") {
+                    setActiveButton("hiders");
+                } else {
                     alert("Game has not ended!");
                     navigate("/", {replace: true});
                     return;
