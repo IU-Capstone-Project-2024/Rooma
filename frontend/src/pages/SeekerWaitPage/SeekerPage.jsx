@@ -81,16 +81,18 @@ export default function SeekerPage() {
             {
                 (new Date() > seekerStartTime || true) && (
                     <div className="flex flex-col justify-between">
-                        <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
-                        <GameTimer endTime={gameEndTime}/>
 
+                        <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
+                        <div className="mb-2">
+                            <GameTimer endTime={gameEndTime}/>
+                        </div>
                         <input
                             className="w-80 h-8 bg-white rounded-lg p-2 text-black mb-2"
                             placeholder="Enter the code here"
                             onChange={(e) => setCodeToSubmit(e.target.value)}
                         />
 
-                        <button className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg mt-4" onClick={sendRequestToFind}>
+                        <button className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg" onClick={sendRequestToFind}>
                             Submit
                         </button>
                     </div>
