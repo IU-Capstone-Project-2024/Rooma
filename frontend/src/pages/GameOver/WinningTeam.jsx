@@ -3,12 +3,14 @@ import Trophy from '../../components/game/Trophy.jsx';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
+import Feedback from '../../components/game/Feedback.jsx';
 
 export default function WinningTeam() {
     const [searchParams] = useSearchParams();
     const [winningTeam, setWinningTeam] = useState("");
     const [hiderResults, setHiderResults] = useState([]);
     const [seekerResults, setSeekerResults] = useState([]);
+    const [showFeedback, setShowFeedback] = useState(false);
 
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
@@ -54,6 +56,13 @@ export default function WinningTeam() {
         };
 
         fetchData();
+
+        //Timer to show feedback form 1 minute after results
+        const timer = setTimeout(() => {
+            setShowFeedback(true);
+        }, 60000);
+        return () => clearTimeout(timer);
+
     }, [gameId, navigate]);
 
     return (
@@ -99,6 +108,7 @@ export default function WinningTeam() {
                     </tbody>
                 </table>
             </div>
+        {showFeedback && <Feedback name="Hide and Seek" />}
         </div>
     );
 }
