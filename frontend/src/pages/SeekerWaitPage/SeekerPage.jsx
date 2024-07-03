@@ -79,13 +79,13 @@ export default function SeekerPage() {
             </div>
 
             {
-                new Date() > seekerStartTime && (
-                    <div>
+                (new Date() > seekerStartTime || true) && (
+                    <div className="flex flex-col justify-between">
                         <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>;
-                        <GameTimer endTime={gameEndTime} />
+                        <GameTimer endTime={gameEndTime}/>
 
-                        <textarea
-                            className="w-80 h-40 bg-white rounded-lg p-2 text-black"
+                        <input
+                            className="w-80 h-8 bg-white rounded-lg p-2 text-black mb-2"
                             placeholder="Enter the code here"
                             onChange={(e) => setCodeToSubmit(e.target.value)}
                         />
@@ -98,8 +98,9 @@ export default function SeekerPage() {
             }
 
 
-            {new Date() < seekerStartTime && <h2 className="text-2xl text-white font-bold mb-8 z-10">The game will start soon!</h2>}
-            {new Date() < seekerStartTime && <GameTimer endTime={seekerStartTime} frozen={true} />}
+            {new Date() < seekerStartTime &&
+                <h2 className="text-2xl text-white font-bold mb-8 z-10">The game will start soon!</h2>}
+            {new Date() < seekerStartTime && <GameTimer endTime={seekerStartTime} frozen={true}/>}
 
         </section>
     );
