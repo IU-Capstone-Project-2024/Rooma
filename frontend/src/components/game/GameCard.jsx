@@ -79,7 +79,7 @@ export default function GameCard({name, img, small, onClick}) {
                         <div className="text-center text-lg space-y-4">
                             <h2 className="text-xl text-[#ED7A2D] font-bold mb-2">{name}</h2>
 
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col md:flex-row items-center justify-between">
                                 <p>Number of participants:</p>
                                 <div className="bg-[#FFC87A] px-2 rounded-lg">
                                     <p>not limited</p>
@@ -87,7 +87,7 @@ export default function GameCard({name, img, small, onClick}) {
                             </div>
 
                             {GAME_DETAILS.get(name)?.gameTime &&
-                                <div className="flex justify-between">
+                                <div className="flex flex-col md:flex-row justify-between">
                                     <p className="text-left">Select game time (hours/minutes):</p>
                                     <div className="flex items-center">
                                         <input
@@ -110,7 +110,7 @@ export default function GameCard({name, img, small, onClick}) {
                             }
 
                             {GAME_DETAILS.get(name)?.waitingTime &&
-                                <div className="flex justify-between">
+                                <div className="flex flex-col md:flex-row justify-between">
                                     <p className="text-left">Select time for waiting (hours/minutes):</p>
                                     <div className="flex items-center">
                                         <input
