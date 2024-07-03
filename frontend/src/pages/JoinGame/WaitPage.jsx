@@ -62,14 +62,14 @@ export default function WaitPage() {
                         </div>
                     </div>
 
-                    <div className="text-lg text-gray-800">
+                    <div className="text-lg text-gray-800 justify-between mb-4">
                         <p className="mb-2">Rules of the game:</p>
                         <p>{rules}</p>
                     </div>
 
                     {
                         note && (
-                            <div className="text-lg text-gray-800">
+                            <div className="text-lg text-gray-800 justify-between mb-4">
                                 <p className="mb-2">Game master comment:</p>
                                 <p className="bg-[#FFC87A] px-3 py-1 rounded-lg" style={{whiteSpace: "pre-wrap"}}>{note}</p>
                             </div>
