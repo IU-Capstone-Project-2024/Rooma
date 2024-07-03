@@ -3,7 +3,7 @@ import {BASE_URL} from "@/constants/urls.js";
 
 const GAMES_URL = BASE_URL + '/api/games/hide-n-seek';
 
-export const createGame = async (name, duration, timeToHide, seekerPercentage) => {
+export const createGame = async (name, duration, timeToHide, seekerPercentage, comment) => {
     const url = `${GAMES_URL}/create?token=${localStorage.getItem("token")}`;
 
     const gameInfo = {
@@ -12,7 +12,8 @@ export const createGame = async (name, duration, timeToHide, seekerPercentage) =
             duration: duration,
             time_to_hide: timeToHide,
             seeker_percentage: seekerPercentage
-        }
+        },
+        note: comment
     };
 
     try {
