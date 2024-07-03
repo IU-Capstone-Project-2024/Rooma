@@ -81,7 +81,7 @@ export default function SeekerPage() {
             {
                 (new Date() > seekerStartTime || true) && (
                     <div className="flex flex-col justify-between">
-                        <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>;
+                        <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
                         <GameTimer endTime={gameEndTime}/>
 
                         <input
