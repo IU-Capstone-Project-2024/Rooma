@@ -24,7 +24,7 @@ const AppRouter = () => {
                         <Route path="" element={<RequireAuth><Main /></RequireAuth>} />
                         <Route path="join_game" element={<RequireAuth><WaitPage /></RequireAuth>} />
                         <Route path="lobby" element={<RequireAuth><Lobby /></RequireAuth>} />
-                        <Route path="admin_page_during_gameplay" element={<RequireAuth><AdminPageDuringGameplay/></RequireAuth>}/>
+                        <Route path="admin_gameplay" element={<RequireAuth><AdminPageDuringGameplay/></RequireAuth>}/>
                         <Route path="admin_results" element={<RequireAuth><AdminResults/></RequireAuth>}/>
                         <Route path="win" element={<RequireAuth><WinningTeam /></RequireAuth>} />
                         <Route path="*" element={<NotFound />} />

@@ -86,7 +86,7 @@ export default function Lobby() {
 
     const startGameFunc = async () => {
         await startGame(game_id);
-        navigate(`/admin_page_during_gameplay?game_id=${game_id}`);
+        navigate(`/admin_gameplay?game_id=${game_id}`);
     }
 
     return (
