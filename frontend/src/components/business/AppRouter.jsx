@@ -14,6 +14,7 @@ import { ColorProvider} from '@/components/layouts/ColorContext.jsx';
 import AdminPageDuringGameplay from "@/pages/AdminPageDuringGameplay/AdminPageDuringGameplay.jsx";
 import SeekerPage from "@/pages/SeekerWaitPage/SeekerPage.jsx";
 import AdminResults from "@/pages/GameOver/AdminResults.jsx";
+import HiderPage from "@/pages/HiderPage/HiderPage.jsx";
 
 const AppRouter = () => {
     return (
@@ -29,6 +30,7 @@ const AppRouter = () => {
                         <Route path="admin_results" element={<RequireAuth><AdminResults/></RequireAuth>}/>
                         <Route path="win" element={<RequireAuth><WinningTeam /></RequireAuth>} />
                         <Route path="seeker" element={<RequireAuth><SeekerPage /></RequireAuth>} />
+                        <Route path="hider" element={<RequireAuth><HiderPage /></RequireAuth>} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
