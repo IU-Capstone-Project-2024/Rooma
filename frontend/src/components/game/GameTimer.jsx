@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import timerSvg from '../../assets/hideAndSeek/timer.svg';
+import timerSnowSvg from '../../assets/hideAndSeek/timer_snow.svg';
 
-const GameTimer = ({ endTime }) => {
+const GameTimer = ({ endTime, frozen = false }) => {
   const calculateTimeLeft = () => {
     const difference = endTime - new Date().getTime();
     let timeLeft = {};
@@ -33,7 +34,12 @@ const GameTimer = ({ endTime }) => {
 
   return (
     <div style={{ position: 'relative', width: '200px', height: '200px' }}>
+      {!frozen &&
       <img src={timerSvg} alt="Timer Background" style={{ width: '100%', height: '100%' }} />
+      }
+      {frozen &&
+        <img src={timerSnowSvg} alt="Snowflake" style={{ width: '100%', height: '100%', position: 'absolute' }} />
+      }
       <div style={{
         position: 'absolute',
         top: '50%',
