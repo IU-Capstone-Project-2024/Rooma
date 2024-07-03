@@ -73,3 +73,15 @@ export const getSeekerResults = async (gameId) => {
         throw error;
     }
 }
+
+export const getHiderCode = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/hider/code?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting state:', error);
+        throw error;
+    }
+}
