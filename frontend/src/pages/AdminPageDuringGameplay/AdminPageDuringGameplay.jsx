@@ -6,6 +6,7 @@ import {getDuration, getHiderResults, getSeekerResults, getState} from "@/api/hi
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
 import {finishGame} from "@/api/gamesCommon.js";
+import HiderSeekerTable from "@/pages/GameOver/HiderSeekerTable.jsx";
 
 
 export default function AdminPageDuringGameplay() {
@@ -103,49 +104,12 @@ export default function AdminPageDuringGameplay() {
 
             <h1 className="text-4xl text-white font-bold mb-8 z-10">Hide and Seek</h1>
             <div className="flex flex-col sm:flex-row w-full sm:w-3/4 h-full sm:h-auto z-10">
-                <div className="sm:w-1/2 p-4 flex flex-col items-center">
-                    <div className="flex space-x-4 mt-4 justify-start w-full">
-                        <button
-                            className={`px-6 py-3 font-bold rounded ${activeButton === 'hiders' ? 'bg-white text-black' : 'bg-[#FFCD7B] text-black'} hover:bg-white`}
-                            onClick={() => setActiveButton('hiders')}
-                        >
-                            Hiders
-                        </button>
-                        <button
-                            className={`px-6 py-3 font-bold rounded ${activeButton === 'seekers' ? 'bg-white text-black' : 'bg-[#FFCD7B] text-black'} hover:bg-white`}
-                            onClick={() => setActiveButton('seekers')}
-                        >
-                            Seekers
-                        </button>
-                    </div>
-
-                    <div className="relative mt-4 w-full">
-                        <div className="overflow-y-auto max-h-64">
-                            <table className="table-auto border-collapse w-full bg-white rounded-lg">
-                                <thead className="sticky top-0 bg-gray-200">
-                                <tr>
-                                    <th className="p-2 text-center">Telegram ID</th>
-                                    <th className="p-2 text-center">Name</th>
-                                    <th className="p-2 text-center">
-                                        {activeButton === 'seekers' ? 'Players Found' : 'Found in Minutes'}
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {(activeButton === 'seekers' ? seekerResults : hiderResults).map((stat, index) => (
-                                    <tr key={index}>
-                                        <td className="p-2 text-center">{stat["telegram_id"]}</td>
-                                        <td className="p-2 text-center">{stat["name"]}</td>
-                                        <td className="p-2 text-center">
-                                            {activeButton === 'seekers' ? stat["found"] : (stat["found_time"] == null ? "Not found" : stat["found_time"])}
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <HiderSeekerTable
+                    activeButton={activeButton}
+                    setActiveButton={setActiveButton}
+                    hiderResults={hiderResults}
+                    seekerResults={seekerResults}
+                />
                 <div className="sm:w-1/2 p-4 flex flex-col items-center justify-center">
                     <div className="relative w-1/2">
                         <img src={clock} alt="clock" className="w-full h-auto max-w-xs mx-auto"/>
