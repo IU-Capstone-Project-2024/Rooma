@@ -73,3 +73,7 @@ class SeekersResultsResponse(BaseModel):
 
 class HiderCodeResponse(BaseModel):
     code: str
+
+
+class PlayerRoleResponse(BaseModel):
+    role: str
