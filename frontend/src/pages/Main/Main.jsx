@@ -1,6 +1,8 @@
 import hideAndSeek from "../../assets/gameCardAvatars/hide_and_seek.png";
 import killer from "../../assets/gameCardAvatars/killer.png";
 import space from "../../assets/gameCardAvatars/space.png";
+import facts from "../../assets/gameCardAvatars/facts.jpg";
+import man_from from "../../assets/gameCardAvatars/man_from.png";
 import {GamesCarousel} from "../../components/game/GamesCarousel.jsx";
 import {GamesMenu} from "../../components/game/GamesMenu.jsx";
 import { useColor } from '@/components/layouts/ColorContext.jsx';
@@ -20,21 +22,23 @@ const cards = [
         img: space,
     },
     {
-        name: "4",
-        img: hideAndSeek,
+        name: "Facts",
+        img: facts,
     },
     {
-        name: "5",
-        img: hideAndSeek,
+        name: "The man from...",
+        img: man_from,
     },
 ];
 
 const cardsEmpty = [];
 
+const noveltiesCards = cards.slice(1);
+
 const cardsData = {
-    Novelties: cards,
-    Popular: cards,
-    ForYou: [cards[1]],
+    Novelties: noveltiesCards,
+    Popular: [cards[0]],
+    ForYou: [cards[0]],
     Continue: cardsEmpty,
     All: cards,
 };

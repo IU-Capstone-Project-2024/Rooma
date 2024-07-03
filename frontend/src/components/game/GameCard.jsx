@@ -9,12 +9,43 @@ const GAME_DETAILS = new Map([
     ["Hide and Seek", {
         participants: "not limited",
         gameTime: true,
-        waitingTime: true,
+        waitingTime: false,
+        isActive: true,
         description: "Players will be automatically divided into those who are looking and those who are hiding. " +
             "After the host starts the game, their role appears on the players screens." +
             "Those who are hiding will have their own unique code, which needs to be said if the player is found." +
             "The searching player, having found the player, must find out the code and enter it on the phone so that the found person is counted."
     }],
+    ["Killer", {
+        participants: "not limited",
+        gameTime: false,
+        waitingTime: false,
+        isActive: false,
+        description: "Players are given roles of either 'Killer' or 'Innocent'. The Killer's goal is to eliminate all Innocents " +
+            "without getting caught. The Innocents must work together to identify the Killer before it's too late."
+    }],
+    ["Public Chat", {
+        participants: "not limited",
+        gameTime: false,
+        waitingTime: false,
+        isActive: false,
+        description: "An open chat room where players can communicate and discuss various topics. No specific game objectives."
+    }],
+    ["Facts", {
+        participants: "3-10",
+        gameTime: false,
+        waitingTime: false,
+        isActive: false,
+        description: "Players take turns sharing interesting facts. The goal is to surprise or educate others with unique and lesser-known information."
+    }],
+    ["The man from...", {
+        participants: "3-10",
+        gameTime: false,
+        waitingTime: false,
+        isActive: false,
+        description: "Players take on roles and create a story about a mysterious man from a chosen location. The game is driven by " +
+            "creativity and improvisation, as players build upon each other's contributions to the story."
+    }]
 ]);
 
 const convertTimeToMinutes = (timeString) => {
@@ -47,6 +78,8 @@ export default function GameCard({name, img, small, onClick}) {
             });
     };
 
+    const gameDetails = GAME_DETAILS.get(name);
+
     return (
         <div
             className={classNames("cursor-pointer flex flex-col justify-between rounded-2xl bg-[#9CD3CD] aspect-square bg-cover border-4 border-[#9CD3CD] hover:scale-105 transition",
@@ -58,7 +91,15 @@ export default function GameCard({name, img, small, onClick}) {
                 modal
                 trigger={
                     <button
-                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}>Play
+                        className={classNames(
+                            "m-2 self-start rounded-xl text-white",
+                            small ? "px-6 py-1" : "px-8 py-2",
+                            gameDetails.isActive
+                                ? "bg-gradient-to-r from-yellow-400 to-pink-500"
+                                : "bg-gradient-to-r from-green-400 to-blue-500"
+                        )}
+                    >
+                        {gameDetails.isActive ? "Play" : "Read the rules"}
                     </button>
                 }
                 contentStyle={{
@@ -83,11 +124,11 @@ export default function GameCard({name, img, small, onClick}) {
                             <div className="flex flex-col md:flex-row items-center justify-between">
                                 <p>Number of participants:</p>
                                 <div className="bg-[#FFC87A] px-2 rounded-lg">
-                                    <p>not limited</p>
+                                    <p>{gameDetails.participants}</p>
                                 </div>
                             </div>
 
-                            {GAME_DETAILS.get(name)?.gameTime &&
+                            {gameDetails.gameTime &&
                                 <div className="flex flex-col md:flex-row justify-between">
                                     <p className="text-left">Select game time (hours/minutes):</p>
                                     <div className="flex justify-center items-center">
@@ -110,7 +151,7 @@ export default function GameCard({name, img, small, onClick}) {
                                 </div>
                             }
 
-                            {GAME_DETAILS.get(name)?.waitingTime &&
+                            {gameDetails.waitingTime &&
                                 <div className="flex flex-col md:flex-row justify-between">
                                     <p className="text-left">Select time for waiting (hours/minutes):</p>
                                     <div className="flex justify-center items-center">
@@ -134,22 +175,22 @@ export default function GameCard({name, img, small, onClick}) {
                             }
 
                             <p className="text-left">Game Description:</p>
-                            <p className="mb-4 text-left">{GAME_DETAILS.get(name)?.description}</p>
-
-                            <h3 className="text-lg text-[#ED7A2D] font-bold">Comment for players:</h3>
-                            <textarea
-                                className="w-full h-24 p-2 border-2 border-[#FFC87A] rounded-xl"
-                                placeholder="Enter your comment here..."
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                            />
-
-                            <button
-                                className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
-                                onClick={handleCreateGame}
-                            >
-                                Create Game
-                            </button>
+                            <p className="mb-4 text-left">{gameDetails.description}</p>
+                            {gameDetails.isActive && (
+                                <h3 className="text-lg text-[#ED7A2D] font-bold">Comment for players:</h3>
+                                <textarea
+                                    className="w-full h-24 p-2 border-2 border-[#FFC87A] rounded-xl"
+                                    placeholder="Enter your comment here..."
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                />
+                                <button
+                                    className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
+                                    onClick={handleCreateGame}
+                                >
+                                    Create Game
+                                </button>
+                            )}
                         </div>
                     </>
                 )}
