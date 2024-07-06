@@ -12,8 +12,8 @@ class GameStateRepository(MongoBeanieRepository):
     async def get_by_game_id(self, game_id: UUID) -> GameState | None:
         return await self.model.find_one(Eq(self.model.game_id, game_id))
 
-    async def get_not_in_states(self, state: list[str]) -> list[GameState]:
-        return await self.model.find(NotIn(self.model.state, state)).to_list()
+    async def get_not_in_states(self, states: list[str]) -> list[GameState]:
+        return await self.model.find(NotIn(self.model.state, states)).to_list()
 
     async def get_by_state(self, state: str) -> list[GameState]:
         return await self.model.find(Eq(self.model.state, state)).to_list()

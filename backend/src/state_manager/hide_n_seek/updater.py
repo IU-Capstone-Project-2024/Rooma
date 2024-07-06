@@ -15,7 +15,7 @@ async def update_all():
     games = set(game.game_id for game in await game_repo.get_all_active())
     game_states = set(
         game_state.game_id for game_state in
-        await game_state_repo.get_by_state(State.SEARCHING)
+        await game_state_repo.get_not_in_states([State.HIDERS_WIN, State.SEEKERS_WIN, State.NO_WINNERS])
     )
 
     for game_id in games | game_states:
