@@ -83,11 +83,9 @@ export default function SeekerPage() {
                     <div className="flex flex-col justify-between">
 
                         <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
-                        <div className="mb-2">
-                            <GameTimer endTime={gameEndTime}/>
-                        </div>
+                        <GameTimer endTime={gameEndTime}/>
                         <input
-                            className="w-80 h-8 bg-white rounded-lg p-2 text-black mb-2"
+                            className="w-80 h-8 bg-white rounded-lg p-2 text-black mt-2 mb-2"
                             placeholder="Enter the code here"
                             onChange={(e) => setCodeToSubmit(e.target.value)}
                         />
