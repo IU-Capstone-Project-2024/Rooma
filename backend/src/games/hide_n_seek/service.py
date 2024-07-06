@@ -171,8 +171,10 @@ class GameService:
 
     async def get_role(self, game_id: UUID, telegram_id: int) -> PlayerRoleResponse:
         game = await game_repo.get_one_by_game_id(game_id)
-        data = HideNSeekData(**game.data)
+        if not game.is_active:
+            raise GameForbiddenException(game_id)
 
+        data = HideNSeekData(**game.data)
         if telegram_id in data.hiders:
             return PlayerRoleResponse(role="hider")
         else:
