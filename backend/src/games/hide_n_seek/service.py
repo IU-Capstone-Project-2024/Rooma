@@ -175,7 +175,4 @@ class GameService:
             raise GameForbiddenException(game_id)
 
         data = HideNSeekData(**game.data)
-        if telegram_id in data.hiders:
-            return PlayerRoleResponse(role="hider")
-        else:
-            return PlayerRoleResponse(role="seeker")
+        return PlayerRoleResponse(role="hider" if telegram_id in data.hiders else "seeker")
