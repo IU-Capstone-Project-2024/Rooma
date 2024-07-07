@@ -9,7 +9,7 @@ from src.games.schemas import (
     LobbyResponse,
     RulesResponse,
     PostFeedbackDTO,
-    CurrentGamesResponse,
+    ListGamesResponse,
 )
 from src.games.service import GameService
 from src.schemas import SuccessResponse
@@ -24,10 +24,10 @@ service = GameService()
 
 @router.get(
     "/list-current",
-    response_model=list[CurrentGamesResponse],
+    response_model=list[ListGamesResponse],
 )
 async def current_games(user: User = Depends(get_user)):
-    return await service.current_games(user)
+    return await service.list_games(user)
 
 
 @router.post(

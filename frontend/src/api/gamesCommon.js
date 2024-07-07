@@ -60,7 +60,7 @@ export const startGame = async (gameId) => {
         const response = await axios.post(url);
         return response.data;
     } catch (error) {
-        console.error('Error getting rules:', error);
+        console.error('Error starting game:', error);
         throw error;
     }
 }
@@ -72,7 +72,19 @@ export const finishGame = async (gameId) => {
         const response = await axios.post(url);
         return response.data;
     } catch (error) {
-        console.error('Error getting rules:', error);
+        console.error('Error finishing game:', error);
+        throw error;
+    }
+}
+
+export const listCurrent = async () => {
+    const url = `${GAMES_URL}/list-current?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting current games:', error);
         throw error;
     }
 }

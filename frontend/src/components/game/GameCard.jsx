@@ -1,9 +1,9 @@
-import { useState } from "react";
+import {useState} from "react";
 import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
-import { createGame } from "@/api/hideAndSeek.js";
-import { useNavigate } from "react-router-dom";
+import {createGame, getState} from "@/api/hideAndSeek.js";
+import {useNavigate} from "react-router-dom";
 
 const GAME_DETAILS = new Map([
     ["Hide and Seek", {
@@ -53,7 +53,7 @@ const convertTimeToMinutes = (timeString) => {
     return (hours * 60) + minutes;
 };
 
-export default function GameCard({ name, img, small, onClick }) {
+export default function GameCard({name, img, small, gameId, isHost, onClick}) {
     const [game_hours, setGameHours] = useState(0);
     const [game_minutes, setGameMinutes] = useState(0);
 
@@ -77,128 +77,158 @@ export default function GameCard({ name, img, small, onClick }) {
             });
     };
 
+
+    async function navigateToContinue() {
+        // const state = (await getState(gameId))["state"];
+        // if (name === "Hide and Seek") {
+        //     if (isHost === true) {
+        //
+        //     } else {
+        //
+        //     }
+        // }
+    }
+
     const gameDetails = GAME_DETAILS.get(name);
 
     return (
         <div
             className={classNames("cursor-pointer flex flex-col justify-between rounded-2xl bg-[#9CD3CD] aspect-square bg-cover border-4 border-[#9CD3CD] hover:scale-105 transition",
                 small ? "h-48 md:h-56 xl:h-64" : "h-56 md:h-64 xl:h-80")}
-            style={{ backgroundImage: `url(${img})` }} onClick={onClick}>
+            style={{backgroundImage: `url(${img})`}} onClick={onClick}>
             <div
                 className="text-center py-1 text-xl bg-[#] backdrop-brightness-75 text-white rounded-t-2xl select-none">{name}</div>
-            <Popup
-                modal
-                trigger={
-                    <button
-                        className={classNames(
-                            "m-2 self-start rounded-xl text-white",
-                            small ? "px-6 py-1" : "px-8 py-2",
-                            gameDetails.isActive
-                                ? "bg-gradient-to-r from-yellow-400 to-pink-500"
-                                : "bg-gradient-to-r from-green-400 to-blue-500"
-                        )}
-                    >
-                        {gameDetails.isActive ? "Play" : "Read the rules"}
-                    </button>
-                }
-                contentStyle={{
-                    width: "90%",
-                    maxWidth: "400px",
-                    minHeight: "40%",
-                    maxHeight: "80%",
-                    overflowY: "auto",
-                    padding: "20px",
-                    borderRadius: "10px",
-                    boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
-                }}
-            >
-                {close => (
-                    <>
-                        <button
-                            className="absolute top-1 m-0 right-1 px-4 py-2 text-xl"
-                            onClick={() => close()}
+            {
+                (gameId == null || !gameDetails.isActive) ?
+                    (
+                        <Popup
+                            modal
+                            trigger={
+                                <button
+                                    className={classNames(
+                                        "m-2 self-start rounded-xl text-white",
+                                        small ? "px-6 py-1" : "px-8 py-2",
+                                        gameDetails.isActive
+                                            ? "bg-gradient-to-r from-yellow-400 to-pink-500"
+                                            : "bg-gradient-to-r from-green-400 to-blue-500"
+                                    )}
+                                >
+                                    {gameDetails.isActive ? "Play" : "Read the rules"}
+                                </button>
+                            }
+                            contentStyle={{
+                                width: "90%",
+                                maxWidth: "400px",
+                                minHeight: "40%",
+                                maxHeight: "80%",
+                                overflowY: "auto",
+                                padding: "20px",
+                                borderRadius: "10px",
+                                boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
+                            }}
                         >
-                            ×
-                        </button>
-                        <div className="text-center text-lg space-y-4">
-                            <h2 className="text-xl text-[#ED7A2D] font-bold mb-2">{name}</h2>
-
-                            <div className="flex flex-col md:flex-row items-center justify-between">
-                                <p>Number of participants:</p>
-                                <div className="bg-[#FFC87A] px-2 rounded-lg">
-                                    <p>{gameDetails.participants}</p>
-                                </div>
-                            </div>
-
-                            {gameDetails.gameTime &&
-                                <div className="flex flex-col md:flex-row justify-between">
-                                    <p className="text-left">Select game time (hours/minutes):</p>
-                                    <div className="flex justify-center items-center">
-                                        <input
-                                            type="number"
-                                            value={game_hours}
-                                            onChange={(e) => setGameHours(Math.max(0, Math.min(23, e.target.value)))}
-                                            className="w-12 text-center"
-                                            placeholder="hh"
-                                        />
-                                        <span>:</span>
-                                        <input
-                                            type="number"
-                                            value={game_minutes}
-                                            onChange={(e) => setGameMinutes(Math.max(0, Math.min(59, e.target.value)))}
-                                            className="w-12 text-center"
-                                            placeholder="mm"
-                                        />
-                                    </div>
-                                </div>
-                            }
-
-                            {gameDetails.waitingTime &&
-                                <div className="flex flex-col md:flex-row justify-between">
-                                    <p className="text-left">Select time for waiting (hours/minutes):</p>
-                                    <div className="flex justify-center items-center">
-                                        <input
-                                            type="number"
-                                            value={waiting_hours}
-                                            onChange={(e) => setWaitingHours(Math.max(0, Math.min(23, e.target.value)))}
-                                            className="w-12 text-center"
-                                            placeholder="hh"
-                                        />
-                                        <span>:</span>
-                                        <input
-                                            type="number"
-                                            value={waiting_minutes}
-                                            onChange={(e) => setWaitingMinutes(Math.max(0, Math.min(59, e.target.value)))}
-                                            className="w-12 text-center"
-                                            placeholder="mm"
-                                        />
-                                    </div>
-                                </div>
-                            }
-
-                            <p className="text-left">Game Description:</p>
-                            <p className="mb-4 text-left">{gameDetails.description}</p>
-                            {gameDetails.isActive && (
-                                <div>
-                                    <h3 className="text-lg text-[#ED7A2D] font-bold">Comment for players:</h3>
-                                    <textarea
-                                        className="w-full h-24 p-2 border-2 border-[#FFC87A] rounded-xl"
-                                        placeholder="Enter your comment here..."
-                                        value={comment}
-                                        onChange={(e) => setComment(e.target.value)}
-                                    />
+                            {close => (
+                                <>
                                     <button
-                                        className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
-                                        onClick={handleCreateGame}
+                                        className="absolute top-1 m-0 right-1 px-4 py-2 text-xl"
+                                        onClick={() => close()}
                                     >
-                                        Create Game
+                                        ×
                                     </button>
-                                </div>
+                                    <div className="text-center text-lg space-y-4">
+                                        <h2 className="text-xl text-[#ED7A2D] font-bold mb-2">{name}</h2>
+
+                                        <div className="flex flex-col md:flex-row items-center justify-between">
+                                            <p>Number of participants:</p>
+                                            <div className="bg-[#FFC87A] px-2 rounded-lg">
+                                                <p>{gameDetails.participants}</p>
+                                            </div>
+                                        </div>
+
+                                        {gameDetails.gameTime &&
+                                            <div className="flex flex-col md:flex-row justify-between">
+                                                <p className="text-left">Select game time (hours/minutes):</p>
+                                                <div className="flex justify-center items-center">
+                                                    <input
+                                                        type="number"
+                                                        value={game_hours}
+                                                        onChange={(e) => setGameHours(Math.max(0, Math.min(23, e.target.value)))}
+                                                        className="w-12 text-center"
+                                                        placeholder="hh"
+                                                    />
+                                                    <span>:</span>
+                                                    <input
+                                                        type="number"
+                                                        value={game_minutes}
+                                                        onChange={(e) => setGameMinutes(Math.max(0, Math.min(59, e.target.value)))}
+                                                        className="w-12 text-center"
+                                                        placeholder="mm"
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
+
+                                        {gameDetails.waitingTime &&
+                                            <div className="flex flex-col md:flex-row justify-between">
+                                                <p className="text-left">Select time for waiting (hours/minutes):</p>
+                                                <div className="flex justify-center items-center">
+                                                    <input
+                                                        type="number"
+                                                        value={waiting_hours}
+                                                        onChange={(e) => setWaitingHours(Math.max(0, Math.min(23, e.target.value)))}
+                                                        className="w-12 text-center"
+                                                        placeholder="hh"
+                                                    />
+                                                    <span>:</span>
+                                                    <input
+                                                        type="number"
+                                                        value={waiting_minutes}
+                                                        onChange={(e) => setWaitingMinutes(Math.max(0, Math.min(59, e.target.value)))}
+                                                        className="w-12 text-center"
+                                                        placeholder="mm"
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <p className="text-left">Game Description:</p>
+                                        <p className="mb-4 text-left">{gameDetails.description}</p>
+                                        {gameDetails.isActive && (
+                                            <div>
+                                                <h3 className="text-lg text-[#ED7A2D] font-bold">Comment for
+                                                    players:</h3>
+                                                <textarea
+                                                    className="w-full h-24 p-2 border-2 border-[#FFC87A] rounded-xl"
+                                                    placeholder="Enter your comment here..."
+                                                    value={comment}
+                                                    onChange={(e) => setComment(e.target.value)}
+                                                />
+                                                <button
+                                                    className={classNames("m-2 bg-gradient-to-r from-yellow-400 to-pink-500 self-start rounded-xl text-white", small ? "px-6 py-1" : "px-8 py-2")}
+                                                    onClick={handleCreateGame}
+                                                >
+                                                    Create Game
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
                             )}
-                        </div>
-                    </>
-                )}
-            </Popup>
+                        </Popup>
+                    )
+                    : (
+                        <button
+                            className={classNames(
+                                "m-2 self-start rounded-xl text-white",
+                                small ? "px-6 py-1" : "px-8 py-2",
+                                "bg-gradient-to-r from-yellow-400 to-pink-500"
+                            )}
+                            onClick={navigateToContinue}
+                        >
+                            Play
+                        </button>
+                    )
+            }
         </div>
     );
 }
