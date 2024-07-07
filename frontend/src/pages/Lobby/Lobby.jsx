@@ -72,7 +72,7 @@ export default function Lobby() {
         if (users_el) {
             users_el.innerHTML = createUsersHTML(users);
         }
-    }, 5000);
+    }, 1000);
 
     const link = `${BASE_URL}/join_game?game_id=${game_id}`;
 
