@@ -11,7 +11,7 @@ from src.games.schemas import (
     RulesResponse,
     PostFeedbackDTO,
     Player,
-    CurrentGamesResponse,
+    ListGamesResponse,
 )
 from src.schemas import SuccessResponse
 
@@ -21,18 +21,18 @@ user_repo = UserRepository()
 
 
 class GameService:
-    async def current_games(self, user: User) -> list[CurrentGamesResponse]:
-        response: list[CurrentGamesResponse] = []
+    async def list_games(self, user: User) -> list[ListGamesResponse]:
+        response: list[ListGamesResponse] = []
 
         user_host = await game_repo.get_all_games_by_owner_id(user.telegram_id)
         response += [
-            CurrentGamesResponse(game_id=game.game_id, is_host=True, name=game.name)
+            ListGamesResponse(game_id=game.game_id, is_host=True, is_active=game.is_active, name=game.name)
             for game in user_host
         ]
 
         user_participant = await game_repo.get_all_games_with_participant(user.telegram_id)
         response += [
-            CurrentGamesResponse(game_id=game.game_id, is_host=False, name=game.name)
+            ListGamesResponse(game_id=game.game_id, is_host=False, is_active=game.is_active, name=game.name)
             for game in user_participant
         ]
 
