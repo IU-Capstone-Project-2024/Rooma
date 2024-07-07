@@ -48,7 +48,7 @@ const RequestUsers = (gameId) => {
             if (users_el) {
                 users_el.innerHTML = createUsersHTML(users);
             }
-        }, 5000);
+        }, 1000);
 
         return () => clearInterval(interval); // Cleanup on unmount
     }, [gameId, users]);
