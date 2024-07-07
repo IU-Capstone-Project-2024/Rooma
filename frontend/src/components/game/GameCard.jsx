@@ -53,7 +53,7 @@ const convertTimeToMinutes = (timeString) => {
     return (hours * 60) + minutes;
 };
 
-export default function GameCard({ name, img, small, onClick }) {
+export default function GameCard({ name, img, small, gameId, isHost, onClick }) {
     const [game_hours, setGameHours] = useState(0);
     const [game_minutes, setGameMinutes] = useState(0);
 
