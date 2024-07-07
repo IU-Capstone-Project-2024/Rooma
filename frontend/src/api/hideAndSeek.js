@@ -99,7 +99,8 @@ export const getHiderCode = async (gameId) => {
 }
 
 export const getPlayerRole = async (gameId, telegramId) => {
-    const url = `${GAMES_URL}/${gameId}/role?token=${localStorage.getItem("token")}&telegram_id=${telegramId}`;
+    const url = `${GAMES_URL}/${gameId}/role?token=${localStorage.getItem("token")}
+    &telegram_id=${localStorage.getItem("telegramId")}`;
 
     try {
         const response = await axios.get(url);
