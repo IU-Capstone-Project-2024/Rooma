@@ -15,6 +15,7 @@ import AdminPageDuringGameplay from "@/pages/AdminPageDuringGameplay/AdminPageDu
 import SeekerPage from "@/pages/SeekerWaitPage/SeekerPage.jsx";
 import AdminResults from "@/pages/GameOver/AdminResults.jsx";
 import HiderPage from "@/pages/HiderPage/HiderPage.jsx";
+import AdminFeedback from "@/pages/AdminFeedback/AdminFeedback.jsx";
 
 const AppRouter = () => {
     return (
@@ -31,6 +32,7 @@ const AppRouter = () => {
                         <Route path="win" element={<RequireAuth><WinningTeam /></RequireAuth>} />
                         <Route path="seeker" element={<RequireAuth><SeekerPage /></RequireAuth>} />
                         <Route path="hider" element={<RequireAuth><HiderPage /></RequireAuth>} />
+                        <Route path="admin_feedback" element={<RequireAuth><AdminFeedback /></RequireAuth>} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
