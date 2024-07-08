@@ -1,5 +1,5 @@
-import React, {useState, createContext, useEffect} from 'react';
-import {setToken, getToken, setTelegramId, getTelegramId, clearStorage} from '@/utils/storage.js';
+import React, {createContext, useState} from 'react';
+import {clearStorage, getTelegramId, getToken, setTelegramId, setToken} from '@/utils/storage.js';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from "@/components/business/useAuth.js";
 import {BASE_URL} from "@/constants/urls.js";
@@ -22,27 +22,20 @@ export const AuthProvider = ({children}) => {
         return user;
     }
 
-    const signIn = (queryToken, queryTelegramId) => {
+    const signIn = async (queryRefreshToken, queryTelegramId) => {
         const loginOptions = {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({refresh_token: queryToken})
+            body: JSON.stringify({refresh_token: queryRefreshToken})
         }
 
-        useEffect(
-            () => {
-                fetch(BASE_URL + "/api/auth/login", loginOptions)
-                    .then(res => res.json())
-                    .then(
-                        (result) => {
-                            setToken(result["access_token"]);
-                        }
-                    )
-            }, []
-        );
+        const res = await fetch(BASE_URL + "/api/auth/login", loginOptions);
+        const result = await res.json();
 
         setTelegramId(queryTelegramId);
-        setUser({token: queryToken, telegramId: queryTelegramId});
+        setToken(result["access_token"]);
+
+        setUser({token: result["access_token"], telegramId: queryTelegramId});
     };
 
     const signOut = () => {
