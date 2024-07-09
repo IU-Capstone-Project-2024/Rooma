@@ -14,73 +14,55 @@ export default function WaitPage() {
 
     const navigate = useNavigate();
 
-    const game_id = searchParams.get("game_id");
+    const gameId = searchParams.get("game_id");
 
     const [userRole, setUserRole] = useState(null);
     const [gameState, setGameState] = useState(null);
-    const [initFinished, setInitFinished] = useState(false);
-
 
     const leaveGameByButton = () => {
         // Assuming leaveGame handles game leave logic
-        navigate("/", {replace: true});
-        leaveGame(game_id);
+        navigate("/");
+        leaveGame(gameId);
     }
 
     useEffect(() => {
-        if (!game_id) {
-            navigate("/", {replace: true});
-        }
-    }, [game_id, navigate]);
-
-    useEffect(() => {
-        const fetchInfo = async () => {
-            await joinGame(game_id); // Assuming joinGame handles game join logic
-
-            const durationResult = await getDuration(game_id);
-            setDuration(durationResult?.duration);
-            setWaitTime(durationResult?.time_to_hide);
-
-            const rulesResult = await getRules(game_id);
-            setRules(rulesResult?.rules);
-            setNote(rulesResult?.note);
-
-            const roleResult = await getPlayerRole(game_id);
-            setUserRole(roleResult?.role);
-
-            const stateResult = await getState(game_id);
-            setGameState(stateResult?.state);
-
-            setInitFinished(true);
+        if (!gameId) {
+            navigate("/");
         }
 
-        fetchInfo()
-            .catch(error => {
-                if (error.response.status === 400) {
-                    alert("Game has already started!");
-                    navigate("/");
-                }
-            });
-    }, [game_id, navigate]);
+        joinGame(gameId); // Assuming joinGame handles game join logic
+        getDuration(gameId).then((result) => {
+            setDuration(result?.duration);
+            setWaitTime(result?.time_to_hide);
+        });
+        getRules(gameId).then((result) => {
+            setRules(result?.rules);
+            setNote(result?.note);
+        });
+        getPlayerRole(gameId).then((result) => {
+            setUserRole(result?.role);
+        });
+        getState(gameId).then((result) => {
+            setGameState(result?.state);
+        });
+    }, [gameId, navigate]);
 
     useInterval(() => {
-        if (initFinished) {
-            getPlayerRole(game_id).then((result) => {
-                setUserRole(result?.role);
-            });
-        }
+        getPlayerRole(gameId).then((result) => {
+            setUserRole(result?.role);
+        });
     }, 1000);
 
     useEffect(() => {
         if (userRole === "hider") {
-            navigate(`/hider?game_id=${game_id}`, {replace: true});
+            navigate(`/hider?game_id=${gameId}`);
         } else if (userRole === "seeker") {
-            navigate(`/seeker?game_id=${game_id}`, {replace: true});
+            navigate(`/seeker?game_id=${gameId}`);
         }
-    }, [userRole, game_id, navigate]);
+    }, [userRole, gameId, navigate]);
 
     if (gameState === "HIDERS_WIN" || gameState === "SEEKERS_WIN" || gameState === "NO_WINNERS") {
-        navigate("/results?game_id=" + game_id, {replace: true});
+        navigate("/results?game_id=" + gameId);
     }
 
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
