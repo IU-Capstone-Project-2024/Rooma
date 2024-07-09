@@ -77,14 +77,31 @@ export const finishGame = async (gameId) => {
     }
 }
 
-export const listCurrent = async () => {
-    const url = `${GAMES_URL}/list-current?token=${localStorage.getItem("token")}`;
+export const listGames = async () => {
+    const url = `${GAMES_URL}/list-games?token=${localStorage.getItem("token")}`;
 
     try {
         const response = await axios.get(url);
         return response.data;
     } catch (error) {
-        console.error('Error getting current games:', error);
+        console.error('Error getting list of games:', error);
+        throw error;
+    }
+}
+
+export const listPopular = async () => {
+    const url = `${GAMES_URL}/list-popular?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+
+        // rename _id to name
+        return response.data.map(obj => {
+            const {_id, ...rest} = obj;  // Destructure _id and the rest of the object
+            return {name: _id, ...rest}; // Create a new object with name and the rest of the original object
+        });
+    } catch (error) {
+        console.error('Error getting list of popular:', error);
         throw error;
     }
 }
