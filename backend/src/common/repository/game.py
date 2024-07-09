@@ -21,8 +21,10 @@ class GameRepository(MongoBeanieRepository):
     async def add_user_to_lobby(self, game_id: UUID, telegram_id: int):
         game = await self.get_one_by_game_id(game_id)
 
-        if telegram_id in game.lobby:
+        if game.is_active:
             raise CannotAddToLobbyException(game_id)
+        if telegram_id in game.lobby:
+            return
 
         game.lobby.append(telegram_id)
         _ = await game.save()
