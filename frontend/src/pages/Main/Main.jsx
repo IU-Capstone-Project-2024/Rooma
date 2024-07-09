@@ -7,7 +7,7 @@ import {GamesCarousel} from "../../components/game/GamesCarousel.jsx";
 import {GamesMenu} from "../../components/game/GamesMenu.jsx";
 import {useColor} from '@/components/layouts/ColorContext.jsx';
 import {useEffect, useState} from 'react';
-import {listGames} from "@/api/gamesCommon.js";
+import {listGames, listPopular} from "@/api/gamesCommon.js";
 
 const cards = [
     {
@@ -39,10 +39,11 @@ const noveltiesCards = cards.slice(1);
 
 async function getCardsData() {
     const continueGames = await getContinueGames();
+    const popularGames = await getPopularGames();
 
     return {
         Novelties: noveltiesCards,
-        Popular: [cards[0]],
+        Popular: popularGames,
         ForYou: [cards[0]],
         Continue: continueGames,
         All: cards,
@@ -51,6 +52,12 @@ async function getCardsData() {
 
 async function getContinueGames() {
     const res = await listGames();
+    const resFiltered = res.filter(x => x.name in gameNames);
+    return resFiltered.map(x => Object.assign(x, {img: gameNames[x.name]}));
+}
+
+async function getPopularGames() {
+    const res = await listPopular();
     const resFiltered = res.filter(x => x.name in gameNames);
     return resFiltered.map(x => Object.assign(x, {img: gameNames[x.name]}));
 }
