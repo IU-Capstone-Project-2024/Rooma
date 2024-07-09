@@ -1,8 +1,10 @@
+from typing import List
 from uuid import UUID
 
 from src.common.repository.game import GameRepository
 from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
+from src.common.schemas import PopularGameSchema
 from src.database import User
 from src.game_types.game_types import get_rules_by_game_type
 from src.games.schemas import (
@@ -79,3 +81,9 @@ class GameService:
             self, data: PostFeedbackDTO, game_id: UUID, user: User
     ) -> SuccessResponse:
         pass
+
+    async def get_popular(self, user: User) -> list[PopularGameSchema]:
+        popular = await game_repo.get_games_amount_by_name()
+        popular.sort(key=lambda x: x.count, reverse=True)
+
+        return popular

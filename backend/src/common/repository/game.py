@@ -2,6 +2,7 @@ from uuid import UUID
 
 from beanie.operators import Eq
 
+from src.common.schemas import PopularGameSchema
 from src.database.models import Game
 from src.database.repository.mongo import MongoBeanieRepository
 from src.games.exceptions import GameNotFoundException, CannotAddToLobbyException, UserNotFoundException
@@ -72,3 +73,9 @@ class GameRepository(MongoBeanieRepository):
             List of all games with this Telegram ID as the participant.
         """
         return await self.model.find(Eq(Game.lobby, telegram_id)).to_list()
+
+    async def get_games_amount_by_name(self) -> list[PopularGameSchema]:
+        return await Game.aggregate(
+            [{"$group": {"_id": "$name", "count": {"$sum": 1}}}],
+            projection_model=PopularGameSchema
+        ).to_list()
