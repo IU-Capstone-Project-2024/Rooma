@@ -7,7 +7,7 @@ import {GamesCarousel} from "../../components/game/GamesCarousel.jsx";
 import {GamesMenu} from "../../components/game/GamesMenu.jsx";
 import {useColor} from '@/components/layouts/ColorContext.jsx';
 import {useEffect, useState} from 'react';
-import {listCurrent} from "@/api/gamesCommon.js";
+import {listGames} from "@/api/gamesCommon.js";
 
 const cards = [
     {
@@ -50,7 +50,7 @@ async function getCardsData() {
 }
 
 async function getContinueGames() {
-    const res = await listCurrent();
+    const res = await listGames();
     const resFiltered = res.filter(x => x.name in gameNames);
     return resFiltered.map(x => Object.assign(x, {img: gameNames[x.name]}));
 }
