@@ -150,16 +150,16 @@ export default function GameCard({name, img, small, gameId, isHost, onClick}) {
                                                 <p className="text-left">Select game time (hours/minutes):</p>
                                                 <div className="flex justify-center items-center">
                                                     <input
-                                                        type="number"
-                                                        value={game_hours}
+                                                        type="text"
+                                                        value={game_hours.toString()}
                                                         onChange={(e) => setGameHours(Math.max(0, Math.min(23, e.target.value)))}
                                                         className="w-12 text-center"
                                                         placeholder="hh"
                                                     />
                                                     <span>:</span>
                                                     <input
-                                                        type="number"
-                                                        value={game_minutes}
+                                                        type="text"
+                                                        value={game_minutes.toString()}
                                                         onChange={(e) => setGameMinutes(Math.max(0, Math.min(59, e.target.value)))}
                                                         className="w-12 text-center"
                                                         placeholder="mm"
@@ -173,16 +173,16 @@ export default function GameCard({name, img, small, gameId, isHost, onClick}) {
                                                 <p className="text-left">Select time for waiting (hours/minutes):</p>
                                                 <div className="flex justify-center items-center">
                                                     <input
-                                                        type="number"
-                                                        value={waiting_hours}
+                                                        type="text"
+                                                        value={waiting_hours.toString()}
                                                         onChange={(e) => setWaitingHours(Math.max(0, Math.min(23, e.target.value)))}
                                                         className="w-12 text-center"
                                                         placeholder="hh"
                                                     />
                                                     <span>:</span>
                                                     <input
-                                                        type="number"
-                                                        value={waiting_minutes}
+                                                        type="text"
+                                                        value={waiting_minutes.toString()}
                                                         onChange={(e) => setWaitingMinutes(Math.max(0, Math.min(59, e.target.value)))}
                                                         className="w-12 text-center"
                                                         placeholder="mm"
