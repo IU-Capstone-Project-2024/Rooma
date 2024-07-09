@@ -98,7 +98,7 @@ export const getHiderCode = async (gameId) => {
     }
 }
 
-export const getPlayerRole = async (gameId, telegramId) => {
+export const getPlayerRole = async (gameId) => {
     const url = `${GAMES_URL}/${gameId}/role?token=${localStorage.getItem("token")}
     &telegram_id=${localStorage.getItem("telegramId")}`;
 
