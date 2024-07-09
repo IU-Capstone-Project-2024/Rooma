@@ -44,7 +44,7 @@ async function getCardsData() {
     return {
         Novelties: noveltiesCards,
         Popular: popularGames,
-        ForYou: [cards[0]],
+        // ForYou: [cards[0]],
         Continue: continueGames,
         All: cards,
     };

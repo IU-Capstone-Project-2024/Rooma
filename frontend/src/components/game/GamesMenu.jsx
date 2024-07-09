@@ -3,7 +3,7 @@ import classNames from "classnames";
 import GameCard from "./GameCard.jsx";
 import novelties from "../../assets/navbar/novelties.svg";
 import popular from "../../assets/navbar/popular.svg";
-import forYou from "../../assets/navbar/forYou.svg";
+// import forYou from "../../assets/navbar/forYou.svg";
 import continueSVG from "../../assets/navbar/continue.svg";
 import all from "../../assets/navbar/all.svg";
 
