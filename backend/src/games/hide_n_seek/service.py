@@ -173,7 +173,7 @@ class GameService:
         game = await game_repo.get_one_by_game_id(game_id)
         state = await game_state_repo.get_by_game_id(game.game_id)
         if not game.is_active or state is None or state == State.START:
-            raise GameForbiddenException(game_id)
+            return PlayerRoleResponse(role="unknown")
 
         data = HideNSeekData(**game.data)
         return PlayerRoleResponse(role="hider" if telegram_id in data.hiders else "seeker")
