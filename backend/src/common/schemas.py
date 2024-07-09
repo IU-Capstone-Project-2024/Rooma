@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ErrorSchema(BaseModel):
@@ -10,3 +10,8 @@ class ErrorSchema(BaseModel):
 class CreateGameStateSchema(BaseModel):
     game_id: UUID
     state: str
+
+
+class PopularGameSchema(BaseModel):
+    name: str = Field(..., alias="_id")
+    count: int

@@ -18,11 +18,11 @@ const menuItems = [
         label: "Popular",
         icon: popular,
     },
-    {
-        categoryId: "ForYou",
-        label: "For You",
-        icon: forYou,
-    },
+    // {
+    //     categoryId: "ForYou",
+    //     label: "For You",
+    //     icon: forYou,
+    // },
     {
         categoryId: "Continue",
         label: "Continue",

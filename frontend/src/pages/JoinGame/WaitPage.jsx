@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
-import { getDuration } from "@/api/hideAndSeek.js";
+import {getLobby, getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
+import {getDuration, getPlayerRole, getState} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
@@ -14,6 +15,11 @@ export default function WaitPage() {
     const navigate = useNavigate();
 
     const game_id = searchParams.get("game_id");
+
+    const [userRole, setUserRole] = useState(null);
+    const [gameState, setGameState] = useState(null);
+
+
 
     const leaveGameByButton = () => {
         // Assuming leaveGame handles game leave logic
@@ -38,8 +44,34 @@ export default function WaitPage() {
                 setRules(result?.rules);
                 setNote(result?.note);
             });
+            getPlayerRole(game_id).then((result) => {
+                setUserRole(result?.role);
+                console.log('User role:', result?.role)
+            });
+            getState(game_id).then((result) => {
+                setGameState(result?.state);
+            });
         }
     }, [game_id]);
+
+    useInterval(() => {
+        getPlayerRole(game_id).then((result) => {
+                setUserRole(result?.role);
+                console.log('User role:', result?.role)
+        });
+    }, 1000);
+
+    useEffect(() => {
+        if (userRole === "hider") {
+            navigate(`/hider?game_id=${game_id}`, { replace: true });
+        } else if (userRole === "seeker") {
+            navigate(`/seeker?game_id=${game_id}`, { replace: true });
+        }
+    }, [userRole, game_id, navigate]);
+
+    if (gameState === "HIDERS_WIN" || gameState === "SEEKERS_WIN" || gameState === "NO_WINNERS"){
+        navigate("/results?game_id=" + game_id, {replace: true});
+    }
 
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
 

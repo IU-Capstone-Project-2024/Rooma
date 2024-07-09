@@ -1,5 +1,4 @@
 import {useState} from "react";
-import classNames from "classnames";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
 import {useNavigate} from "react-router-dom";
@@ -13,7 +12,7 @@ export default function Feedback() {
     const handleFeedbackSubmit = () => {
         console.log(`Rating: ${rating}, Comment: ${comment}`);
         // TODO: submit & save feedback logic
-        navigate("");
+        navigate("/");
     };
 
     return (

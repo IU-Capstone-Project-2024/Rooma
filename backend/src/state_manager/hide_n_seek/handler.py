@@ -13,7 +13,7 @@ game_state_repo = GameStateRepository()
 
 
 class StateHandler:
-    __entry_state = State.DISTRIBUTE
+    __entry_state = State.START
 
     def __init__(self, game_id: UUID):
         self.game_id = game_id
@@ -55,7 +55,6 @@ class StateHandler:
         return handler
 
     def get_handler_by_state(self, state: State):
-        from src.state_manager.hide_n_seek.states.distribute import StateHandlerDistribute
         from src.state_manager.hide_n_seek.states.start import StateHandlerStart
         from src.state_manager.hide_n_seek.states.hiding import StateHandlerHiding
         from src.state_manager.hide_n_seek.states.searching import StateHandlerSearching
@@ -64,7 +63,6 @@ class StateHandler:
         from src.state_manager.hide_n_seek.states.no_winners import StateHandlerNoWinners
 
         state_to_handler = {
-            State.DISTRIBUTE: StateHandlerDistribute,
             State.START: StateHandlerStart,
             State.HIDING: StateHandlerHiding,
             State.SEARCHING: StateHandlerSearching,
