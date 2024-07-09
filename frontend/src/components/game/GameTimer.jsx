@@ -3,7 +3,7 @@ import timerStandardSvg from '../../assets/hideAndSeek/timer.svg';
 import timerSnowSvg from '../../assets/hideAndSeek/timer_snow.svg';
 import timerBrokenSvg from '../../assets/hideAndSeek/timer_broken.svg';
 
-const GameTimer = ({ endTime, frozen = false, broken = false }) => {
+const GameTimer = ({ endTime, onComplete, frozen = false, broken = false }) => {
   const calculateTimeLeft = () => {
     const difference = endTime - new Date().getTime();
     let timeLeft = {};
@@ -26,6 +26,12 @@ const GameTimer = ({ endTime, frozen = false, broken = false }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
+
+      if (endTime - new Date().getTime() <= 0) {
+        clearInterval(timer);
+        onComplete();
+      }
+
     }, 1000);
 
     return () => clearInterval(timer);
