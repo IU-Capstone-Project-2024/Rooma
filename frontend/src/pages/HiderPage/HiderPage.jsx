@@ -25,10 +25,8 @@ export default function HiderPage() {
 
     useEffect(() => {
         if (game_id) {
-            getEndTimes(game_id).then((result) => {
-                const endTimeStr = result?.game_end_time;
-                const endTime = new Date(endTimeStr);
-                setGameEndTime(endTime);
+            getEndTimes(game_id).then((res) => {
+                setGameEndTime(new Date(res["game_end_time"] + "Z"));
             });
             getHiderCode(game_id).then((result) => {
                 setHiderCode(result?.code);

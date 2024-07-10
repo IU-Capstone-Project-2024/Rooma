@@ -27,11 +27,17 @@ export default function SeekerPage() {
 
     const [codeToSubmit, setCodeToSubmit] = useState("");
 
+    const [date, setDate] = useState(new Date());
+
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
     const sendRequestToFind = async () => {
         await find(gameId, codeToSubmit)
+    }
+
+    const updateDate = () => {
+        setDate(new Date());
     }
 
     useEffect(() => {
@@ -94,13 +100,14 @@ export default function SeekerPage() {
             </div>
 
             {
-                (new Date() > seekerStartTime || true) && (
-                    <div className="flex flex-col justify-between">
+                (date >= seekerStartTime) && (
+                    <div className="flex flex-col justify-between items-center z-10">
 
                         <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
                         <GameTimer endTime={gameEndTime}/>
+
                         <input
-                            className="w-80 h-8 bg-white rounded-lg p-2 text-black mt-2 mb-2"
+                            className="w-60 h-8 bg-white rounded-lg p-2 text-black mt-7 mb-2"
                             placeholder="Enter the code here"
                             onChange={(e) => setCodeToSubmit(e.target.value)}
                         />
@@ -113,9 +120,15 @@ export default function SeekerPage() {
             }
 
 
-            {new Date() < seekerStartTime &&
-                <h2 className="text-2xl text-white font-bold mb-8 z-10">The game will start soon!</h2>}
-            {new Date() < seekerStartTime && <GameTimer endTime={seekerStartTime} frozen={true}/>}
+            {
+                (date < seekerStartTime) && (
+                    <div className="flex flex-col justify-between items-center z-10">
+
+                        <h2 className="text-2xl text-white font-bold mb-8 z-10">Please, wait</h2>
+                        <GameTimer endTime={seekerStartTime} frozen={true} onComplete={updateDate}/>
+                    </div>
+                )
+            }
 
         </section>
     );
