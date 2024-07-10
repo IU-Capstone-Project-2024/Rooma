@@ -18,9 +18,6 @@ class StateHandlerStart(StateHandler):
         game = await self.get_current_game()
         if game is None:
             return
-        if len(game.lobby) < 2:
-            log.error(f"Not enough people to distribute in game with id = {self.game_id}")
-            return
 
         data = HideNSeekData(**game.data)
 
@@ -30,7 +27,7 @@ class StateHandlerStart(StateHandler):
         seeker_size = min(seeker_size, len(game.lobby) - 1)  # no hiders
 
         # distribute
-        seekers = set(sample(game.lobby, seeker_size))
+        seekers = set() if len(game.lobby) < 2 else set(sample(game.lobby, seeker_size))
         hiders = set(game.lobby) - seekers
 
         # generate codes
