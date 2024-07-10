@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import timerStandardSvg from '../../assets/hideAndSeek/timer.svg';
+import timerStandardSvg from '../../assets/hideAndSeek/timer_standard.svg';
 import timerSnowSvg from '../../assets/hideAndSeek/timer_snow.svg';
 import timerBrokenSvg from '../../assets/hideAndSeek/timer_broken.svg';
 
