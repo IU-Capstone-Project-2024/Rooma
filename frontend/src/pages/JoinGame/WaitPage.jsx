@@ -30,7 +30,13 @@ export default function WaitPage() {
             navigate("/");
         }
 
-        joinGame(gameId); // Assuming joinGame handles game join logic
+        joinGame(gameId) // Assuming joinGame handles game join logic
+            .catch((error) => {
+                if (error.response.status === 400) {
+                    alert("Game has already started!");
+                    navigate("/");
+                }
+            });
         getDuration(gameId).then((result) => {
             setDuration(result?.duration);
             setWaitTime(result?.time_to_hide);
