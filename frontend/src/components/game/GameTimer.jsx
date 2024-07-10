@@ -42,15 +42,15 @@ const GameTimer = ({ endTime, onComplete, frozen = false, broken = false }) => {
   };
 
   return (
-      <div style={{position: 'relative', width: '200px', height: '200px'}}>
+      <div style={{position: 'relative', width: '300px', height: '300px'}}>
         <img src={timerSvg} alt="Timer Background" style={{width: '100%', height: '100%'}}/>
 
         <div style={{
           position: 'absolute',
-          top: '50%',
+          top: '46%',
           left: '50%',
           transform: 'translate(-50%, -20%)',
-          fontSize: '24px',
+          fontSize: '160%',
         }}>
           {`${formatTime(timeLeft.hours || 0)}:${formatTime(timeLeft.minutes || 0)}:${formatTime(timeLeft.seconds || 0)}`}
         </div>
