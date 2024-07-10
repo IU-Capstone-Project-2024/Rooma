@@ -91,9 +91,11 @@ class GameService:
             raise GameForbiddenException
 
         feedbacks = await feedback_repo.get_by_game_id(game_id)
+
+        avg_score = 0 if len(feedbacks) == 0 else sum(feedback.score for feedback in feedbacks) / len(feedbacks)
         # TODO: PROCESS FEEDBACKS
 
-        return GetAdminFeedback(avg_score=6.9, feedback="Skibidi")
+        return GetAdminFeedback(avg_score=avg_score, feedback="Skibidi")
 
     async def get_popular(self, user: User) -> list[PopularGameSchema]:
         popular = await game_repo.get_games_amount_by_name()
