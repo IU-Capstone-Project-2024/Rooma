@@ -31,27 +31,22 @@ export default function WinningTeam() {
                 return;
             }
 
-            try {
-                const res = await getState(gameId);
-                const currentWinningTeam = res["state"];
-                setWinningTeam(currentWinningTeam);
+            const res = await getState(gameId);
+            const currentWinningTeam = res["state"];
+            setWinningTeam(currentWinningTeam);
 
-                if (!(["seekers_win", "hiders_win", "no_winners"].includes(stateRes["state"]))) {
-                    alert("Game has not ended!");
-                    navigate("/");
-                    return;
-                }
-
-                if (currentWinningTeam === "seekers_win") {
-                    const seekerRes = await getSeekerResults(gameId);
-                    setSeekerResults(seekerRes);
-                } else {
-                    const hiderRes = await getHiderResults(gameId);
-                    setHiderResults(hiderRes);
-                }
-            } catch (err) {
-                alert(err);
+            if (!(["seekers_win", "hiders_win", "no_winners"].includes(currentWinningTeam))) {
+                alert("Game has not ended!");
                 navigate("/");
+                return;
+            }
+
+            if (currentWinningTeam === "seekers_win") {
+                const seekerRes = await getSeekerResults(gameId);
+                setSeekerResults(seekerRes);
+            } else {
+                const hiderRes = await getHiderResults(gameId);
+                setHiderResults(hiderRes);
             }
         };
 

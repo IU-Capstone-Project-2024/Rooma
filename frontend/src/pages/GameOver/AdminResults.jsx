@@ -32,32 +32,27 @@ export default function AdminResults() {
                 return;
             }
 
-            try {
-                const res = await getState(gameId);
-                const currentWinningTeam = res["state"];
-                setWinningTeam(currentWinningTeam);
+            const res = await getState(gameId);
+            const currentWinningTeam = res["state"];
+            setWinningTeam(currentWinningTeam);
 
-                if (currentWinningTeam === "seekers_win") {
-                    setActiveButton("seekers");
-                } else if (currentWinningTeam === "hiders_win") {
-                    setActiveButton("hiders");
-                } else if (currentWinningTeam === "no_winners") {
-                    setActiveButton("hiders");
-                } else {
-                    alert("Game has not ended!");
-                    navigate("/");
-                    return;
-                }
-
-                const seekerRes = await getSeekerResults(gameId);
-                const hiderRes = await getHiderResults(gameId);
-
-                setSeekerResults(seekerRes);
-                setHiderResults(hiderRes);
-            } catch (err) {
-                alert(err);
+            if (currentWinningTeam === "seekers_win") {
+                setActiveButton("seekers");
+            } else if (currentWinningTeam === "hiders_win") {
+                setActiveButton("hiders");
+            } else if (currentWinningTeam === "no_winners") {
+                setActiveButton("hiders");
+            } else {
+                alert("Game has not ended!");
                 navigate("/");
+                return;
             }
+
+            const seekerRes = await getSeekerResults(gameId);
+            const hiderRes = await getHiderResults(gameId);
+
+            setSeekerResults(seekerRes);
+            setHiderResults(hiderRes);
         };
 
         fetchData();
