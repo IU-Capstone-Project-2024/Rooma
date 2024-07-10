@@ -16,6 +16,7 @@ from src.games.schemas import (
     Player,
     ListGamesResponse,
     GetAdminFeedback,
+    PostFeedbackInner,
 )
 from src.schemas import SuccessResponse
 
@@ -80,8 +81,9 @@ class GameService:
 
         return Game(**game.model_dump())
 
-    async def post_feedback(self, data: PostFeedbackDTO, user: User) -> SuccessResponse:
-        await feedback_repo.create_one(data)
+    async def post_feedback(self, game_id: UUID, data: PostFeedbackDTO, user: User) -> SuccessResponse:
+        to_create = PostFeedbackInner(game_id=game_id, **data.model_dump())
+        await feedback_repo.create_one(to_create)
 
         return SuccessResponse(success=True)
 
