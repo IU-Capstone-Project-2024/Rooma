@@ -72,7 +72,7 @@ export default function AdminPageDuringGameplay() {
         setSeekerResults(seekerRes);
         setHiderResults(hiderRes);
 
-        if (stateRes["state"] === "seekers_win" || stateRes["state"] === "hiders_win") {
+        if (["seekers_win", "hiders_win", "no_winners"].includes(stateRes["state"])) {
             moveAfterFinish();
         }
     }, 5000);
