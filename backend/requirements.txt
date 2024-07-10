@@ -16,3 +16,6 @@ aiogram==3.7.0
 # Auth
 python-dotenv==1.0.1
 PyJWT==2.8.0
+
+# LLM
+requests
