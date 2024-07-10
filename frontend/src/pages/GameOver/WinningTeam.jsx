@@ -106,7 +106,12 @@ export default function WinningTeam() {
                     </button>
                 </div>
             </div>
-            {showFeedback && <Feedback name="Hide and Seek" gameId={gameId}/>}
+            <Feedback
+                name="Hide and Seek"
+                gameId={gameId}
+                showFeedback={showFeedback}
+                setShowFeedback={setShowFeedback}
+            />
         </div>
     );
 }

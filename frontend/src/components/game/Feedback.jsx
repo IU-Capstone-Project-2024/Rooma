@@ -4,7 +4,7 @@ import 'reactjs-popup/dist/index.css';
 import {useNavigate} from "react-router-dom";
 import {postFeedback} from "@/api/gamesCommon.js";
 
-export default function Feedback({gameId}) {
+export default function Feedback({gameId, showFeedback, setShowFeedback}) {
     const [comment, setComment] = useState("");
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function Feedback({gameId}) {
 
     return (
         <Popup
-            open={true}
+            open={showFeedback}
             modal
             contentStyle={{
                 maxWidth: "400px",
@@ -25,6 +25,7 @@ export default function Feedback({gameId}) {
                 borderRadius: "10px",
                 boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
             }}
+            onClose={() => setShowFeedback(false)}
         >
             {close => (
                 <>
