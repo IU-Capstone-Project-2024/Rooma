@@ -22,6 +22,7 @@ export default function AdminPageDuringGameplay() {
     const [hiderResults, setHiderResults] = useState([]);
     const [seekerResults, setSeekerResults] = useState([]);
     const [activeButton, setActiveButton] = useState('hiders');
+    const [finishButton, setFinishButton] = useState("Finish game");
     const [hours, setHours] = useState(1);
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
@@ -31,7 +32,7 @@ export default function AdminPageDuringGameplay() {
 
     useEffect(() => {
         if (!gameId) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [gameId, navigate]);
 
@@ -56,9 +57,9 @@ export default function AdminPageDuringGameplay() {
         navigate(`/admin_results?game_id=${gameId}`);
     };
 
-    const prematureFinishGame = () => {
+    const prematureFinish = () => {
         finishGame(gameId);
-        moveAfterFinish();
+        setFinishButton("Waiting...");
     };
 
     // refresh data about players
@@ -72,7 +73,7 @@ export default function AdminPageDuringGameplay() {
         setSeekerResults(seekerRes);
         setHiderResults(hiderRes);
 
-        if (stateRes["state"] === "seekers_win" || stateRes["state"] === "hiders_win") {
+        if (["seekers_win", "hiders_win", "no_winners"].includes(stateRes["state"])) {
             moveAfterFinish();
         }
     }, 5000);
@@ -120,8 +121,8 @@ export default function AdminPageDuringGameplay() {
                         </div>
                     </div>
                     <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
-                            onClick={prematureFinishGame}>
-                        Finish game
+                            onClick={prematureFinish}>
+                        {finishButton}
                     </button>
                 </div>
             </div>

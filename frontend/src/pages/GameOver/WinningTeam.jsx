@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import Trophy from '../../components/game/Trophy.jsx';
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 import Feedback from '../../components/game/Feedback.jsx';
@@ -15,7 +15,7 @@ export default function WinningTeam() {
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
-    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
@@ -27,7 +27,7 @@ export default function WinningTeam() {
     useEffect(() => {
         const fetchData = async () => {
             if (!gameId) {
-                navigate("/", {replace: true});
+                navigate("/");
                 return;
             }
 
@@ -36,9 +36,9 @@ export default function WinningTeam() {
                 const currentWinningTeam = res["state"];
                 setWinningTeam(currentWinningTeam);
 
-                if (currentWinningTeam !== "seekers_win" && currentWinningTeam !== "hiders_win") {
+                if (!(["seekers_win", "hiders_win", "no_winners"].includes(stateRes["state"]))) {
                     alert("Game has not ended!");
-                    navigate("/", {replace: true});
+                    navigate("/");
                     return;
                 }
 
@@ -51,7 +51,7 @@ export default function WinningTeam() {
                 }
             } catch (err) {
                 alert(err);
-                navigate("/", {replace: true});
+                navigate("/");
             }
         };
 
@@ -108,7 +108,7 @@ export default function WinningTeam() {
                     </tbody>
                 </table>
             </div>
-        {showFeedback && <Feedback name="Hide and Seek" />}
+            {showFeedback && <Feedback name="Hide and Seek"/>}
         </div>
     );
 }

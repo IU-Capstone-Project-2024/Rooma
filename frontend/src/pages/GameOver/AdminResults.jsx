@@ -28,7 +28,7 @@ export default function AdminResults() {
     useEffect(() => {
         const fetchData = async () => {
             if (!gameId) {
-                navigate("/", {replace: true});
+                navigate("/");
                 return;
             }
 
@@ -41,9 +41,11 @@ export default function AdminResults() {
                     setActiveButton("seekers");
                 } else if (currentWinningTeam === "hiders_win") {
                     setActiveButton("hiders");
+                } else if (currentWinningTeam === "no_winners") {
+                    setActiveButton("hiders");
                 } else {
                     alert("Game has not ended!");
-                    navigate("/", {replace: true});
+                    navigate("/");
                     return;
                 }
 
@@ -54,7 +56,7 @@ export default function AdminResults() {
                 setHiderResults(hiderRes);
             } catch (err) {
                 alert(err);
-                navigate("/", {replace: true});
+                navigate("/");
             }
         };
 
@@ -75,7 +77,9 @@ export default function AdminResults() {
                     <div
                         className="border-[4px] border-gray-400 p-2 rounded-[10px] bg-white">
                         <h2 className="text-2xl text-gray-800">
-                            {winningTeam === 'seekers_win' ? 'SEEKERS' : 'HIDERS'}
+                            {winningTeam === 'seekers_win'
+                                ? 'SEEKERS'
+                                : (winningTeam === 'hiders_win' ? 'HIDERS' : 'NO WINNERS')}
                         </h2>
                     </div>
                     <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"

@@ -31,10 +31,12 @@ export default function HiderSeekerTable({activeButton, setActiveButton, hiderRe
                         <tbody>
                         {(activeButton === 'seekers' ? seekerResults : hiderResults).map((stat, index) => (
                             <tr key={index}>
-                                <td className="p-2 text-center">{stat["telegram_id"]}</td>
-                                <td className="p-2 text-center">{stat["name"]}</td>
+                                <td className="p-2 text-center">{stat?.telegram_id}</td>
+                                <td className="p-2 text-center">{stat?.name}</td>
                                 <td className="p-2 text-center">
-                                    {activeButton === 'seekers' ? stat["found"] : (stat["found_time"] == null ? "Not found" : stat["found_time"])}
+                                    {activeButton === 'seekers'
+                                        ? stat?.found
+                                        : (stat?.found_time == null ? "Not found" : stat?.found_time)}
                                 </td>
                             </tr>
                         ))}

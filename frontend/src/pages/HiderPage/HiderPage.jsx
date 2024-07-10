@@ -17,7 +17,7 @@ export default function HiderPage() {
 
     useEffect(() => {
         if (!game_id) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [game_id, navigate]);
 
