@@ -47,7 +47,7 @@ const GameTimer = ({ endTime, onComplete, frozen = false, broken = false }) => {
 
         <div style={{
           position: 'absolute',
-          top: frozen ? '45%' : '50%',
+          top: '50%',
           left: '50%',
           transform: 'translate(-50%, -20%)',
           fontSize: '24px',
