@@ -105,3 +105,34 @@ export const listPopular = async () => {
         throw error;
     }
 }
+
+
+export const postFeedback = async (gameId, score, feedback) => {
+    const url = `${GAMES_URL}/${gameId}/feedback?token=${localStorage.getItem("token")}`;
+
+    const feedbackPayload = {
+        game_id: gameId,
+        score: score,
+        feedback: feedback
+    };
+
+    try {
+        const response = await axios.post(url, feedbackPayload);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating feedback:', error);
+        throw error;
+    }
+}
+
+export const getGeneralFeedback = async (gameId) => {
+    const url = `${GAMES_URL}/${gameId}/feedback?token=${localStorage.getItem("token")}`;
+
+    try {
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting feedback:', error);
+        throw error;
+    }
+}

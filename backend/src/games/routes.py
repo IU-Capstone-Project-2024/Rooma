@@ -100,7 +100,7 @@ async def get_game(game_id: UUID, user: User = Depends(get_user)):
     "/{game_id}/feedback",
     response_model=SuccessResponse,
 )
-async def post_feedback(data: PostFeedbackDTO, user: User = Depends(get_user)):
+async def post_feedback(game_id: UUID, data: PostFeedbackDTO, user: User = Depends(get_user)):
     return await service.post_feedback(data, user)
 
 
