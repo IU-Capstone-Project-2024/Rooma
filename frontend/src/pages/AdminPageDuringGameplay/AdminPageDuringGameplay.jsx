@@ -1,12 +1,12 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useSearchParams} from "react-router-dom";
-import clock from "@/assets/hideAndSeek/clock.svg";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
-import {getDuration, getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
+import {getEndTimes, getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
 import {finishGame} from "@/api/gamesCommon.js";
 import HiderSeekerTable from "@/pages/GameOver/HiderSeekerTable.jsx";
+import GameTimer from "@/components/game/GameTimer.jsx";
 
 
 export default function AdminPageDuringGameplay() {
@@ -27,6 +27,8 @@ export default function AdminPageDuringGameplay() {
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
 
+    const [endTime, setEndTime] = useState(new Date());
+
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
@@ -38,19 +40,13 @@ export default function AdminPageDuringGameplay() {
 
     // get duration and update the timer
     useEffect(() => {
-        const fetchDuration = async () => {
-            const res = await getDuration(gameId);
-            const duration = Number(res["duration"]);
-
-            const hours = Math.floor(duration / 60);
-            const minutes = duration % 60;
-
-            setHours(hours);
-            setMinutes(minutes);
-            setSeconds(0);
-        }
-
-        fetchDuration();
+        setTimeout(
+            () => {
+                getEndTimes(gameId).then((res) => {
+                    setEndTime(new Date(res["game_end_time"] + "Z"));
+                });
+            }, 1000
+        )
     }, [gameId]);
 
     const moveAfterFinish = () => {
@@ -78,26 +74,6 @@ export default function AdminPageDuringGameplay() {
         }
     }, 5000);
 
-    // refresh timer
-    useInterval(() => {
-        setSeconds(prevSeconds => {
-            if (prevSeconds === 0) {
-                if (minutes === 0) {
-                    if (hours === 0) {
-                        moveAfterFinish();
-                        return 0;
-                    }
-                    setHours(prevHours => prevHours - 1);
-                    setMinutes(59);
-                    return 59;
-                }
-                setMinutes(prevMinutes => prevMinutes - 1);
-                return 59;
-            }
-            return prevSeconds - 1;
-        });
-    }, 1000);
-
     return (
         <section className="relative flex flex-col items-center justify-center bg-[#FF7F29]">
             <img src={steps_1} alt="steps" className="absolute top-24 right-0 h-96 z-0"/>
@@ -112,14 +88,7 @@ export default function AdminPageDuringGameplay() {
                     seekerResults={seekerResults}
                 />
                 <div className="sm:w-1/2 p-4 flex flex-col items-center justify-center">
-                    <div className="relative w-1/2">
-                        <img src={clock} alt="clock" className="w-full h-auto max-w-xs mx-auto"/>
-                        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                            <span className="text-2xl md:text-3xl">
-                                {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-                            </span>
-                        </div>
-                    </div>
+                    <GameTimer endTime={endTime}/>
                     <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
                             onClick={prematureFinish}>
                         {finishButton}
