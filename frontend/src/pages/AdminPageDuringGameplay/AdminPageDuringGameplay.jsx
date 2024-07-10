@@ -23,9 +23,6 @@ export default function AdminPageDuringGameplay() {
     const [seekerResults, setSeekerResults] = useState([]);
     const [activeButton, setActiveButton] = useState('hiders');
     const [finishButton, setFinishButton] = useState("Finish game");
-    const [hours, setHours] = useState(1);
-    const [minutes, setMinutes] = useState(0);
-    const [seconds, setSeconds] = useState(0);
 
     const [endTime, setEndTime] = useState(new Date());
 
