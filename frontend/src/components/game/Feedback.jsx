@@ -2,16 +2,15 @@ import {useState} from "react";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
 import {useNavigate} from "react-router-dom";
+import {postFeedback} from "@/api/gamesCommon.js";
 
-export default function Feedback() {
-
+export default function Feedback({gameId}) {
     const [comment, setComment] = useState("");
     const [rating, setRating] = useState(0);
     const navigate = useNavigate();
 
     const handleFeedbackSubmit = () => {
-        console.log(`Rating: ${rating}, Comment: ${comment}`);
-        // TODO: submit & save feedback logic
+        postFeedback(gameId, rating, comment);
         navigate("/");
     };
 

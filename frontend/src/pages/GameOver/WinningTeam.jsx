@@ -55,7 +55,7 @@ export default function WinningTeam() {
         //Timer to show feedback form 1 minute after results
         const timer = setTimeout(() => {
             setShowFeedback(true);
-        }, 60000);
+        }, 5000);
         return () => clearTimeout(timer);
 
     }, [gameId, navigate]);
@@ -103,7 +103,7 @@ export default function WinningTeam() {
                     </tbody>
                 </table>
             </div>
-            {showFeedback && <Feedback name="Hide and Seek"/>}
+            {showFeedback && <Feedback name="Hide and Seek" gameId={gameId}/>}
         </div>
     );
 }
