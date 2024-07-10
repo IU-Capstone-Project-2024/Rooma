@@ -1,14 +1,31 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useColor } from '@/components/layouts/ColorContext.jsx'; 
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import { useColor } from '@/components/layouts/ColorContext.jsx';
+import {getGeneralFeedback } from "@/api/gamesCommon.js";
 
 const FeedbackSummary = () => {
     const navigate = useNavigate();
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
 
-    // Placeholder for summarization logic for star rating and user impressions
-    const averageRating = 3.1; // Replace with actual summarization logic
-    const summarizedFeedback = "The game went well, but there was no time to hide; all the players were quickly found."; // Replace with actual summarization logic
+    const [averageRating, setAverageRating] = React.useState(0);
+    const [summarizedFeedback, setSummarizedFeedback] = React.useState("Wait please AI summarize feedback from players...");
+
+    const [searchParams] = useSearchParams();
+    const game_id = searchParams.get("game_id");
+
+    useEffect(() => {
+        if (!game_id) {
+            navigate("/");
+        }
+    }, [game_id, navigate]);
+
+    useEffect(() => {
+        getGeneralFeedback(game_id)
+            .then((res) => {
+                setAverageRating(res.avg_score);
+                setSummarizedFeedback(res.feedback);
+            })
+    }, [game_id]);
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
@@ -33,7 +50,7 @@ const FeedbackSummary = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-orange-500 p-4">
+        <div className="flex flex-col items-center justify-center h-screen p-4">
             <h1 className="text-4xl font-bold text-white mb-8"> Hide and Seek </h1>
             <div className="bg-white rounded-xl shadow-lg p-6 w-full h-fit max-w-3xl text-center">
                 <div className="flex justify-center items-center my-4">

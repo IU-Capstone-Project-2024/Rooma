@@ -14,7 +14,6 @@ export default function AdminResults() {
     const [hiderResults, setHiderResults] = useState([]);
     const [seekerResults, setSeekerResults] = useState([]);
 
-
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
@@ -81,14 +80,16 @@ export default function AdminResults() {
                                 : (winningTeam === 'hiders_win' ? 'HIDERS' : 'NO WINNERS')}
                         </h2>
                     </div>
+
                     <button
                         className="mt-2 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
-                        onClick={() => {
-                            setShowFeedback(true)
-                        }}
-                    >
-                        Send feedback
+                            onClick={() => {
+                                navigate("/admin_feedback?game_id=" + gameId);
+                            }}
+                        >
+                            Finish game and check feedback
                     </button>
+
                 </div>
                 <HiderSeekerTable
                     activeButton={activeButton}
