@@ -56,11 +56,6 @@ export default function AdminPageDuringGameplay() {
         navigate(`/admin_results?game_id=${gameId}`);
     };
 
-    const prematureFinishGame = () => {
-        finishGame(gameId);
-        moveAfterFinish();
-    };
-
     // refresh data about players
     useInterval(async () => {
         const [seekerRes, hiderRes, stateRes] = await Promise.all([
@@ -120,7 +115,7 @@ export default function AdminPageDuringGameplay() {
                         </div>
                     </div>
                     <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
-                            onClick={prematureFinishGame}>
+                            onClick={() => finishGame(gameId)}>
                         Finish game
                     </button>
                 </div>
