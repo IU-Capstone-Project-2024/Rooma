@@ -7,6 +7,7 @@ from src.common.repository.user import UserRepository
 from src.common.schemas import PopularGameSchema
 from src.database import User
 from src.game_types.game_types import get_rules_by_game_type
+from src.games.exceptions import GameForbiddenException
 from src.games.schemas import (
     Game,
     LobbyResponse,
@@ -14,6 +15,7 @@ from src.games.schemas import (
     PostFeedbackDTO,
     Player,
     ListGamesResponse,
+    GetAdminFeedback,
 )
 from src.schemas import SuccessResponse
 
@@ -82,6 +84,16 @@ class GameService:
         await feedback_repo.create_one(data)
 
         return SuccessResponse(success=True)
+
+    async def get_general_feedback(self, game_id: UUID, user: User) -> GetAdminFeedback:
+        game = await game_repo.get_one_by_game_id(game_id)
+        if user.telegram_id != game.owner_telegram_id:
+            raise GameForbiddenException
+
+        feedbacks = await feedback_repo.get_by_game_id(game_id)
+        # TODO: PROCESS FEEDBACKS
+
+        return GetAdminFeedback(avg_score=6.9, feedback="Skibidi")
 
     async def get_popular(self, user: User) -> list[PopularGameSchema]:
         popular = await game_repo.get_games_amount_by_name()

@@ -40,3 +40,8 @@ class PostFeedbackDTO(BaseModel):
     game_id: UUID
     score: int
     feedback: str | None
+
+
+class GetAdminFeedback(BaseModel):
+    avg_score: float
+    feedback: str
