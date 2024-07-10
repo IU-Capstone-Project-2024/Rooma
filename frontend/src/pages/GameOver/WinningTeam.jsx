@@ -51,13 +51,6 @@ export default function WinningTeam() {
         };
 
         fetchData();
-
-        //Timer to show feedback form 1 minute after results
-        const timer = setTimeout(() => {
-            setShowFeedback(true);
-        }, 5000);
-        return () => clearTimeout(timer);
-
     }, [gameId, navigate]);
 
     return (
@@ -102,6 +95,16 @@ export default function WinningTeam() {
                     ))}
                     </tbody>
                 </table>
+            </div>
+            <div className="flex justify-center relative">
+                <div className="relative">
+                    <button
+                        className="mt-2 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
+                        onClick={() => {setShowFeedback(true)}}
+                    >
+                        Send feedback
+                    </button>
+                </div>
             </div>
             {showFeedback && <Feedback name="Hide and Seek" gameId={gameId}/>}
         </div>
