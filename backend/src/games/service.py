@@ -1,6 +1,6 @@
-from typing import List
 from uuid import UUID
 
+from src.common.repository.feedback import FeedbackRepository
 from src.common.repository.game import GameRepository
 from src.common.repository.game_state import GameStateRepository
 from src.common.repository.user import UserRepository
@@ -20,6 +20,7 @@ from src.schemas import SuccessResponse
 game_repo = GameRepository()
 game_state_repo = GameStateRepository()
 user_repo = UserRepository()
+feedback_repo = FeedbackRepository()
 
 
 class GameService:
@@ -77,10 +78,10 @@ class GameService:
 
         return Game(**game.model_dump())
 
-    async def post_feedback(
-            self, data: PostFeedbackDTO, game_id: UUID, user: User
-    ) -> SuccessResponse:
-        pass
+    async def post_feedback(self, data: PostFeedbackDTO, user: User) -> SuccessResponse:
+        await feedback_repo.create_one(data)
+
+        return SuccessResponse(success=True)
 
     async def get_popular(self, user: User) -> list[PopularGameSchema]:
         popular = await game_repo.get_games_amount_by_name()
