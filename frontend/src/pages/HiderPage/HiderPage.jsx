@@ -45,6 +45,10 @@ export default function HiderPage() {
             });
     }, 2000);
 
+    if (gameState === 'hiders_win' || gameState === 'seekers_win' || gameState === 'no_winners') {
+        navigate("/win?game_id=" + game_id);
+    }
+
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
 
     useEffect(() => {
