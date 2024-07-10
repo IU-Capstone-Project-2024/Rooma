@@ -38,4 +38,4 @@ class GameState(Document):
 class Feedback(Document):
     game_id: UUID
     score: int
-    feedback: str
+    feedback: str | None

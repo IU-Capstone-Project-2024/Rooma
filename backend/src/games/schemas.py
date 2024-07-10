@@ -37,5 +37,6 @@ class RulesResponse(BaseModel):
 
 
 class PostFeedbackDTO(BaseModel):
-    # TODO: Fill it
-    pass
+    game_id: UUID
+    score: int
+    feedback: str | None
