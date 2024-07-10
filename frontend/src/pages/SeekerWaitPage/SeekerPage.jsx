@@ -35,7 +35,7 @@ export default function SeekerPage() {
 
     useEffect(() => {
         if (!gameId) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [gameId, navigate]);
 

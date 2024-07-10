@@ -31,7 +31,7 @@ export default function AdminPageDuringGameplay() {
 
     useEffect(() => {
         if (!gameId) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [gameId, navigate]);
 

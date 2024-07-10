@@ -28,7 +28,7 @@ export default function AdminResults() {
     useEffect(() => {
         const fetchData = async () => {
             if (!gameId) {
-                navigate("/", {replace: true});
+                navigate("/");
                 return;
             }
 
@@ -45,7 +45,7 @@ export default function AdminResults() {
                     setActiveButton("hiders");
                 } else {
                     alert("Game has not ended!");
-                    navigate("/", {replace: true});
+                    navigate("/");
                     return;
                 }
 
@@ -56,7 +56,7 @@ export default function AdminResults() {
                 setHiderResults(hiderRes);
             } catch (err) {
                 alert(err);
-                navigate("/", {replace: true});
+                navigate("/");
             }
         };
 

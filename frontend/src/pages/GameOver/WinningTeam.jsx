@@ -27,7 +27,7 @@ export default function WinningTeam() {
     useEffect(() => {
         const fetchData = async () => {
             if (!gameId) {
-                navigate("/", {replace: true});
+                navigate("/");
                 return;
             }
 
@@ -38,7 +38,7 @@ export default function WinningTeam() {
 
                 if (!(["seekers_win", "hiders_win", "no_winners"].includes(stateRes["state"]))) {
                     alert("Game has not ended!");
-                    navigate("/", {replace: true});
+                    navigate("/");
                     return;
                 }
 
@@ -51,7 +51,7 @@ export default function WinningTeam() {
                 }
             } catch (err) {
                 alert(err);
-                navigate("/", {replace: true});
+                navigate("/");
             }
         };
 
