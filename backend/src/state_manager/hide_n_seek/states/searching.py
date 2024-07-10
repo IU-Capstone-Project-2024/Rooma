@@ -14,7 +14,6 @@ class StateHandlerSearching(StateHandler):
         game = await self.get_current_game()
         if game is None:
             return
-
         # game is ended by foreign
         if game.is_active is False:
             await self.set_new_state(State.NO_WINNERS)
