@@ -5,6 +5,7 @@ import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js"
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import Trophy from "@/components/game/Trophy.jsx";
 import HiderSeekerTable from "@/pages/GameOver/HiderSeekerTable.jsx";
+import Feedback from "@/components/game/Feedback.jsx";
 
 export default function AdminResults() {
     const [searchParams] = useSearchParams();
@@ -13,10 +14,13 @@ export default function AdminResults() {
     const [hiderResults, setHiderResults] = useState([]);
     const [seekerResults, setSeekerResults] = useState([]);
 
+
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
+
+    const [showFeedback, setShowFeedback] = useState(false);
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
@@ -77,9 +81,13 @@ export default function AdminResults() {
                                 : (winningTeam === 'hiders_win' ? 'HIDERS' : 'NO WINNERS')}
                         </h2>
                     </div>
-                    <button className="mt-4 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
+                    <button
+                        className="mt-2 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
+                        onClick={() => {
+                            setShowFeedback(true)
+                        }}
                     >
-                        Send feedback form
+                        Send feedback
                     </button>
                 </div>
                 <HiderSeekerTable
@@ -87,6 +95,12 @@ export default function AdminResults() {
                     setActiveButton={setActiveButton}
                     hiderResults={hiderResults}
                     seekerResults={seekerResults}
+                />
+                <Feedback
+                    name="Hide and Seek"
+                    gameId={gameId}
+                    showFeedback={showFeedback}
+                    setShowFeedback={setShowFeedback}
                 />
             </div>
         </section>
