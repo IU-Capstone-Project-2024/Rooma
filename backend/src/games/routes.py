@@ -101,7 +101,7 @@ async def get_game(game_id: UUID, user: User = Depends(get_user)):
     response_model=SuccessResponse,
 )
 async def post_feedback(game_id: UUID, data: PostFeedbackDTO, user: User = Depends(get_user)):
-    return await service.post_feedback(data, game_id, user)
+    return await service.post_feedback(game_id, data, user)
 
 
 @router.get(
