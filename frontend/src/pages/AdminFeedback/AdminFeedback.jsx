@@ -23,7 +23,7 @@ const FeedbackSummary = () => {
         getGeneralFeedback(game_id)
             .then((res) => {
                 setAverageRating(res.avg_score);
-                setSummarizedFeedback(res.feedback);
+                setSummarizedFeedback(parseSummarizedFeedback(res.feedback));
             })
     }, [game_id]);
 
@@ -48,6 +48,18 @@ const FeedbackSummary = () => {
             </div>
         );
     };
+
+    const parseSummarizedFeedback = (feedback) => {
+        return feedback.split('\n\n').map((block, index) => (
+            <div key={index} className="my-4">
+                {block.split('**').map((part, i) => (
+                    i % 2 === 0
+                        ? <span key={i} className="text-xl text-gray-700">{part}</span>
+                        : <span key={i} className="bg-[#FFC87A] text-black px-2 py-1 rounded ml-2">{part}</span>
+                ))}
+            </div>
+        ));
+    }
 
     return (
         <div className="flex flex-col items-center justify-center h-screen p-4">
