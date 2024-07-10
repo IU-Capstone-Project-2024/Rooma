@@ -7,7 +7,6 @@ import GameTimer from "@/components/game/GameTimer.jsx";
 import {getState} from "@/api/hideAndSeek.js";
 import {useInterval} from "@/utils/UseInterval.jsx";
 
-
 export default function HiderPage() {
     const [hiderCode, setHiderCode] = useState(null);
     const [gameEndTime, setGameEndTime] = useState(null);
