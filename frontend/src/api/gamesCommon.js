@@ -111,7 +111,6 @@ export const postFeedback = async (gameId, score, feedback) => {
     const url = `${GAMES_URL}/${gameId}/feedback?token=${localStorage.getItem("token")}`;
 
     const feedbackPayload = {
-        game_id: gameId,
         score: score,
         feedback: feedback
     };

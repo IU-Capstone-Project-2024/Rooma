@@ -37,6 +37,11 @@ class RulesResponse(BaseModel):
 
 
 class PostFeedbackDTO(BaseModel):
+    score: int
+    feedback: str | None
+
+
+class PostFeedbackInner(BaseModel):
     game_id: UUID
     score: int
     feedback: str | None
