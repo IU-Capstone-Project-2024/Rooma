@@ -15,7 +15,8 @@ from src.games.schemas import (
     PostFeedbackDTO,
     Player,
     ListGamesResponse,
-    GetAdminFeedback, PostFeedbackInner,
+    GetAdminFeedback,
+    PostFeedbackInner,
 )
 from src.schemas import SuccessResponse
 
