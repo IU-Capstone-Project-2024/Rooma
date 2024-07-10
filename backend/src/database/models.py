@@ -29,7 +29,13 @@ class RefreshToken(Document):
     value: str
     active: bool
 
-      
+
 class GameState(Document):
     game_id: UUID
     state: str
+
+
+class Feedback(Document):
+    game_id: UUID
+    score: int
+    feedback: str
