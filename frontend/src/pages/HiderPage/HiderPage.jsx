@@ -4,12 +4,15 @@ import {getEndTimes, getHiderCode} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import GameTimer from "@/components/game/GameTimer.jsx";
+import {getState} from "@/api/hideAndSeek.js";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 
 export default function HiderPage() {
     const [hiderCode, setHiderCode] = useState(null);
     const [gameEndTime, setGameEndTime] = useState(null);
     const [searchParams] = useSearchParams();
+    const [gameState, setGameState] = useState(null);
 
     const navigate = useNavigate();
 
@@ -33,6 +36,14 @@ export default function HiderPage() {
             });
         }
     }, [game_id]);
+
+    useInterval(() => {
+        getState(game_id)
+            .then((res) => {
+                setGameState(res.state);
+                console.log(gameState);
+            });
+    }, 2000);
 
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
 
