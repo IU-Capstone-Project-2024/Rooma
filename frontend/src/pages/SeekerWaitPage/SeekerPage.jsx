@@ -2,8 +2,9 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {find, getDuration, getEndTimes} from "@/api/hideAndSeek.js";
+import {find, getDuration, getEndTimes, getState} from "@/api/hideAndSeek.js";
 import GameTimer from "@/components/game/GameTimer.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 export default function SeekerPage() {
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
@@ -60,6 +61,20 @@ export default function SeekerPage() {
 
         fetchDuration();
     }, [gameId]);
+
+    const [gameState, setGameState] = useState(null);
+
+    useInterval(() => {
+        getState(gameId)
+            .then((res) => {
+                setGameState(res.state);
+                console.log(gameState);
+            });
+    }, 2000);
+
+    if (gameState === 'hiders_win' || gameState === 'seekers_win' || gameState === 'no_winners') {
+        navigate("/win?game_id=" + gameId);
+    }
 
     return (
         <section className="relative flex flex-col items-center justify-center">
