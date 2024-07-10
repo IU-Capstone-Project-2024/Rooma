@@ -61,9 +61,11 @@ export default function WaitPage() {
         }
     }, [userRole, gameId, navigate]);
 
-    if (gameState === "HIDERS_WIN" || gameState === "SEEKERS_WIN" || gameState === "NO_WINNERS") {
-        navigate("/results?game_id=" + gameId);
-    }
+    useEffect(() => {
+        if (gameState === "hiders_win" || gameState === "seekers_win" || gameState === "no_winners") {
+            navigate("/win?game_id=" + gameId);
+        }
+    }, [gameId, gameState, navigate]);
 
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
