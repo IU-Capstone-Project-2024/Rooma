@@ -60,7 +60,7 @@ export default function AdminPageDuringGameplay() {
     const prematureFinish = () => {
         finishGame(gameId);
         setFinishButton("Waiting...");
-    }
+    };
 
     // refresh data about players
     useInterval(async () => {
