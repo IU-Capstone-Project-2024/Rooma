@@ -6,7 +6,7 @@ from src.database import init_db
 from src.state_manager.hide_n_seek.handler import StateHandler
 from src.state_manager.hide_n_seek.state import State
 
-SLEEP_TIME = 5  # seconds
+SLEEP_TIME = 1  # seconds
 game_repo = GameRepository()
 game_state_repo = GameStateRepository()
 
