@@ -1,19 +1,43 @@
 import classNames from "classnames";
 import 'reactjs-popup/dist/index.css';
 import {useNavigate} from "react-router-dom";
-import {getState} from "@/api/hideAndSeek.js";
+import {getPlayerRole, getState} from "@/api/hideAndSeek.js";
 
 export default function ContinueGameCard({name, img, small, gameId, isHost, isActive, onClick}) {
     const navigate = useNavigate();
 
-    async function navigateToContinue() {
-        const state = (await getState(gameId))["state"];
-        console.log(state);
+    async function continueToPage() {
+        let state = "";
+        try {
+            const stateRes = await getState(gameId);
+            state = stateRes?.state || "";
+        } catch (e) { /* empty */
+        }
+
         if (name === "Hide and Seek") {
-            if (isHost === true) {
-
+            if (["no_winners", "seekers_win", "hiders_win"].includes(state)) {
+                if (isHost) {
+                    navigate(`/admin_results?game_id=${gameId}`);
+                } else {
+                    navigate(`/win?game_id=${gameId}`);
+                }
+            } else if (["hiding", "searching"].includes(state)) {
+                if (isHost) {
+                    navigate(`/admin_gameplay?game_id=${gameId}`);
+                } else {
+                    const roleRes = await getPlayerRole(gameId);
+                    if (roleRes.role === "seeker") {
+                        navigate(`/seeker?game_id=${gameId}`);
+                    } else if (roleRes.role === "hider") {
+                        navigate(`/hider?game_id=${gameId}`);
+                    }
+                }
             } else {
-
+                if (isHost) {
+                    navigate(`/lobby?game_id=${gameId}`);
+                } else {
+                    navigate(`/join_game?game_id=${gameId}`);
+                }
             }
         }
     }
@@ -42,7 +66,7 @@ export default function ContinueGameCard({name, img, small, gameId, isHost, isAc
                         small ? "px-6 py-1" : "px-8 py-2",
                         "bg-gradient-to-r from-yellow-400 to-pink-500",
                     )}
-                    onClick={navigateToContinue}
+                    onClick={continueToPage}
                 >
                     Continue as {isHost ? "host" : "player"}
                 </button>
