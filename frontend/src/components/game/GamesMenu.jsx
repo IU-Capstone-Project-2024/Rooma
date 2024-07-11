@@ -62,13 +62,11 @@ export function GamesMenu({cardsData}) {
                 <div className="flex flex-wrap justify-center gap-5 mx-auto">
                     {selectedCards.map((card, index) => (
                         <div key={index} className="flex justify-center">
-                            <GameCard
-                                name={card.name}
-                                img={card.img}
-                                gameId={selectedCategory === "Continue" ? card.game_id : null}
-                                isHost={selectedCategory === "Continue" ? card.is_host : null}
-                                small={true}
-                            />
+                            {
+                                selectedCategory === "Continue"
+                                    ? (<div>Placeholder</div>)
+                                    : (<GameCard name={card.name} img={card.img} small={true}/>)
+                            }
                         </div>
                     ))}
                 </div>
