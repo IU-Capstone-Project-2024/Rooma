@@ -6,6 +6,7 @@ import popular from "../../assets/navbar/popular.svg";
 // import forYou from "../../assets/navbar/forYou.svg";
 import continueSVG from "../../assets/navbar/continue.svg";
 import all from "../../assets/navbar/all.svg";
+import ContinueGameCard from "@/components/game/ContinueGameCard.jsx";
 
 const menuItems = [
     {
@@ -64,7 +65,7 @@ export function GamesMenu({cardsData}) {
                         <div key={index} className="flex justify-center">
                             {
                                 selectedCategory === "Continue"
-                                    ? (<div>Placeholder</div>)
+                                    ? (<ContinueGameCard name={card.name} img={card.img} small={true} gameId={card.game_id} isHost={card.is_host}/>)
                                     : (<GameCard name={card.name} img={card.img} small={true}/>)
                             }
                         </div>
