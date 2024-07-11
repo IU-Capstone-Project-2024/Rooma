@@ -1,0 +1,18 @@
+FROM alpine:latest
+
+RUN apk add --no-cache mongodb-tools
+
+# Copy the backup script to the container
+COPY ../backup_scripts/backup.sh /backup.sh
+
+RUN chmod +x backup.sh
+
+RUN mkdir "/etc/cron.d/"
+
+# Set the cron job
+RUN echo "0 0 * * * /backup.sh" > /etc/cron.d/mongodb-backup
+
+RUN /usr/bin/crontab /etc/cron.d/mongodb-backup
+
+# Start the cron service
+CMD ["crond", "-f"]

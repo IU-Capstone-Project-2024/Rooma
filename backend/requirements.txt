@@ -1,7 +1,7 @@
 # API
 fastapi==0.111.0
 pydantic==2.7.1
-uvicorn==0.29.0
+shortuuid
 
 # MongoDB
 beanie==1.26.0
@@ -10,3 +10,12 @@ motor==3.4.0
 # Prometheus
 prometheus-fastapi-instrumentator==7.0.0
 
+# Bot
+aiogram==3.7.0
+
+# Auth
+python-dotenv==1.0.1
+PyJWT==2.8.0
+
+# LLM
+requests
