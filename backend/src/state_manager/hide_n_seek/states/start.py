@@ -21,6 +21,18 @@ class StateHandlerStart(StateHandler):
 
         data = HideNSeekData(**game.data)
 
+        # calculate finish times
+        current_time = datetime.utcnow()
+        seeker_start_time = current_time + timedelta(minutes=data.time_to_hide)
+        game_end_time = current_time + timedelta(minutes=data.duration)
+
+        # save end times
+        data.seeker_start_time = seeker_start_time
+        data.game_end_time = game_end_time
+
+        game.data = data.model_dump()
+        _ = await game.save()
+
         # calculate seeker size and check if there are no seekers or hiders
         seeker_size = int(data.seeker_percentage / 100) * len(game.lobby)
         seeker_size = max(seeker_size, 1)  # no seekers
@@ -35,15 +47,6 @@ class StateHandlerStart(StateHandler):
 
         # update data about teams
         data.hiders = {telegram_id: code for telegram_id, code in zip(hiders, codes)}
-
-        # calculate finish times
-        current_time = datetime.utcnow()
-        seeker_start_time = current_time + timedelta(minutes=data.time_to_hide)
-        game_end_time = current_time + timedelta(minutes=data.duration)
-
-        # save end times
-        data.seeker_start_time = seeker_start_time
-        data.game_end_time = game_end_time
 
         game.data = data.model_dump()
         _ = await game.save()
