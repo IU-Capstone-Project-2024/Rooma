@@ -3,9 +3,10 @@ import classNames from "classnames";
 import GameCard from "./GameCard.jsx";
 import novelties from "../../assets/navbar/novelties.svg";
 import popular from "../../assets/navbar/popular.svg";
-import forYou from "../../assets/navbar/forYou.svg";
+// import forYou from "../../assets/navbar/forYou.svg";
 import continueSVG from "../../assets/navbar/continue.svg";
 import all from "../../assets/navbar/all.svg";
+import ContinueGameCard from "@/components/game/ContinueGameCard.jsx";
 
 const menuItems = [
     {
@@ -62,13 +63,18 @@ export function GamesMenu({cardsData}) {
                 <div className="flex flex-wrap justify-center gap-5 mx-auto">
                     {selectedCards.map((card, index) => (
                         <div key={index} className="flex justify-center">
-                            <GameCard
-                                name={card.name}
-                                img={card.img}
-                                gameId={selectedCategory === "Continue" ? card.game_id : null}
-                                isHost={selectedCategory === "Continue" ? card.is_host : null}
-                                small={true}
-                            />
+                            {
+                                selectedCategory === "Continue"
+                                    ? (<ContinueGameCard
+                                        name={card.name}
+                                        img={card.img}
+                                        small={true}
+                                        gameId={card.game_id}
+                                        isHost={card.is_host}
+                                        isActive={card.is_active}
+                                    />)
+                                    : (<GameCard name={card.name} img={card.img} small={true}/>)
+                            }
                         </div>
                     ))}
                 </div>
