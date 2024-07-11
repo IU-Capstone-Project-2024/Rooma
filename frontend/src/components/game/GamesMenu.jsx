@@ -65,7 +65,14 @@ export function GamesMenu({cardsData}) {
                         <div key={index} className="flex justify-center">
                             {
                                 selectedCategory === "Continue"
-                                    ? (<ContinueGameCard name={card.name} img={card.img} small={true} gameId={card.game_id} isHost={card.is_host}/>)
+                                    ? (<ContinueGameCard
+                                        name={card.name}
+                                        img={card.img}
+                                        small={true}
+                                        gameId={card.game_id}
+                                        isHost={card.is_host}
+                                        isActive={card.is_active}
+                                    />)
                                     : (<GameCard name={card.name} img={card.img} small={true}/>)
                             }
                         </div>
