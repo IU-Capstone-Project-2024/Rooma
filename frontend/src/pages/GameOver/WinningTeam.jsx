@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import Trophy from '../../components/game/Trophy.jsx';
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 import Feedback from '../../components/game/Feedback.jsx';
@@ -15,7 +15,7 @@ export default function WinningTeam() {
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
-    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
@@ -27,42 +27,30 @@ export default function WinningTeam() {
     useEffect(() => {
         const fetchData = async () => {
             if (!gameId) {
-                navigate("/", {replace: true});
+                navigate("/");
                 return;
             }
 
-            try {
-                const res = await getState(gameId);
-                const currentWinningTeam = res["state"];
-                setWinningTeam(currentWinningTeam);
+            const res = await getState(gameId);
+            const currentWinningTeam = res["state"];
+            setWinningTeam(currentWinningTeam);
 
-                if (currentWinningTeam !== "seekers_win" && currentWinningTeam !== "hiders_win") {
-                    alert("Game has not ended!");
-                    navigate("/", {replace: true});
-                    return;
-                }
+            if (!(["seekers_win", "hiders_win", "no_winners"].includes(currentWinningTeam))) {
+                alert("Game has not ended!");
+                navigate("/");
+                return;
+            }
 
-                if (currentWinningTeam === "seekers_win") {
-                    const seekerRes = await getSeekerResults(gameId);
-                    setSeekerResults(seekerRes);
-                } else {
-                    const hiderRes = await getHiderResults(gameId);
-                    setHiderResults(hiderRes);
-                }
-            } catch (err) {
-                alert(err);
-                navigate("/", {replace: true});
+            if (currentWinningTeam === "seekers_win") {
+                const seekerRes = await getSeekerResults(gameId);
+                setSeekerResults(seekerRes);
+            } else {
+                const hiderRes = await getHiderResults(gameId);
+                setHiderResults(hiderRes);
             }
         };
 
         fetchData();
-
-        //Timer to show feedback form 1 minute after results
-        const timer = setTimeout(() => {
-            setShowFeedback(true);
-        }, 60000);
-        return () => clearTimeout(timer);
-
     }, [gameId, navigate]);
 
     return (
@@ -108,7 +96,22 @@ export default function WinningTeam() {
                     </tbody>
                 </table>
             </div>
-        {showFeedback && <Feedback name="Hide and Seek" />}
+            <div className="flex justify-center relative">
+                <div className="relative">
+                    <button
+                        className="mt-2 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
+                        onClick={() => {setShowFeedback(true)}}
+                    >
+                        Send feedback
+                    </button>
+                </div>
+            </div>
+            <Feedback
+                name="Hide and Seek"
+                gameId={gameId}
+                showFeedback={showFeedback}
+                setShowFeedback={setShowFeedback}
+            />
         </div>
     );
 }

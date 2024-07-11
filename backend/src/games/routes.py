@@ -11,6 +11,7 @@ from src.games.schemas import (
     RulesResponse,
     PostFeedbackDTO,
     ListGamesResponse,
+    GetAdminFeedback,
 )
 from src.games.service import GameService
 from src.schemas import SuccessResponse
@@ -99,5 +100,13 @@ async def get_game(game_id: UUID, user: User = Depends(get_user)):
     "/{game_id}/feedback",
     response_model=SuccessResponse,
 )
-async def post_feedback(data: PostFeedbackDTO, game_id: UUID, user: User = Depends(get_user)):
-    return await service.post_feedback(data, game_id, user)
+async def post_feedback(game_id: UUID, data: PostFeedbackDTO, user: User = Depends(get_user)):
+    return await service.post_feedback(game_id, data, user)
+
+
+@router.get(
+    "/{game_id}/feedback",
+    response_model=GetAdminFeedback,
+)
+async def get_general_feedback(game_id: UUID, user: User = Depends(get_user)):
+    return await service.get_general_feedback(game_id, user)

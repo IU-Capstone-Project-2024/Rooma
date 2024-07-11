@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import {getLobby, getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
+import {useEffect, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
 import {getDuration, getPlayerRole, getState} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
@@ -14,66 +14,66 @@ export default function WaitPage() {
 
     const navigate = useNavigate();
 
-    const game_id = searchParams.get("game_id");
+    const gameId = searchParams.get("game_id");
 
     const [userRole, setUserRole] = useState(null);
     const [gameState, setGameState] = useState(null);
 
-
-
     const leaveGameByButton = () => {
         // Assuming leaveGame handles game leave logic
-        navigate("/", {replace: true});
-        leaveGame(game_id);
+        navigate("/");
+        leaveGame(gameId);
     }
 
     useEffect(() => {
-        if (!game_id) {
-            navigate("/", {replace: true});
+        if (!gameId) {
+            navigate("/");
         }
-    }, [game_id, navigate]);
 
-    useEffect(() => {
-        if (game_id) {
-            joinGame(game_id); // Assuming joinGame handles game join logic
-            getDuration(game_id).then((result) => {
-                setDuration(result?.duration);
-                setWaitTime(result?.time_to_hide);
+        joinGame(gameId) // Assuming joinGame handles game join logic
+            .catch((error) => {
+                if (error.response.status === 400) {
+                    alert("Game has already started!");
+                    navigate("/");
+                }
             });
-            getRules(game_id).then((result) => {
-                setRules(result?.rules);
-                setNote(result?.note);
-            });
-            getPlayerRole(game_id).then((result) => {
-                setUserRole(result?.role);
-                console.log('User role:', result?.role)
-            });
-            getState(game_id).then((result) => {
-                setGameState(result?.state);
-            });
-        }
-    }, [game_id]);
+        getDuration(gameId).then((result) => {
+            setDuration(result?.duration);
+            setWaitTime(result?.time_to_hide);
+        });
+        getRules(gameId).then((result) => {
+            setRules(result?.rules);
+            setNote(result?.note);
+        });
+        getPlayerRole(gameId).then((result) => {
+            setUserRole(result?.role);
+        });
+        getState(gameId).then((result) => {
+            setGameState(result?.state);
+        });
+    }, [gameId, navigate]);
 
     useInterval(() => {
-        getPlayerRole(game_id).then((result) => {
-                setUserRole(result?.role);
-                console.log('User role:', result?.role)
+        getPlayerRole(gameId).then((result) => {
+            setUserRole(result?.role);
         });
     }, 1000);
 
     useEffect(() => {
         if (userRole === "hider") {
-            navigate(`/hider?game_id=${game_id}`, { replace: true });
+            navigate(`/hider?game_id=${gameId}`);
         } else if (userRole === "seeker") {
-            navigate(`/seeker?game_id=${game_id}`, { replace: true });
+            navigate(`/seeker?game_id=${gameId}`);
         }
-    }, [userRole, game_id, navigate]);
+    }, [userRole, gameId, navigate]);
 
-    if (gameState === "HIDERS_WIN" || gameState === "SEEKERS_WIN" || gameState === "NO_WINNERS"){
-        navigate("/results?game_id=" + game_id, {replace: true});
-    }
+    useEffect(() => {
+        if (gameState === "hiders_win" || gameState === "seekers_win" || gameState === "no_winners") {
+            navigate("/win?game_id=" + gameId);
+        }
+    }, [gameId, gameState, navigate]);
 
-    const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
+    const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
 
     useEffect(() => {
         setHeaderColor('#FF7F29');
@@ -124,7 +124,8 @@ export default function WaitPage() {
 
                     <button
                         className="mt-6 bg-[#FF7F29] text-white font-bold py-2 px-4 rounded-lg"
-                        onClick={leaveGameByButton}>Leave the Game</button>
+                        onClick={leaveGameByButton}>Leave the Game
+                    </button>
                 </div>
             </div>
         </section>

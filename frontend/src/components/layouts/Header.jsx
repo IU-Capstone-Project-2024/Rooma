@@ -39,7 +39,7 @@ export default function Header({ style }) {
             </button>
 
             <button
-                className="bg-[#9CD3CD72] h-14 px-5 text-white text-lg rounded-full"
+                className="bg-[#9CD3CD72] z-50 h-14 px-5 text-white text-lg rounded-full"
                 onClick={handleLogout}
             >
                 Log out

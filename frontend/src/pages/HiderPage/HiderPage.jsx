@@ -4,12 +4,14 @@ import {getEndTimes, getHiderCode} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import GameTimer from "@/components/game/GameTimer.jsx";
-
+import {getState} from "@/api/hideAndSeek.js";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 export default function HiderPage() {
     const [hiderCode, setHiderCode] = useState(null);
     const [gameEndTime, setGameEndTime] = useState(null);
     const [searchParams] = useSearchParams();
+    const [gameState, setGameState] = useState(null);
 
     const navigate = useNavigate();
 
@@ -17,22 +19,32 @@ export default function HiderPage() {
 
     useEffect(() => {
         if (!game_id) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [game_id, navigate]);
 
     useEffect(() => {
         if (game_id) {
-            getEndTimes(game_id).then((result) => {
-                const endTimeStr = result?.game_end_time;
-                const endTime = new Date(endTimeStr);
-                setGameEndTime(endTime);
+            getEndTimes(game_id).then((res) => {
+                setGameEndTime(new Date(res["game_end_time"] + "Z"));
             });
             getHiderCode(game_id).then((result) => {
                 setHiderCode(result?.code);
             });
         }
     }, [game_id]);
+
+    useInterval(() => {
+        getState(game_id)
+            .then((res) => {
+                setGameState(res.state);
+                console.log(gameState);
+            });
+    }, 2000);
+
+    if (gameState === 'hiders_win' || gameState === 'seekers_win' || gameState === 'no_winners') {
+        navigate("/win?game_id=" + game_id);
+    }
 
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
 

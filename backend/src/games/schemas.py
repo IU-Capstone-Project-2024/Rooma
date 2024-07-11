@@ -1,7 +1,7 @@
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Player(BaseModel):
@@ -37,5 +37,16 @@ class RulesResponse(BaseModel):
 
 
 class PostFeedbackDTO(BaseModel):
-    # TODO: Fill it
-    pass
+    score: int = Field(..., ge=0, le=5)
+    feedback: str | None
+
+
+class PostFeedbackInner(BaseModel):
+    game_id: UUID
+    score: int
+    feedback: str | None
+
+
+class GetAdminFeedback(BaseModel):
+    avg_score: float
+    feedback: str

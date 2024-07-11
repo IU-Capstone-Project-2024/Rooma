@@ -2,8 +2,9 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {find, getDuration, getEndTimes} from "@/api/hideAndSeek.js";
+import {find, getDuration, getEndTimes, getState} from "@/api/hideAndSeek.js";
 import GameTimer from "@/components/game/GameTimer.jsx";
+import {useInterval} from "@/utils/UseInterval.jsx";
 
 export default function SeekerPage() {
     const {setHeaderColor, setFooterColor, setBackgroundColor} = useColor();
@@ -26,6 +27,8 @@ export default function SeekerPage() {
 
     const [codeToSubmit, setCodeToSubmit] = useState("");
 
+    const [date, setDate] = useState(new Date());
+
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
@@ -33,9 +36,13 @@ export default function SeekerPage() {
         await find(gameId, codeToSubmit)
     }
 
+    const updateDate = () => {
+        setDate(new Date());
+    }
+
     useEffect(() => {
         if (!gameId) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [gameId, navigate]);
 
@@ -61,6 +68,20 @@ export default function SeekerPage() {
         fetchDuration();
     }, [gameId]);
 
+    const [gameState, setGameState] = useState(null);
+
+    useInterval(() => {
+        getState(gameId)
+            .then((res) => {
+                setGameState(res.state);
+                console.log(gameState);
+            });
+    }, 2000);
+
+    if (gameState === 'hiders_win' || gameState === 'seekers_win' || gameState === 'no_winners') {
+        navigate("/win?game_id=" + gameId);
+    }
+
     return (
         <section className="relative flex flex-col items-center justify-center">
             <img src={steps_1} alt="steps" className="absolute top-24 right-0 h-96 z-0"/>
@@ -79,13 +100,14 @@ export default function SeekerPage() {
             </div>
 
             {
-                (new Date() > seekerStartTime || true) && (
-                    <div className="flex flex-col justify-between">
+                (date >= seekerStartTime) && (
+                    <div className="flex flex-col justify-between items-center z-10">
 
                         <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
                         <GameTimer endTime={gameEndTime}/>
+
                         <input
-                            className="w-80 h-8 bg-white rounded-lg p-2 text-black mt-2 mb-2"
+                            className="w-60 h-8 bg-white rounded-lg p-2 text-black mt-7 mb-2"
                             placeholder="Enter the code here"
                             onChange={(e) => setCodeToSubmit(e.target.value)}
                         />
@@ -98,9 +120,15 @@ export default function SeekerPage() {
             }
 
 
-            {new Date() < seekerStartTime &&
-                <h2 className="text-2xl text-white font-bold mb-8 z-10">The game will start soon!</h2>}
-            {new Date() < seekerStartTime && <GameTimer endTime={seekerStartTime} frozen={true}/>}
+            {
+                (date < seekerStartTime) && (
+                    <div className="flex flex-col justify-between items-center z-10">
+
+                        <h2 className="text-2xl text-white font-bold mb-8 z-10">Please, wait</h2>
+                        <GameTimer endTime={seekerStartTime} frozen={true} onComplete={updateDate}/>
+                    </div>
+                )
+            }
 
         </section>
     );

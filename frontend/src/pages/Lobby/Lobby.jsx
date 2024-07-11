@@ -58,7 +58,7 @@ export default function Lobby() {
 
     useEffect(() => {
         if (!game_id) {
-            navigate("/", {replace: true});
+            navigate("/");
         }
     }, [game_id, navigate]);
 
