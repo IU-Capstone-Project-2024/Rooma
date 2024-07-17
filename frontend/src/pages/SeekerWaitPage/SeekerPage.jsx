@@ -83,6 +83,7 @@ export default function SeekerPage() {
         navigate("/win?game_id=" + gameId);
     }
 
+
     const [isEnabled, setEnabled] = useState(false);
 
     useEffect(() => {
@@ -146,6 +147,7 @@ export default function SeekerPage() {
             {date >= seekerStartTime ? (
                 <div className="flex flex-col justify-between items-center z-10">
                     <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
+
                     <GameTimer endTime={gameEndTime}/>
 
                     <h2 className=" text-white font-bold mb-8 z-10"> You can catch hider by scanning QR code or entering the code manually </h2>
@@ -166,9 +168,9 @@ export default function SeekerPage() {
                         onChange={(e) => setCodeToSubmit(e.target.value)}
                     />
 
+
                     <button className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg"
                             onClick={() => sendRequestToFind()}>
-                        Submit
                     </button>
                 </div>
             ) : (
