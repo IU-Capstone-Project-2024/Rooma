@@ -14,7 +14,7 @@ export function GamesCarousel({cards}) {
         onSwipedRight: () => setCardIndex(cardIndex === 0 ? cards.length - 1 : cardIndex - 1),
         preventDefaultTouchmoveEvent: true,
         trackTouch: true,
-        trackMouse: false
+        trackMouse: true
     });
 
     return (
