@@ -17,14 +17,42 @@ export function GamesCarousel({cards}) {
         trackMouse: true
     });
 
+    // Swipe to the previous card
+    const goToPrevCard = () => {
+        setCardIndex(cardIndex === 0 ? cards.length - 1 : cardIndex - 1);
+    };
+
+    // Swipe to the next card
+    const goToNextCard = () => {
+        setCardIndex((cardIndex + 1) % cards.length);
+    };
+
     return (
         <div className="flex flex-col gap-5">
             <div className="flex justify-center items-center gap-8 md:gap-12 lg:gap-16 overflow-x-hidden py-5" {...handlers}>
+                <div className="flex left-0 h-full items-center justify-start pl-4 hidden lg:flex">
+                    <button className="arrow left" onClick={goToPrevCard}
+                    >
+                    <svg width="18" height="64" viewBox="0 0 18 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 4.0658L4 31.5406" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M14 59.2455L4 31.7707" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                    </button>
+                </div>
                 <GameCard name={cards[prevIndex].name} img={cards[prevIndex].img} small={true}
-                          onClick={() => setCardIndex(cardIndex === 0 ? cards.length - 1 : cardIndex - 1)}/>
+                          onClick={goToPrevCard}/>
                 <GameCard name={cards[cardIndex].name} img={cards[cardIndex].img}/>
                 <GameCard name={cards[nextIndex].name} img={cards[nextIndex].img} small={true}
-                          onClick={() => setCardIndex((cardIndex + 1) % cards.length)}/>
+                          onClick={goToNextCard}/>
+                <div className="flex right-0 h-full items-center justify-end pr-4 hidden lg:flex">
+                    <button className="arrow right" onClick={goToNextCard}
+                    >
+                    <svg width="18" height="64" viewBox="0 0 18 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 59.2455L14 31.7707" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M4 4.0658L14 31.5406" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                    </button>
+                </div>
             </div>
             <div className="flex items-center gap-3 self-center">
                 {cards.map((_, index) => (
