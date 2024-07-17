@@ -5,7 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { find, getDuration, getEndTimes, getState } from "@/api/hideAndSeek.js";
 import GameTimer from "@/components/game/GameTimer.jsx";
 import { useInterval } from "@/utils/UseInterval.jsx";
-import { Scanner } from '@yudiel/react-qr-scanner';
+import { Html5Qrcode } from "html5-qrcode";
 
 export default function SeekerPage() {
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
@@ -83,17 +83,48 @@ export default function SeekerPage() {
         navigate("/win?game_id=" + gameId);
     }
 
-    const [isMobile, setIsMobile] = useState(false);
+    const [isEnabled, setEnabled] = useState(false);
 
     useEffect(() => {
-        const detectMobile = () => {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isAndroid = /Mobi|Android/i.test(navigator.userAgent);
-            setIsMobile(isIOS || isAndroid);
-        };
+        const config = { fps: 10, qrbox: { width: 150, height: 150 } };
+        const html5QrCode = new Html5Qrcode("qrCodeContainer");
 
-        detectMobile();
-    }, []);
+        const qrScannerStop = () => {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode
+                    .stop()
+                    .then(() => console.log("QR Code scanning stopped"))
+                    .catch((err) => console.error(err));
+            }
+        }
+
+        if (isEnabled){
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (result) => {
+                    if (result.length > 0) {
+                        console.log(result);
+                        sendRequestToFind(result);
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        } else {
+            qrScannerStop();
+        }
+
+        return () => {
+            qrScannerStop();
+        }
+
+    }, [isEnabled]);
+
+    const toggleScanner = () => {
+        setEnabled(!isEnabled);
+    }
 
     return (
         <section className="relative flex flex-col items-center justify-center">
@@ -115,25 +146,19 @@ export default function SeekerPage() {
             {date >= seekerStartTime ? (
                 <div className="flex flex-col justify-between items-center z-10">
                     <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
-                    <GameTimer endTime={gameEndTime} />
+                    <GameTimer endTime={gameEndTime}/>
 
-                    {isMobile ? (
-                        <div className="mb-8 z-10 w-60">
-                            <Scanner
-                                onScan={(result) => {
-                                    if (result.length > 0) {
-                                        const code = result[0].text;
-                                        console.log(code);
-                                        sendRequestToFind(code);
-                                    }
-                                }}
-                                styles={{ video: { width: '100%' } }} // Устанавливаем стили для видео
-                                constraints={{ facingMode: 'environment' }} // Устанавливаем использование внешней камеры
-                            />
-                        </div>
-                    ) : (
-                        <p className="text-white z-10">Scanner is available only on mobile devices.</p>
-                    )}
+                    <h2 className=" text-white font-bold mb-8 z-10"> You can catch hider by scanning QR code or entering the code manually </h2>
+                    <button
+                        className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg"
+                        onClick={toggleScanner}
+                    >
+                        {isEnabled ? "Stop Scanning QR code" : "Start Scanning Qr code"}
+                    </button>
+
+                    <div className="mb-8 w-60 relative">
+                        <div id="qrCodeContainer" className="w-full h-full"></div>
+                    </div>
 
                     <input
                         className="w-60 h-8 bg-white rounded-lg p-2 text-black mt-7 mb-2"
@@ -141,14 +166,15 @@ export default function SeekerPage() {
                         onChange={(e) => setCodeToSubmit(e.target.value)}
                     />
 
-                    <button className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg" onClick={() => sendRequestToFind()}>
+                    <button className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg"
+                            onClick={() => sendRequestToFind()}>
                         Submit
                     </button>
                 </div>
             ) : (
                 <div className="flex flex-col justify-between items-center z-10">
                     <h2 className="text-2xl text-white font-bold mb-8 z-10">Please, wait</h2>
-                    <GameTimer endTime={seekerStartTime} frozen={true} onComplete={updateDate} />
+                    <GameTimer endTime={seekerStartTime} frozen={true} onComplete={updateDate}/>
                 </div>
             )}
         </section>
