@@ -6,6 +6,7 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import GameTimer from "@/components/game/GameTimer.jsx";
 import {getState} from "@/api/hideAndSeek.js";
 import {useInterval} from "@/utils/UseInterval.jsx";
+import QRCode from "qrcode.react";
 
 export default function HiderPage() {
     const [hiderCode, setHiderCode] = useState(null);
@@ -73,6 +74,12 @@ export default function HiderPage() {
                     {hiderCode}
                 </span>
             </h2>
+
+            {hiderCode && (
+                <div className="mb-8 z-10">
+                    <QRCode lassName="qr-code mb-4 md:mb-8" size={150} includeMargin={true} value={hiderCode}/>
+                </div>
+            )}
 
             <GameTimer endTime={gameEndTime} />
         </section>
