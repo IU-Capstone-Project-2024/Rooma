@@ -1,0 +1,3 @@
+https://rooma-games.duckdns.org {
+    reverse_proxy nginx:80
+}
