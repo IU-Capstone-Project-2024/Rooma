@@ -28,8 +28,6 @@ services:
       target: rooma-api
     networks:
       - rooma_network
-    env_file:
-      - ../config/.env
     environment:
       - IN_DOCKER=true
       - TESTING=true
@@ -44,8 +42,6 @@ services:
       target: rooma-states
     networks:
       - rooma_network
-    env_file:
-      - ../config/.env
     environment:
       - IN_DOCKER=true
       - TESTING=true
@@ -60,8 +56,6 @@ services:
       target: rooma-tests
     networks:
       - rooma_network
-    env_file:
-      - ../config/.env
     environment:
       - IN_DOCKER=true
       - TESTING=true
