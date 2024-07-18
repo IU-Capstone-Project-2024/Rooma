@@ -22,8 +22,11 @@ class LLM:
             "The game uses these parameters:\n"
             "{parameters}\n"
             "I want you to summarize the feedbacks for me. "
-            "Write what players liked, what they disliked in two sections. "
+            "Write what players liked, what they disliked. "
             "Be concise. Do not write anything related to application bugs, only related to game organization.\n"
+            "Write in following format:\n\n"
+            "**What players liked**\n\n*Like 1\n*Like 2\n*etc\n\n"
+            "**What players disliked**\n\n*Dislike 1\n*Dislike 2\n*etc"
         )
 
     def generate(self, game_name: str, feedbacks: str, rules: str, parameters: str) -> str:
