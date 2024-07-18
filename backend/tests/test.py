@@ -4,6 +4,8 @@ from time import sleep
 
 import requests
 
+sleep(1)
+
 BASE_URL = getenv("BASE_URL", "http://localhost/api")
 
 
