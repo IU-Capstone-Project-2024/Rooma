@@ -21,8 +21,9 @@ class LLM:
             "{rules}\n"
             "The game uses these parameters:\n"
             "{parameters}\n"
-            "I want you to summarize the feedbacks for me. Write what players liked, what they disliked. "
-            "Be concise. Do not write anything related to application bugs, only related to game organization."
+            "I want you to summarize the feedbacks for me. "
+            "Write what players liked, what they disliked in two sections. "
+            "Be concise. Do not write anything related to application bugs, only related to game organization.\n"
         )
 
     def generate(self, game_name: str, feedbacks: str, rules: str, parameters: str) -> str:
