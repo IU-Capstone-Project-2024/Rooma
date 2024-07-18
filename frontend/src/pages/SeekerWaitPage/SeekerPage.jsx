@@ -146,9 +146,8 @@ export default function SeekerPage() {
                     <h2 className="text-2xl text-white font-bold mb-8 z-10">You can start seeking now!</h2>
                     <GameTimer endTime={gameEndTime}/>
 
-                    <h2 className=" text-white font-bold mb-8 z-10"> You can catch hider by scanning QR code or entering the code manually </h2>
                     <button
-                        className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg"
+                        className="bg-[#FFC87A] text-black px-4 py-2 rounded-lg mb-2"
                         onClick={toggleScanner}
                     >
                         {isEnabled ? "Stop Scanning QR code" : "Start Scanning Qr code"}
