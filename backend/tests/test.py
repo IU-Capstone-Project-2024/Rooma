@@ -1,9 +1,10 @@
 import unittest
+from os import getenv
 from time import sleep
 
 import requests
 
-BASE_URL = "http://localhost/api"
+BASE_URL = getenv("BASE_URL", "http://localhost/api")
 
 
 class TestRoomaAPI(unittest.TestCase):
