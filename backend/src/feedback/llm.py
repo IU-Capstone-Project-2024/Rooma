@@ -33,7 +33,7 @@ class LLM:
 
     def generate(self, game_name: str, feedbacks: str, rules: str, parameters: str) -> str:
         data = json.dumps({
-            "model": "microsoft/phi-3-medium-128k-instruct:free",
+            "model": "microsoft/phi-3-mini-128k-instruct:free",
             "messages": [
                 {
                     "role": "user",
