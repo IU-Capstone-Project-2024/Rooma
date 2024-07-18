@@ -54,4 +54,7 @@ class LLM:
         )
         response_json = json.loads(response.text)
 
+        if "choices" not in response_json:
+            print(response_json)
+            return "Error while requesting AI API. Please, retry later..."
         return response_json["choices"][0]["message"]["content"]
