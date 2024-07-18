@@ -5,6 +5,7 @@ import classNames from "classnames";
 
 export function GamesCarousel({cards}) {
     const [cardIndex, setCardIndex] = useState(1);
+    const [track, setTrack] = useState(true);
 
     const prevIndex = cardIndex === 0 ? cards.length - 1 : cardIndex - 1;
     const nextIndex = cardIndex === cards.length - 1 ? 0 : cardIndex + 1;
@@ -13,8 +14,8 @@ export function GamesCarousel({cards}) {
         onSwipedLeft: () => setCardIndex((cardIndex + 1) % cards.length),
         onSwipedRight: () => setCardIndex(cardIndex === 0 ? cards.length - 1 : cardIndex - 1),
         preventDefaultTouchmoveEvent: true,
-        trackTouch: true,
-        trackMouse: true
+        trackTouch: track,
+        trackMouse: track
     });
 
     // Swipe to the previous card
@@ -41,7 +42,7 @@ export function GamesCarousel({cards}) {
                 </div>
                 <GameCard name={cards[prevIndex].name} img={cards[prevIndex].img} small={true}
                           onClick={goToPrevCard}/>
-                <GameCard name={cards[cardIndex].name} img={cards[cardIndex].img}/>
+                <GameCard name={cards[cardIndex].name} img={cards[cardIndex].img} setTrack={setTrack}/>
                 <GameCard name={cards[nextIndex].name} img={cards[nextIndex].img} small={true}
                           onClick={goToNextCard}/>
                 <div className="flex right-0 h-full items-center justify-end pr-4 lg:flex">
