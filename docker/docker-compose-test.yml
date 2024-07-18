@@ -28,6 +28,8 @@ services:
       target: rooma-api
     networks:
       - rooma_network
+    ports:
+      - "8000:8000"
     environment:
       - IN_DOCKER=true
       - TESTING=true
