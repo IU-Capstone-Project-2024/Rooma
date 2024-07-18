@@ -52,16 +52,19 @@ services:
     depends_on:
       - mongodb
 
-  nginx:
-    container_name: rooma_nginx
-    image: nginx:latest
-    volumes:
-      - ../nginx:/etc/nginx/conf.d
-      - ../frontend/dist:/etc/nginx/html
+  tests:
+    container_name: rooma_tests
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: rooma-tests
     networks:
       - rooma_network
-    ports:
-      - "80:80"
+    env_file:
+      - ../config/.env
+    environment:
+      - IN_DOCKER=true
+      - TESTING=true
+      - BASE_URL=http://api:8000
     depends_on:
       - api
-      - grafana

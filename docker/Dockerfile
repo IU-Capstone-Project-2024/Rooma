@@ -23,3 +23,8 @@ FROM python-base AS rooma-states
 
 COPY /backend/src/state_manager/hide_n_seek/updater.py /updater.py
 CMD ["python", "updater.py"]
+
+FROM python-base AS rooma-tests
+
+COPY /backend/tests /tests
+CMD ["python", "tests/test.py"]
