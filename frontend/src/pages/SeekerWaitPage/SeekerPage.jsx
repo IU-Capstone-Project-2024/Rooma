@@ -32,7 +32,15 @@ export default function SeekerPage() {
     const gameId = searchParams.get("game_id");
 
     const sendRequestToFind = async (code) => {
-        await find(gameId, code || codeToSubmit);
+        // if successful find then alert message that find is successful
+        await find(gameId, code || codeToSubmit)
+            .then((res) => {
+                if (res["status"] === "success") {
+                    alert("You have found the hider!");
+                } else {
+                    alert("You have not found the hider!");
+                }
+            });
     }
 
     const updateDate = () => {
