@@ -176,4 +176,7 @@ class GameService:
             return PlayerRoleResponse(role="unknown")
 
         data = HideNSeekData(**game.data)
+        if not data.hiders:
+            return PlayerRoleResponse(role="unknown")
+
         return PlayerRoleResponse(role="hider" if telegram_id in data.hiders else "seeker")

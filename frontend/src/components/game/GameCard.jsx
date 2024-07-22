@@ -71,7 +71,7 @@ export default function GameCard({name, img, small, setTrack, onClick}) {
         const gameTimeInMinutes = convertTimeToMinutes(selectedGameTime);
         const waitingTimeInMinutes = convertTimeToMinutes(selectedWaitingTime);
 
-        createGame(name, Number(gameTimeInMinutes), Number(waitingTimeInMinutes), 20, comment)
+        createGame(name, Number(gameTimeInMinutes), Number(waitingTimeInMinutes), 25, comment)
             .then((res) => {
                 navigate("/lobby?game_id=" + res["game_id"]);
             });
