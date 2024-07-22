@@ -116,18 +116,20 @@ export default function Lobby() {
                     {(waitingForPlayers && users.length === 0) ? (
                         <p className="text-white text-xl">Waiting for players to join...</p>
                     ) : (
-                        <div className="w-full overflow-y-auto max-h-80">
-                            <table className="table-auto border-collapse border border-gray-800 w-full">
-                                <thead>
-                                <tr>
-                                    <th className="border border-gray-600 px-4 py-2 bg-gray-200">#</th>
-                                    <th className="border border-gray-600 px-4 py-2 bg-gray-200">Telegram ID</th>
-                                    <th className="border border-gray-600 px-4 py-2 bg-gray-200">First Name</th>
-                                </tr>
-                                </thead>
-                                <tbody className="users">
-                                </tbody>
-                            </table>
+                        <div className="w-full">
+                            <div className="overflow-y-auto max-h-80">
+                                <table className="table-auto border-collapse border border-gray-800 w-full">
+                                    <thead>
+                                    <tr>
+                                        <th className="border border-gray-600 px-4 py-2 bg-gray-200">#</th>
+                                        <th className="border border-gray-600 px-4 py-2 bg-gray-200">Telegram ID</th>
+                                        <th className="border border-gray-600 px-4 py-2 bg-gray-200">First Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody className="users">
+                                    </tbody>
+                                </table>
+                            </div>
                             <button
                                 className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}
                                 onClick={startGameFunc}>
