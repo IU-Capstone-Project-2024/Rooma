@@ -4,6 +4,7 @@ import {getRules, joinGame, leaveGame} from "@/api/gamesCommon.js";
 import {getDuration, getPlayerRole, getState} from "@/api/hideAndSeek.js";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
+import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 
 export default function WaitPage() {
     const [duration, setDuration] = useState(null);
@@ -83,6 +84,8 @@ export default function WaitPage() {
 
     return (
         <section className="my-8 flex flex-col justify-center items-center px-4 sm:px-8">
+            <img src={steps_1} alt="steps" className="absolute top-24 right-0 h-96 z-0"/>
+            <img src={steps_1} alt="steps" className="absolute bottom-0 left-0 h-96 z-0 rotate-90"/>
             <h1 className="text-3xl text-white font-bold mb-6">Hide and Seek Game</h1>
 
             <div className="bg-white rounded-xl p-6 max-w-3xl w-full mx-auto shadow-md border-4 border-[#FFC87A]">
