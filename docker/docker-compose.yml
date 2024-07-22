@@ -2,6 +2,8 @@ volumes:
   db_data:
   prom_data:
   grafana_data:
+  caddy_data:
+  caddy_config:
 
 networks:
   rooma_network:
@@ -111,8 +113,22 @@ services:
       - ../frontend/dist:/etc/nginx/html
     networks:
       - rooma_network
-    ports:
-      - "80:80"
     depends_on:
       - api
       - grafana
+
+  caddy:
+    container_name: rooma_caddy
+    image: caddy:latest
+    volumes:
+      - ../caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - rooma_network
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    depends_on:
+      - nginx

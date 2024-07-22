@@ -53,7 +53,7 @@ const convertTimeToMinutes = (timeString) => {
     return (hours * 60) + minutes;
 };
 
-export default function GameCard({name, img, small, onClick}) {
+export default function GameCard({name, img, small, setTrack, onClick}) {
     const [game_hours, setGameHours] = useState(0);
     const [game_minutes, setGameMinutes] = useState(0);
 
@@ -110,6 +110,16 @@ export default function GameCard({name, img, small, onClick}) {
                     padding: "20px",
                     borderRadius: "10px",
                     boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
+                }}
+                onOpen={() => {
+                    if (setTrack) {
+                        setTrack(false);
+                    }
+                }}
+                onClose={() => {
+                    if (setTrack) {
+                        setTrack(true);
+                    }
                 }}
             >
                 {close => (

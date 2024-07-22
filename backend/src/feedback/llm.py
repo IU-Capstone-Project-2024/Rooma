@@ -21,8 +21,15 @@ class LLM:
             "{rules}\n"
             "The game uses these parameters:\n"
             "{parameters}\n"
-            "I want you to summarize the feedbacks for me. Write what players liked, what they disliked. "
-            "Be concise. Do not write anything related to application bugs, only related to game organization."
+            "I want you to summarize the feedbacks for me. "
+            "Write what players liked, what they disliked. "
+            "Be concise. DO NOT GENERATE MORE OUTPUT THAN FEEDBACKS LENGTH. "
+            "Do not write anything related to application bugs, only related to game organization.\n"
+            "If no feedback exists, write why nobody could have left it.\n"
+            "Write in following format:\n```"
+            "**What players liked**\n\n*Like 1\n*Like 2\n*etc\n\n"
+            "**What players disliked**\n\n*Dislike 1\n*Dislike 2\n*etc"
+            "\n```"
         )
 
     def generate(self, game_name: str, feedbacks: str, rules: str, parameters: str) -> str:
@@ -48,4 +55,7 @@ class LLM:
         )
         response_json = json.loads(response.text)
 
+        if "choices" not in response_json:
+            print(response_json)
+            return "Error while requesting AI API. Please, retry later..."
         return response_json["choices"][0]["message"]["content"]
