@@ -113,10 +113,10 @@ export default function Lobby() {
                 </div>
 
                 <div className="flex flex-col items-center mx-4 md:mx-16 mt-8 md:mt-0">
-                    {(waitingForPlayers && users.length === 0) ? ( // Conditional rendering based on waitingForPlayers state
+                    {(waitingForPlayers && users.length === 0) ? (
                         <p className="text-white text-xl">Waiting for players to join...</p>
                     ) : (
-                        <div className="w-full">
+                        <div className="w-full overflow-y-auto max-h-80">
                             <table className="table-auto border-collapse border border-gray-800 w-full">
                                 <thead>
                                 <tr>
@@ -125,7 +125,7 @@ export default function Lobby() {
                                     <th className="border border-gray-600 px-4 py-2 bg-gray-200">First Name</th>
                                 </tr>
                                 </thead>
-                                <tbody className="users overflow-y-auto" style={{ maxHeight: '20rem' }}>
+                                <tbody className="users">
                                 </tbody>
                             </table>
                             <button
