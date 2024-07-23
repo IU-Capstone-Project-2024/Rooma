@@ -6,6 +6,7 @@ import { find, getDuration, getEndTimes, getState } from "@/api/hideAndSeek.js";
 import GameTimer from "@/components/game/GameTimer.jsx";
 import { useInterval } from "@/utils/UseInterval.jsx";
 import { Html5Qrcode } from "html5-qrcode";
+import NotifyModal from "@/components/general/NotifyModal.jsx";
 
 export default function SeekerPage() {
     const { setHeaderColor, setFooterColor, setBackgroundColor } = useColor();
@@ -26,21 +27,20 @@ export default function SeekerPage() {
 
     const [codeToSubmit, setCodeToSubmit] = useState("");
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [date, setDate] = useState(new Date());
 
     const navigate = useNavigate();
     const gameId = searchParams.get("game_id");
 
     const sendRequestToFind = async (code) => {
-        // if successful find then alert message that find is successful
-        await find(gameId, code || codeToSubmit)
-            .then((res) => {
-                if (res["status"] === "success") {
-                    alert("You have found the hider!");
-                } else {
-                    alert("You have not found the hider!");
-                }
-            });
+        try {
+            await find(gameId, code || codeToSubmit);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const updateDate = () => {
@@ -182,6 +182,11 @@ export default function SeekerPage() {
                     <GameTimer endTime={seekerStartTime} frozen={true} onComplete={updateDate}/>
                 </div>
             )}
+
+             <NotifyModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            ></NotifyModal>
         </section>
     );
 }
