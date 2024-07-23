@@ -13,7 +13,7 @@ const NotifyModal = ({isOpen, onClose}) => {
                         className="px-4 py-2 bg-[#FF7F29] text-white rounded-full"
                         onClick={onClose}
                     >
-                        Cancel
+                        OK
                     </button>
 
                 </div>
