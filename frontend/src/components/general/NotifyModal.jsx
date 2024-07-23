@@ -10,7 +10,7 @@ const NotifyModal = ({isOpen, onClose}) => {
                 <h2 className="text-xl font-semibold mb-4">You have successfully found a player!</h2>
                 <div className="flex justify-center space-x-4 mt-4">
                     <button
-                        className="px-4 py-2 bg-['#FF7F29'] text-black rounded-full hover:bg-gray-400"
+                        className="px-4 py-2 bg-[#FF7F29] text-white rounded-full"
                         onClick={onClose}
                     >
                         Cancel
