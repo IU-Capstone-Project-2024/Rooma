@@ -88,7 +88,7 @@ export default function WaitPage() {
             <img src={steps_1} alt="steps" className="absolute bottom-0 left-0 h-96 z-0 rotate-90"/>
             <h1 className="text-3xl text-white font-bold mb-6">Hide and Seek Game</h1>
 
-            <div className="bg-white rounded-xl p-6 max-w-3xl w-full mx-auto shadow-md border-4 border-[#FFC87A]">
+            <div className="bg-white rounded-xl p-6 max-w-3xl w-full mx-auto shadow-md border-4 border-[#FFC87A] z-10">
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                         <p className="text-lg">Number of Participants:</p>

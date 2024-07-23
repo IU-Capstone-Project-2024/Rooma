@@ -72,7 +72,7 @@ export default function WinningTeam() {
             </div>
 
             <div className="overflow-y-auto max-h-64 mt-16 mx-auto w-4/5">
-                <table className="table-auto border-collapse  w-full">
+                <table className="table-auto border-collapse  w-full z-10">
                     <thead>
                     <tr>
                         <th className="bg-gray-100 p-2">Telegram ID</th>
