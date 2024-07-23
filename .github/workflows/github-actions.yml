@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - make-tests
 
 jobs:
   test_backend:
