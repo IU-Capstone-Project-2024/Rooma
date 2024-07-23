@@ -13,7 +13,7 @@ const NotifyModal = ({isOpen, onClose}) => {
                         className="px-4 py-2 bg-['#FF7F29'] text-black rounded-full hover:bg-gray-400"
                         onClick={onClose}
                     >
-                        Cancel
+                        OK
                     </button>
 
                 </div>
