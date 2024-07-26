@@ -6,6 +6,20 @@ on:
       - dev
 
 jobs:
+  test_backend:
+    name: Test Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start Docker Compose
+        run: docker compose -f docker/docker-compose-test.yml up --build -d
+
+      - name: Print logs
+        run: docker logs -f rooma_tests
+
   build_frontend:
     name: Build Frontend
     environment: Deployment

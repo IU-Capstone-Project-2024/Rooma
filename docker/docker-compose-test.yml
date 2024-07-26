@@ -1,0 +1,66 @@
+volumes:
+  db_data:
+  prom_data:
+  grafana_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  rooma_network:
+    driver: bridge
+
+services:
+  mongodb:
+    container_name: rooma_mongodb
+    image: mongo:7-jammy
+    volumes:
+      - db_data:/data/db
+    networks:
+      - rooma_network
+    restart: unless-stopped
+    command: --quiet
+
+  api:
+    container_name: rooma_api
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: rooma-api
+    networks:
+      - rooma_network
+    ports:
+      - "8000:8000"
+    environment:
+      - IN_DOCKER=true
+      - TESTING=true
+    depends_on:
+      - mongodb
+
+  states:
+    container_name: rooma_states
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: rooma-states
+    networks:
+      - rooma_network
+    environment:
+      - IN_DOCKER=true
+      - TESTING=true
+    depends_on:
+      - mongodb
+
+  tests:
+    container_name: rooma_tests
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+      target: rooma-tests
+    networks:
+      - rooma_network
+    environment:
+      - IN_DOCKER=true
+      - TESTING=true
+      - BASE_URL=http://api:8000
+    depends_on:
+      - api
