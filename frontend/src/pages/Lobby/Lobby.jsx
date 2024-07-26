@@ -8,12 +8,12 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {useInterval} from "@/utils/UseInterval.jsx";
 
-const ROW_COUNT = 8;
-
 function createUsersHTML(users) {
     let rows = "";
-    for (let i = 0; i < ROW_COUNT; i++) {
+    for (let i = 0; i < users.length; i++) {
         const tr = document.createElement('tr');
+
+        tr.style.height = "2.5rem";
 
         const td0 = document.createElement('td');
         td0.className = "border border-gray-600 px-4 py-2 bg-white";
@@ -53,6 +53,7 @@ async function copyTextToClipboard(text) {
 export default function Lobby() {
     const [users, setUsers] = useState([]);
     const [searchParams] = useSearchParams();
+    const [waitingForPlayers, setWaitingForPlayers] = useState(true);
     const navigate = useNavigate();
     const game_id = searchParams.get("game_id");
 
@@ -66,6 +67,11 @@ export default function Lobby() {
         getLobby(game_id)
             .then((res) => {
                 setUsers(res["lobby"]);
+                if (res["lobby"].length > 0) {
+                    setWaitingForPlayers(false); // Update waiting state if users are present
+                } else {
+                    setWaitingForPlayers(true); // Set waiting state if no users are present
+                }
             });
 
         let users_el = document.getElementsByClassName("users").item(0);
@@ -107,23 +113,30 @@ export default function Lobby() {
                 </div>
 
                 <div className="flex flex-col items-center mx-4 md:mx-16 mt-8 md:mt-0">
-                    <table className="table-auto border-collapse border border-gray-800 w-full">
-                        <thead>
-                        <tr>
-                            <th className="border border-gray-600 px-4 py-2 bg-gray-200">#</th>
-                            <th className="border border-gray-600 px-4 py-2 bg-gray-200">Telegram ID</th>
-                            <th className="border border-gray-600 px-4 py-2 bg-gray-200">First Name</th>
-                        </tr>
-                        </thead>
-                        <tbody className="users h-80 overflow-y-auto">
-                        </tbody>
-                    </table>
-
-                    <button
-                        className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}
-                        onClick={startGameFunc}>
-                        Play
-                    </button>
+                    {(waitingForPlayers && users.length === 0) ? (
+                        <p className="text-white text-xl">Waiting for players to join...</p>
+                    ) : (
+                        <div className="w-full">
+                            <div className="overflow-y-auto max-h-80">
+                                <table className="table-auto border-collapse border border-gray-800 w-full">
+                                    <thead>
+                                    <tr>
+                                        <th className="border border-gray-600 px-4 py-2 bg-gray-200">#</th>
+                                        <th className="border border-gray-600 px-4 py-2 bg-gray-200">Telegram ID</th>
+                                        <th className="border border-gray-600 px-4 py-2 bg-gray-200">First Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody className="users">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button
+                                className={classNames("m-2 bg-[#FFCD7B] rounded-xl text-white px-8 py-2 mt-4 md:mt-8")}
+                                onClick={startGameFunc}>
+                                Play
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

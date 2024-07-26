@@ -6,16 +6,23 @@ import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 import GameTimer from "@/components/game/GameTimer.jsx";
 import {getState} from "@/api/hideAndSeek.js";
 import {useInterval} from "@/utils/UseInterval.jsx";
+import QRCode from "qrcode.react";
 
 export default function HiderPage() {
     const [hiderCode, setHiderCode] = useState(null);
     const [gameEndTime, setGameEndTime] = useState(null);
+    const [seekerStartTime, setSeekerStartTime] = useState(null);
     const [searchParams] = useSearchParams();
     const [gameState, setGameState] = useState(null);
+    const [date, setDate] = useState(new Date());
 
     const navigate = useNavigate();
 
     const game_id = searchParams.get("game_id");
+
+    const updateDate = () => {
+        setDate(new Date());
+    }
 
     useEffect(() => {
         if (!game_id) {
@@ -27,6 +34,7 @@ export default function HiderPage() {
         if (game_id) {
             getEndTimes(game_id).then((res) => {
                 setGameEndTime(new Date(res["game_end_time"] + "Z"));
+                setSeekerStartTime(new Date(res["seeker_start_time"] + "Z"));
             });
             getHiderCode(game_id).then((result) => {
                 setHiderCode(result?.code);
@@ -74,7 +82,23 @@ export default function HiderPage() {
                 </span>
             </h2>
 
-            <GameTimer endTime={gameEndTime} />
+            {hiderCode && (
+                <div className="mb-8 z-10">
+                    <QRCode lassName="qr-code mb-4 md:mb-8" size={150} includeMargin={true} value={hiderCode}/>
+                </div>
+            )}
+
+            {date >= seekerStartTime ? (
+                <div className="flex flex-col justify-between items-center z-10">
+                    <h2 className="text-2xl text-white font-bold mb-8 z-10">Seekers are seeking now:</h2>
+                    <GameTimer endTime={gameEndTime} onComplete={updateDate}/>
+                </div>
+            ) : (
+                <div className="flex flex-col justify-between items-center z-10">
+                    <h2 className="text-2xl text-white font-bold mb-8 z-10">Hide! Seekers will start seeking soon:</h2>
+                    <GameTimer endTime={seekerStartTime} onComplete={updateDate}/>
+                </div>
+            )}
         </section>
     );
 }

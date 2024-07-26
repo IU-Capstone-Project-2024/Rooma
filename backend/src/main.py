@@ -35,7 +35,7 @@ app = FastAPI(
     root_path=APP_ROOT_PATH,
     title=APP_TITLE,
     description=APP_DESCRIPTION,
-    version="0.5.0"
+    version="0.6.0"
 )
 instrumentator = Instrumentator().instrument(app)
 

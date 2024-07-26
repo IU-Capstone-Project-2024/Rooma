@@ -4,6 +4,7 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {useColor} from "@/components/layouts/ColorContext.jsx";
 import {getHiderResults, getSeekerResults, getState} from "@/api/hideAndSeek.js";
 import Feedback from '../../components/game/Feedback.jsx';
+import steps_1 from "@/assets/hideAndSeek/steps_1.svg";
 
 export default function WinningTeam() {
     const [searchParams] = useSearchParams();
@@ -55,6 +56,8 @@ export default function WinningTeam() {
 
     return (
         <div className="text-center space-y-10 p-5 flex flex-col sm:px-8">
+            <img src={steps_1} alt="steps" className="absolute top-24 right-0 h-96 z-0"/>
+            <img src={steps_1} alt="steps" className="absolute bottom-0 left-0 h-96 z-0 rotate-90"/>
 
             <h1 className="text-4xl text-white font-bold">Hide and Seek</h1>
             <div className="flex justify-center my-3 relative">
@@ -69,7 +72,7 @@ export default function WinningTeam() {
             </div>
 
             <div className="overflow-y-auto max-h-64 mt-16 mx-auto w-4/5">
-                <table className="table-auto border-collapse  w-full">
+                <table className="table-auto border-collapse  w-full z-10">
                     <thead>
                     <tr>
                         <th className="bg-gray-100 p-2">Telegram ID</th>
@@ -100,7 +103,9 @@ export default function WinningTeam() {
                 <div className="relative">
                     <button
                         className="mt-2 px-6 py-3 bg-[#FFCD7B] text-black font-bold rounded"
-                        onClick={() => {setShowFeedback(true)}}
+                        onClick={() => {
+                            setShowFeedback(true)
+                        }}
                     >
                         Send feedback
                     </button>
