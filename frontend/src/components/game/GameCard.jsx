@@ -12,10 +12,11 @@ const GAME_DETAILS = new Map([
         waitingTime: true,
         playerPercentage: true,
         isActive: true,
-        description: "Players will be automatically divided into those who are looking and those who are hiding. " +
-            "After the host starts the game, their role appears on the players screens." +
-            "Those who are hiding will have their own unique code, which needs to be said if the player is found." +
-            "The searching player, having found the player, must find out the code and enter it on the phone so that the found person is counted."
+        description: "Players will be automatically divided into those who are looking and those who " +
+            "are hiding. After the host starts the game, your role appears on the screen. If you are hiding, " +
+            "you'll have their own unique qr code, which needs to be shown the one who found you. " +
+            "If you are searching player, having found the player, you must find out the qr code and enter it " +
+            "on the phone so that the found person is counted."
     }],
     ["Killer", {
         participants: "not limited",
