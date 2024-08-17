@@ -10,17 +10,18 @@ const GAME_DETAILS = new Map([
         participants: "not limited",
         gameTime: true,
         waitingTime: true,
+        playerPercentage: true,
         isActive: true,
-        description: "Players will be automatically divided into those who are looking and those who " +
-            "are hiding. After the host starts the game, your role appears on the screen. If you are hiding, " +
-            "you'll have their own unique qr code, which needs to be shown the one who found you. " +
-            "If you are searching player, having found the player, you must find out the qr code and enter it " +
-            "on the phone so that the found person is counted."
+        description: "Players will be automatically divided into those who are looking and those who are hiding. " +
+            "After the host starts the game, their role appears on the players screens." +
+            "Those who are hiding will have their own unique code, which needs to be said if the player is found." +
+            "The searching player, having found the player, must find out the code and enter it on the phone so that the found person is counted."
     }],
     ["Killer", {
         participants: "not limited",
         gameTime: false,
         waitingTime: false,
+        playerPercentage: false,
         isActive: false,
         description: "Players are given roles of either 'Killer' or 'Innocent'. The Killer's goal is to eliminate all Innocents " +
             "without getting caught. The Innocents must work together to identify the Killer before it's too late."
@@ -29,6 +30,7 @@ const GAME_DETAILS = new Map([
         participants: "not limited",
         gameTime: false,
         waitingTime: false,
+        playerPercentage: false,
         isActive: false,
         description: "An open chat room where players can communicate and discuss various topics. No specific game objectives."
     }],
@@ -36,6 +38,7 @@ const GAME_DETAILS = new Map([
         participants: "3-10",
         gameTime: false,
         waitingTime: false,
+        playerPercentage: false,
         isActive: false,
         description: "Players take turns sharing interesting facts. The goal is to surprise or educate others with unique and lesser-known information."
     }],
@@ -43,6 +46,7 @@ const GAME_DETAILS = new Map([
         participants: "3-10",
         gameTime: false,
         waitingTime: false,
+        playerPercentage: false,
         isActive: false,
         description: "Players take on roles and create a story about a mysterious man from a chosen location. The game is driven by " +
             "creativity and improvisation, as players build upon each other's contributions to the story."
@@ -61,6 +65,8 @@ export default function GameCard({name, img, small, setTrack, onClick}) {
     const [waiting_hours, setWaitingHours] = useState(0);
     const [waiting_minutes, setWaitingMinutes] = useState(0);
 
+    const [player_percentage, setPlayerPercentage] = useState(25);
+
     const [comment, setComment] = useState("")
 
     const navigate = useNavigate();
@@ -72,7 +78,7 @@ export default function GameCard({name, img, small, setTrack, onClick}) {
         const gameTimeInMinutes = convertTimeToMinutes(selectedGameTime);
         const waitingTimeInMinutes = convertTimeToMinutes(selectedWaitingTime);
 
-        createGame(name, Number(gameTimeInMinutes), Number(waitingTimeInMinutes), 25, comment)
+        createGame(name, Number(gameTimeInMinutes), Number(waitingTimeInMinutes), Number(player_percentage), comment)
             .then((res) => {
                 navigate("/lobby?game_id=" + res["game_id"]);
             });
@@ -184,6 +190,19 @@ export default function GameCard({name, img, small, setTrack, onClick}) {
                                             placeholder="mm"
                                         />
                                     </div>
+                                </div>
+                            }
+
+                            {gameDetails.playerPercentage &&
+                                <div className="flex flex-col md:flex-row justify-between">
+                                    <p className="text-left">Percentage of players:</p>
+                                    <input
+                                        type="text"
+                                        value={player_percentage.toString()}
+                                        onChange={(e) => setPlayerPercentage(Math.max(0, Math.min(100, e.target.value)))}
+                                        className="w-12 text-center"
+                                        placeholder="0-100"
+                                    />
                                 </div>
                             }
 
