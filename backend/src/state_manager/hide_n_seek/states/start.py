@@ -34,7 +34,7 @@ class StateHandlerStart(StateHandler):
         _ = await game.save()
 
         # calculate seeker size and check if there are no seekers or hiders
-        seeker_size = int(data.seeker_percentage / 100) * len(game.lobby)
+        seeker_size = int(data.seeker_percentage / 100 * len(game.lobby))
         seeker_size = max(seeker_size, 1)  # no seekers
         seeker_size = min(seeker_size, len(game.lobby) - 1)  # no hiders
 
