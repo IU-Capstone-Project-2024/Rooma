@@ -36,16 +36,18 @@ APP_ROOT_PATH = "/api"
 APP_TITLE = "Rooma"
 APP_DESCRIPTION = "Online service for offline games"
 
-DB_NAME = getenv("DATABASE_NAME")
-DB_HOST = getenv("DATABASE_HOST")
-TOKEN = getenv("BOT_TOKEN")
+TESTING = getenv("TESTING", False)
 
-REFRESH_AUTH_SECRET = getenv("REFRESH_AUTH_SECRET")
-ACCESS_AUTH_SECRET = getenv("ACCESS_AUTH_SECRET")
+DB_NAME = getenv("DATABASE_NAME") if not TESTING else "Rooma"
+DB_HOST = getenv("DATABASE_HOST") if not TESTING else "mongodb"
+TOKEN = getenv("BOT_TOKEN") if not TESTING else "TEST_TOKEN"
 
-FRONT_BASE_URL = getenv("FRONT_BASE_URL")
+REFRESH_AUTH_SECRET = getenv("REFRESH_AUTH_SECRET") if not TESTING else "1234567890"
+ACCESS_AUTH_SECRET = getenv("ACCESS_AUTH_SECRET") if not TESTING else "1234567890"
+
+FRONT_BASE_URL = getenv("FRONT_BASE_URL") if not TESTING else "http://localhost"
 
 FRONT_CREATE_GAME_LINK = FRONT_BASE_URL
 FRONT_JOIN_GAME_LINK = FRONT_BASE_URL + "/join_game"
 
-LLM_API_KEY = getenv("LLM_API_KEY")
+LLM_API_KEY = getenv("LLM_API_KEY") if not TESTING else "QLWEJKLA"
